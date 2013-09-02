@@ -1,0 +1,6 @@
+pep_ssl_server_capath /etc/grid-security/certificates/
+pep_ssl_client_cert /etc/grid-security/hostcert.pem
+pep_ssl_client_key /etc/grid-security/hostkey.pem
+pep_url https://<%=@argusservice-%>:<%=@argusport-%>/authz
+pep_timeout 30 # seconds
+xacml_resourceid <%=@cream_pepc_resourceid%>

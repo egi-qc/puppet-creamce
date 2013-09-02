@@ -1,0 +1,28 @@
+<%@grid_queues.each do | queue, value | %>
+dn: GlueCESEBindGroupCEUniqueID=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>,mds-vo-name=resource,o=grid
+objectClass: GlueGeneralTop
+objectClass: GlueCESEBindGroup
+objectClass: GlueSchemaVersion
+GlueCESEBindGroupCEUniqueID: <%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+<%@se_list.keys.each do | se | -%>
+GlueCESEBindGroupSEUniqueID: <%=se%>
+<%end-%>
+GlueSchemaVersionMajor: 1
+GlueSchemaVersionMinor: 3
+<%end-%>
+
+<%@grid_queues.each do | queue, value | -%>
+<%@se_list.keys.each do | se | -%>
+dn: GlueCESEBindSEUniqueID=<%=se-%>,GlueCESEBindGroupCEUniqueID=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid 
+objectClass: GlueGeneralTop
+objectClass: GlueCESEBind
+objectClass: GlueSchemaVersion
+GlueCESEBindSEUniqueID: <%=se%>
+GlueCESEBindCEAccesspoint: n.a
+GlueCESEBindCEUniqueID: <%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+GlueCESEBindMountInfo: n.a
+GlueCESEBindWeight: 0
+GlueSchemaVersionMajor: 1
+GlueSchemaVersionMinor: 3
+<%end-%>
+<%end-%>

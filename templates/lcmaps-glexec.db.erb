@@ -1,0 +1,49 @@
+# Written by Oscar Koeroo - okoeroo * at * nikhef * dot * nl
+# A new version of the gLExec configuration, only usable by glexec higher then version 0.6.0-1
+
+# where to look for modules
+path = /usr/lib64/lcmaps
+
+# module definitions
+posix_enf = "lcmaps_posix_enf.mod"
+" -maxuid 1"
+" -maxpgid 1"
+" -maxsgid 32"
+
+localaccount = "lcmaps_localaccount.mod"
+" -gridmapfile /etc/grid-security/grid-mapfile"
+
+poolaccount = "lcmaps_poolaccount.mod"
+" -override_inconsistency"
+" -gridmapfile /etc/grid-security/grid-mapfile"
+" -gridmapdir /etc/grid-security/gridmapdir"
+
+vomslocalgroup = "lcmaps_voms_localgroup.mod"
+" -groupmapfile /etc/grid-security/groupmapfile"
+" -mapmin 0"
+
+vomslocalaccount = "lcmaps_voms_localaccount.mod"
+" -gridmapfile /etc/grid-security/grid-mapfile"
+" -use_voms_gid"
+
+vomspoolaccount = "lcmaps_voms_poolaccount.mod"
+" -gridmapfile /etc/grid-security/grid-mapfile"
+" -gridmapdir /etc/grid-security/gridmapdir"
+" -do_not_use_secondary_gids"
+
+
+proxycheck = "lcmaps_verify_proxy.mod"
+             "-certdir /etc/grid-security/certificates"
+
+
+# policies
+withvoms:
+proxycheck -> vomslocalgroup
+vomslocalgroup -> vomslocalaccount
+vomslocalaccount -> posix_enf | vomspoolaccount
+vomspoolaccount -> posix_enf
+
+standard:
+proxycheck -> localaccount
+localaccount -> posix_enf | poolaccount
+poolaccount -> posix_enf

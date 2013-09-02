@@ -1,0 +1,34 @@
+<%
+thisce=@ce_def[@hostname]
+clustername=thisce["ce_cluster"]
+subclustername=thisce["ce_subcluster"]
+ce_info=subclusters[subclustername]
+ce_physcpu=ce_info["ce_physcpu"]
+ce_logcpu=ce_info["ce_logcpu"]
+ce_sf00=ce_info["ce_sf00"]
+ce_si00=ce_info["ce_si00"]
+ce_smpsize=ce_info["ce_smpsize"]
+ce_runtimeenv=ce_info["ce_runtimeenv"]
+subcluster_tmpdir=ce_info["subcluster_tmpdir"]
+subcluster_wntmdir=ce_info["subcluster_wntmdir"]
+-%>
+dn: GLUE2ManagerId=<%=@fqdn-%>_ComputingElement_Manager,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2Manager
+objectClass: GLUE2ComputingManager
+GLUE2EntityCreationTime: 2013-08-29T08:37:55Z
+GLUE2EntityName: Computing Manager on <%=@fqdn%>
+GLUE2ComputingManagerTotalPhysicalCPUs: <%=ce_physcpu%>
+GLUE2ComputingManagerTotalLogicalCPUs: <%=ce_logcpu%>
+GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-manager-static
+GLUE2EntityOtherInfo: InfoProviderVersion=1.1
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2EntityOtherInfo: CPUScalingReferenceSI00=<%=ce_si00%>
+<%@ce_capability.each do | cap | -%>
+GLUE2EntityOtherInfo: <%=cap%>
+<%end-%>
+GLUE2ManagerID: <%=@fqdn-%>_ComputingElement_Manager
+GLUE2ManagerProductName: <%=@batch_system%>
+GLUE2ManagerProductVersion: <%=@batch_system-%>_<%=defined? @batchversion ? @batchversion : 'undef'%>
+GLUE2ManagerServiceForeignKey: <%=@fqdn-%>_ComputingElement
+GLUE2ComputingManagerComputingServiceForeignKey: <%=@fqdn-%>_ComputingElement

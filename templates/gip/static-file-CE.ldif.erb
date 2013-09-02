@@ -1,0 +1,112 @@
+<%
+name_map=Hash.new
+voswdir=Hash.new
+voappdir=Hash.new
+defaultse=Hash.new
+@voenv.each do | voshortname, value |
+  name_map[value['voname']]=voshortname
+  voswdir[value['voname']]=value['vo_sw_dir']
+  voappdir[value['voname']]=value['vo_app_dir']
+  defaultse[value['voname']]=value['vo_default_se']
+end-%>
+
+
+<%@grid_queues.each do | queue, value | 
+  vonames=value["vonames"]-%>
+dn: GlueCEUniqueID=<%=fqdn-%>:<%=ce_port-%>/<%=ce_type-%>-<%=batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
+objectClass: GlueCETop
+objectClass: GlueCE
+objectClass: GlueCEAccessControlBase
+objectClass: GlueCEInfo
+objectClass: GlueCEPolicy
+objectClass: GlueCEState
+objectClass: GlueInformationService
+objectClass: GlueKey
+objectClass: GlueSchemaVersion
+GlueCEUniqueID: <%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+GlueCEHostingCluster: <%=@fqdn%>
+GlueCEName: <%=queue%>
+GlueCEImplementationName: CREAM
+GlueCEImplementationVersion: <%=if (defined? @creamversion); @creamversion else 'undef'; end%>
+GlueCEInfoGatekeeperPort: <%=@ce_port%>
+GlueCEInfoHostName: <%=@fqdn%>
+GlueCEInfoLRMSType: <%=@batch_system%>
+GlueCEInfoLRMSVersion: not defined
+GlueCEInfoTotalCPUs: 0
+GlueCEInfoJobManager: <%=@batch_system%>
+GlueCEInfoContactString: https://<%=@fqdn-%>:<%=@ce_port-%>/ce-cream/services
+GlueCEInfoDataDir: unset
+GlueCEStateEstimatedResponseTime: 2146660842
+GlueCEStateFreeCPUs: 0
+GlueCEStateRunningJobs: 0
+GlueCEStateStatus: Production
+GlueCEStateTotalJobs: 0
+GlueCEStateWaitingJobs: 444444
+GlueCEStateWorstResponseTime: 2146660842
+GlueCEStateFreeJobSlots: 0
+GlueCEPolicyMaxCPUTime: 999999999
+GlueCEPolicyMaxRunningJobs: 999999999
+GlueCEPolicyMaxTotalJobs: 999999999
+GlueCEPolicyMaxWallClockTime: 999999999
+GlueCEPolicyMaxObtainableCPUTime: 999999999
+GlueCEPolicyMaxObtainableWallClockTime: 999999999
+GlueCEPolicyMaxWaitingJobs: 999999999
+GlueCEPolicyMaxSlotsPerJob: 999999999
+GlueCEPolicyPreemption: 0
+GlueCEPolicyPriority: 1
+GlueCEPolicyAssignedJobSlots: 0
+GlueForeignKey: GlueClusterUniqueID=<%=@fqdn%>
+GlueInformationServiceURL: ldap://<%=@fqdn-%>:<%=@info_port-%>/mds-vo-name=<%=@info_type-%>grid
+GlueSchemaVersionMajor: 1
+GlueSchemaVersionMinor: 3
+<%@ce_capability.each do |cap |-%>
+GlueCECapability:  <%=cap%>
+<%end-%>
+<%vonames.each do |voname |-%>
+GlueCEInfoApplicationDir: <%=voappdir[voname]%>
+GlueCEInfoDefaultSE: <%=defaultse[voname]%>
+<% if voname.include?("/") -%>
+GlueCEAccessControlBaseRule: VOMS:<%=voname%>
+<% else -%>
+GlueCEAccessControlBaseRule: VO:<%=voname%>
+<%end-%>
+<%end-%>
+
+<%vonames.each do |voname|-%>
+dn: GlueVOViewLocalID=<%=voname-%>,GlueCEUniqueID=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
+objectClass: GlueCETop
+objectClass: GlueVOView
+objectClass: GlueCEInfo
+objectClass: GlueCEState
+objectClass: GlueCEAccessControlBase
+objectClass: GlueCEPolicy
+objectClass: GlueKey
+objectClass: GlueSchemaVersion
+GlueVOViewLocalID: <%=voname%>
+GlueCEStateRunningJobs: 0
+GlueCEStateWaitingJobs: 444444
+GlueCEStateTotalJobs: 0
+GlueCEStateFreeJobSlots: 0
+GlueCEStateEstimatedResponseTime: 2146660842
+GlueCEStateWorstResponseTime: 2146660842
+GlueCEInfoDefaultSE: <%=defaultse[voname]%>
+GlueCEInfoApplicationDir: <%=voswdir[voname]%>
+GlueCEInfoDataDir: unset
+GlueChunkKey: GlueCEUniqueID=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+<% if voname.include?("/") -%>
+GlueCEAccessControlBaseRule: VOMS:<%=voname%>
+<% else -%>
+GlueCEAccessControlBaseRule: VO:<%=voname%>
+<%end-%>
+GlueSchemaVersionMajor: 1
+GlueSchemaVersionMinor: 3
+<% if ! voname.include?("/") -%>
+<% vonames.each do |other | -%>
+<% if other.include?("/") -%>
+GlueCEAccessControlBaseRule: DENY:<%=other%>
+<%end-%>
+<%end-%>
+<%end-%>
+
+<%end-%>
+<%end-%>

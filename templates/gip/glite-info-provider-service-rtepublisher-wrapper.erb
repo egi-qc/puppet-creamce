@@ -1,0 +1,6 @@
+#!/bin/sh
+export PATH=/bin:/sbin:/usr/sbin:/bin:/usr/bin:/usr/bin
+export RTEPublisher_HOST=ce208.cern.ch
+export GRIDFTP_PATH=/opt/glite/var/info
+/usr/bin/glite-info-service /etc/glite/info/service/glite-info-service-rtepublisher.conf CERN-PROD
+/usr/bin/glite-info-glue2-endpoint /etc/glite/info/service/glite-info-glue2-rtepublisher.conf ce208.cern.ch_ComputingElement

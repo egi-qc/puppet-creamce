@@ -1,0 +1,8 @@
+if [ "X${GLITE_ENV_SET+X}" = "X" ]; then
+    . /usr/libexec/grid-env-funcs.sh
+    if [ "x${GLITE_UI_ARCH:-$1}" = "x32BIT" ]; then arch_dir=lib; else arch_dir=lib64; fi
+    gridpath_prepend     "PATH" "/opt/d-cache/srm/bin:/opt/d-cache/dcap/bin"
+    gridpath_prepend     "PATH" "/bin"
+    gridpath_prepend     "MANPATH" "/opt/glite/share/man"
+    gridpath_prepend     "LD_LIBRARY_PATH" "/opt/d-cache/dcap/lib64"
+    gridpath_prepend     "LD_LIBRARY_PATH" "/opt/d-cache/dcap/lib"

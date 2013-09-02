@@ -1,0 +1,88 @@
+<%
+thisce=ce_def[@hostname]
+clustername=thisce["ce_cluster"]
+subclustername=thisce["ce_subcluster"]
+ce_info=subclusters[subclustername]
+ce_cpu_model=ce_info["ce_cpu_model"]
+ce_cpu_speed=ce_info["ce_cpu_speed"]
+ce_cpu_vendor=ce_info["ce_cpu_vendor"]
+ce_inboundip=ce_info["ce_inboundip"]
+ce_physcpu=ce_info["ce_physcpu"]
+ce_logcpu=ce_info["ce_logcpu"]
+ce_minphysmem=ce_info["ce_minphysmem"]
+ce_minvirtmem=ce_info["ce_minvirtmem"]
+ce_os=ce_info["ce_os"]
+ce_os_family=ce_info["ce_os_family"]
+ce_os_arch=ce_info["ce_os_arch"]
+ce_os_release=ce_info["ce_os_release"]
+ce_os_version=ce_info["ce_os_version"]
+ce_os_name=ce_info["ce_os_name"]
+ce_otherdescr=ce_info["ce_otherdescr"]
+ce_outboundip=ce_info["ce_outboundip"]
+ce_sf00=ce_info["ce_sf00"]
+ce_si00=ce_info["ce_si00"]
+ce_smpsize=ce_info["ce_smpsize"]
+ce_runtimeenv=ce_info["ce_runtimeenv"]
+subcluster_tmpdir=ce_info["subcluster_tmpdir"]
+subcluster_wntmdir=ce_info["subcluster_wntmdir"]
+-%>
+dn: GlueClusterUniqueID=<%=@fqdn-%>,mds-vo-name=resource,o=grid
+objectClass: GlueClusterTop
+objectClass: GlueCluster
+objectClass: GlueInformationService
+objectClass: GlueKey
+objectClass: GlueSchemaVersion
+GlueClusterUniqueID: <%=@fqdn%>
+GlueClusterName: <%=@fqdn%>
+GlueForeignKey: GlueSiteUniqueID=<%=@sitename%>
+<%grid_queues.each do | queue, value | -%>
+GlueForeignKey: GlueCEUniqueID=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+<%end-%>
+<%grid_queues.each do | queue, value | -%>
+GlueClusterService: <%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+<%end-%>
+GlueInformationServiceURL: ldap://<%=@fqdn-%>:<%=@info_port-%>/mds-vo-name=<%=info_type-%>,o=grid
+GlueSchemaVersionMajor: 1
+GlueSchemaVersionMinor: 3
+
+dn: GlueSubClusterUniqueID=<%=@fqdn-%>,GlueClusterUniqueID=<%=@fqdn-%>,mds-vo-name=<%=info_type-%>,o=grid
+objectClass: GlueClusterTop
+objectClass: GlueSubCluster
+objectClass: GlueHostApplicationSoftware
+objectClass: GlueHostArchitecture
+objectClass: GlueHostBenchmark
+objectClass: GlueHostMainMemory
+objectClass: GlueHostNetworkAdapter
+objectClass: GlueHostOperatingSystem
+objectClass: GlueHostProcessor
+objectClass: GlueInformationService
+objectClass: GlueKey
+objectClass: GlueSchemaVersion
+GlueSubClusterUniqueID: <%=@fqdn%>
+GlueChunkKey: GlueClusterUniqueID=<%=@fqdn%>
+GlueHostArchitecturePlatformType: <%=ce_os_arch%>
+GlueHostArchitectureSMPSize: <%=ce_smpsize%>
+GlueHostBenchmarkSF00: <%=ce_sf00%>
+GlueHostBenchmarkSI00: <%=ce_si00%>
+GlueHostMainMemoryRAMSize: <%=ce_minphysmem%>
+GlueHostMainMemoryVirtualSize: <%=ce_minvirtmem%>
+GlueHostNetworkAdapterInboundIP: <%=ce_inboundip.to_s.upcase%>
+GlueHostNetworkAdapterOutboundIP: <%=ce_outboundip.to_s.upcase%>
+GlueHostOperatingSystemName: <%=ce_os_name%>
+GlueHostOperatingSystemRelease: <%=ce_os_release%>
+GlueHostOperatingSystemVersion: <%=ce_os_version%>
+GlueHostProcessorClockSpeed: <%=ce_cpu_speed%>
+GlueHostProcessorModel: <%=ce_cpu_model%>
+GlueHostProcessorVendor: <%=ce_cpu_vendor%>
+GlueHostProcessorOtherDescription: <%=ce_otherdescr%>
+GlueSubClusterName: <%=@fqdn%>
+GlueSubClusterPhysicalCPUs: <%=ce_physcpu%>
+GlueSubClusterLogicalCPUs: <%=ce_logcpu%>
+GlueSubClusterTmpDir: <%=subcluster_tmpdir%>
+GlueSubClusterWNTmpDir: <%=subcluster_wntmdir%>
+GlueInformationServiceURL: ldap://<%=@fqdn%>:<%=@info_port-%>/mds-vo-name=<%=info_type-%>,o=grid
+GlueSchemaVersionMajor: 1
+GlueSchemaVersionMinor: 3
+<%ce_runtimeenv.each do |runtimeenv |-%>
+GlueHostApplicationSoftwareRunTimeEnvironment: <%=runtimeenv%>
+<%end-%>

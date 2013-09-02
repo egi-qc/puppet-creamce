@@ -1,0 +1,108 @@
+# WARNING: THIS FILE IS WRITTEN BY yaim! (function config_cream_blah)
+#
+
+# Supported batch systems
+supported_lrms=<%=@batch_system%>
+
+blah_child_poll_timeout=200 
+
+alldone_interval=86400
+
+. /etc/profile.<%=@batch_system%>
+
+# Needed to implement the short term solution for proxy renewal (savannah task #8176) 
+blah_disable_wn_proxy_renewal=yes 
+
+# working on glexec -> sudo support 
+blah_disable_proxy_user_copy=yes
+blah_id_mapping_command_sudo="/usr/bin/sudo -H"
+blah_set_default_workdir_to_home=yes
+
+# DGAS logfile 
+BLAHPD_ACCOUNTING_INFO_LOG=/var/log/cream/accounting/blahp.log
+
+# Path where lsf executables are located 
+lsf_binpath=/usr/bin/
+
+# Path where the lsf conf file is located
+lsf_confpath=/etc
+
+# Path where the lsf logs are located (for pbs $pbs_spoolpath/server_logs)
+lsf_spoolpath=
+
+# If it is set to yes blah does not check the jobid in the logfiles
+lsf_nochecksubmission=yes
+
+# If it is set to yes blah does NOT use log files to get job status, 
+# but uses only standard LRMS query
+lsf_nologaccess=
+
+# If it is set to no blah scripts for lsf will not try to read 
+# locally from the logs if BLParser is not present
+lsf_fallback=no
+
+# Set to yes to use Blah Log Parser for lsf
+lsf_BLParser=yes
+# New parser section
+job_registry=/var/blah/user_blah_job_registry.bjr
+#
+async_notification_port=56554
+bupdater_loop_interval=600
+#
+# about 2 months of purge interval.
+purge_interval=2500000
+                                                                                                                                         
+#Updater location
+bupdater_path=/usr/libexec/BUpdaterLSF
+                                                                                                                                         
+#Notifier location
+bnotifier_path=/usr/libexec/BNotifier
+                                                                                                                                         
+#Updater pid file
+bupdater_pidfile=/var/blah/blah_bupdater.pid
+                                                                                                                                         
+#Notifier pid file
+bnotifier_pidfile=/var/blah/blah_bnotifier.pid
+ 
+#Updater debug level
+bupdater_debug_level=2
+                                                                                                                                         
+#Updater debug log file
+bupdater_debug_logfile=/var/log/cream/glite-ce-bupdater.log
+                                                                                                                                         
+#Notifier debug level
+bnotifier_debug_level=2
+                                                                                                                                         
+#Notifier debug log file
+bnotifier_debug_logfile=/var/log/cream/glite-ce-bnotifier.log
+#
+blah_children_restart_interval=0
+
+#Enable sharing of job registry cache via mmap
+job_registry_use_mmap=yes
+
+#Enable check of execution of bupdater and bnotifier
+blah_check_children_interval=30
+
+# CERN add caching for LSF queries
+lsf_batch_caching_enabled=yes
+batch_command_caching_filter=/usr/libexec/runcmd
+
+# use btools to obsolete bhist calls
+bupdater_use_btools=yes
+bupdater_btools_path=/usr/bin
+
+#
+#use the long format for bjobs command (-l instead of -w) (yes|no) (default=yes)
+bupdater_bjobs_long_format=no
+#
+#use bhist to calculate suspended jobs timestamp
+bupdater_use_bhist_for_susp=no
+bupdater_use_bhist_for_killed=no
+bupdater_use_bhist_for_idle=no
+
+bhist_logs_to_read=1
+bhist_finalstate_interval=900
+
+bupdater_use_bhist_time_constraint=no
+
