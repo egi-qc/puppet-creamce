@@ -1,0 +1,94 @@
+<%
+now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
+thisce=@ce_def[@hostname]
+clustername=thisce["ce_cluster"]
+subclustername=thisce["ce_subcluster"]
+ce_info=subclusters[subclustername]
+ce_physcpu=ce_info["ce_physcpu"]
+ce_logcpu=ce_info["ce_logcpu"]
+ce_sf00=ce_info["ce_sf00"]
+ce_si00=ce_info["ce_si00"]
+ce_smpsize=ce_info["ce_smpsize"]
+ce_runtimeenv=ce_info["ce_runtimeenv"]
+ce_cpu_model=ce_info["ce_cpu_model"] 
+ce_cpu_speed=ce_info["ce_cpu_speed"] 
+ce_cpu_vendor=ce_info["ce_cpu_vendor"]
+ce_cpu_version=ce_info["ce_cpu_version"]
+ce_inboundip=ce_info["ce_inboundip"]
+ce_outboundip=ce_info["ce_outboundip"]
+ce_physcpu=ce_info["ce_physcpu"] 
+ce_logcpu=ce_info["ce_logcpu"] 
+ce_cores=ce_info["ce_cores"]
+ce_physcpu_perhost=ce_info["ce_physcpu_perhost"]
+ce_logcpu_perhost=ce_info["ce_logcpu_perhost"]
+ce_minphysmem=ce_info["ce_minphysmem"]
+ce_minvirtmem=ce_info["ce_minvirtmem"]
+ce_os=ce_info["ce_os"]
+ce_os_family=ce_info["ce_os_family"].downcase
+ce_os_arch=ce_info["ce_os_arch"]
+ce_os_release=ce_info["ce_os_release"]
+ce_os_name=ce_info["ce_os_name"]
+ce_os_version=ce_info["ce_os_version"]
+ce_otherdescr=ce_info["ce_otherdescr"]
+if (ce_os_arch == "x86_64")
+   ce_platform_type="amd64"
+else
+   ce_platform_type=ce_os_arch
+end
+if (ce_smpsize > 0) 
+   instances = ce_logcpu/ce_smpsize
+else 
+   instances = 0
+end
+if (ce_logcpu_perhost == ce_physcpu_perhost)
+   cpuType = 'single'
+else
+   cpuType = 'multi'
+end              
+if (ce_physcpu_perhost > 0)
+   if smpSize == (ce_logcpu_perhost/ce_physcpu_perhost):
+       coreType = 'single'
+   else
+       coreType = 'multi'
+   end
+else 
+   coreType = 'single'
+end
+
+subcluster_tmpdir=ce_info["subcluster_tmpdir"]
+subcluster_wntmdir=ce_info["subcluster_wntmdir"]
+# we should loop here over the service IDs as well 
+-%>
+dn: GLUE2ResourceID=<%=@fqdn-%>,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2Resource
+objectClass: GLUE2ExecutionEnvironment
+GLUE2EntityCreationTime: <%=now%>
+GLUE2EntityName: <%=@fqdn%>
+GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-executionenvironment-static
+GLUE2EntityOtherInfo: InfoProviderVersion=1.1
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2EntityOtherInfo: SmpSize=<%=ce_smpsize%>
+GLUE2EntityOtherInfo: Cores=<%=ce_cores%>
+GLUE2ResourceID: <%=@fqdn%>
+GLUE2ResourceManagerForeignKey: <%=@fqdn-%>_ComputingElement_Manager
+GLUE2ExecutionEnvironmentPlatform: <%=ce_platform_type%>
+GLUE2ExecutionEnvironmentTotalInstances: <%=instances%>
+GLUE2ExecutionEnvironmentPhysicalCPUs: <%=ce_physcpu_perhost%>
+GLUE2ExecutionEnvironmentLogicalCPUs: <%=ce_logcpu_perhost%>
+GLUE2ExecutionEnvironmentCPUMultiplicity: <%=cpuType-%>cpu-<%=coreType%>core
+GLUE2ExecutionEnvironmentCPUVendor: <%=ce_cpu_vendor%>
+GLUE2ExecutionEnvironmentCPUModel: <%=ce_cpu_model%>
+GLUE2ExecutionEnvironmentCPUClockSpeed: <%=ce_cpu_speed%>
+GLUE2ExecutionEnvironmentCPUVersion: <%=ce_cpu_version%>
+GLUE2ExecutionEnvironmentMainMemorySize: <%=ce_minphysmem%>
+GLUE2ExecutionEnvironmentVirtualMemorySize: <%=ce_minvirtmem%>
+GLUE2ExecutionEnvironmentOSFamily: <%=ce_os_family%>
+GLUE2ExecutionEnvironmentOSName: <%=ce_os_name%>
+GLUE2ExecutionEnvironmentOSVersion: <%=ce_os_release%>
+GLUE2ExecutionEnvironmentConnectivityIn: <%=ce_inboundip.to_s.upcase%>
+GLUE2ExecutionEnvironmentConnectivityOut: <%=ce_outboundip.to_s.upcase%>
+GLUE2ExecutionEnvironmentComputingManagerForeignKey: <%=@fqdn-%>_ComputingElement_Manager
+GLUE2ExecutionEnvironmentCPUTimeScalingFactor: 1
+GLUE2ExecutionEnvironmentWallTimeScalingFactor: 1
+

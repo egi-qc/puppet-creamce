@@ -1,0 +1,68 @@
+<%
+now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
+@grid_queues.each do | queue, value |
+  vonames=value["vonames"]
+  vonames.each do | owner | 
+-%>
+dn: GLUE2ShareID=<%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2Share
+objectClass: GLUE2ComputingShare
+GLUE2EntityCreationTime: <%=now%>
+GLUE2EntityOtherInfo: CREAMCEId=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+GLUE2EntityOtherInfo: ServiceType=org.glite.ce.CREAM
+GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-share-static
+GLUE2EntityOtherInfo: InfoProviderVersion=1.1
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2ShareID: <%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement
+GLUE2ShareDescription: Share of <%=queue-%> for <%=owner%>
+GLUE2ShareResourceForeignKey: <%=@fqdn%>
+GLUE2ShareEndpointForeignKey: <%=@fqdn-%>_org.glite.ce.CREAM
+GLUE2ShareServiceForeignKey: <%=@fqdn-%>_ComputingElement
+GLUE2ComputingShareMappingQueue: <%=queue%>
+GLUE2ComputingShareServingState: production
+GLUE2ComputingShareDefaultCPUTime: 999999999
+GLUE2ComputingShareMaxCPUTime: 999999999
+GLUE2ComputingShareDefaultWallTime: 999999999
+GLUE2ComputingShareMaxWallTime: 999999999
+GLUE2ComputingShareMaxRunningJobs: 999999999
+GLUE2ComputingShareMaxTotalJobs: 999999999
+GLUE2ComputingShareMaxWaitingJobs: 999999999
+GLUE2ComputingShareMaxSlotsPerJob: 444444
+GLUE2ComputingShareRunningJobs: 0
+GLUE2ComputingShareTotalJobs: 0
+GLUE2ComputingShareFreeSlots: 0
+GLUE2ComputingShareUsedSlots: 0
+GLUE2ComputingShareWaitingJobs: 444444
+GLUE2ComputingShareEstimatedAverageWaitingTime: 2146660842
+GLUE2ComputingShareEstimatedWorstWaitingTime: 2146660842
+GLUE2ComputingShareMaxMainMemory: 444444
+GLUE2ComputingShareMaxVirtualMemory: 444444
+GLUE2ComputingShareGuaranteedMainMemory: 0
+GLUE2ComputingShareGuaranteedVirtualMemory: 0
+GLUE2ComputingShareMaxUserRunningJobs: 444444
+GLUE2ComputingShareMinCPUTime: 0
+GLUE2ComputingShareMaxTotalCPUTime: 444444
+GLUE2ComputingShareRequestedSlots: 444444
+GLUE2ComputingShareMaxMultiSlotWallTime: 999999999
+GLUE2ComputingShareMinWallTime: 0
+GLUE2ComputingShareExecutionEnvironmentForeignKey: <%=@fqdn%>
+GLUE2ComputingShareComputingEndpointForeignKey: <%=@fqdn-%>_org.glite.ce.CREAM
+GLUE2ComputingShareComputingServiceForeignKey: <%=@fqdn-%>_ComputingElement
+
+dn: GLUE2PolicyID=<%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement_policy,GLUE2ShareId=<%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2Policy
+objectClass: GLUE2MappingPolicy
+GLUE2EntityCreationTime: <%=now%>
+GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-share-static
+GLUE2EntityOtherInfo: InfoProviderVersion=1.1
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2PolicyID: <%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement_policy
+GLUE2PolicyScheme: org.glite.standard
+GLUE2PolicyRule: VO:<%=owner%>
+GLUE2PolicyUserDomainForeignKey: <%=owner%>
+GLUE2MappingPolicyShareForeignKey: <%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement
+
+<%end-%>
+<%end-%>

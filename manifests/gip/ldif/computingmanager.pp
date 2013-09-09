@@ -8,7 +8,6 @@ class creamce::gip::ldif::computingmanager inherits creamce::params {
     owner => "ldap",
     group => "ldap",
     #require => Exec['ComputingManager.ldif']
-    mode => 0644,
     content => template("creamce/gip/computing_manager.ldif.erb"),
   }
   

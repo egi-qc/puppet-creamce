@@ -1,4 +1,5 @@
 <%
+now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
 thisce=@ce_def[@hostname]
 clustername=thisce["ce_cluster"]
 subclustername=thisce["ce_subcluster"]
@@ -16,7 +17,7 @@ dn: GLUE2ManagerId=<%=@fqdn-%>_ComputingElement_Manager,GLUE2ServiceID=<%=@fqdn-
 objectClass: GLUE2Entity
 objectClass: GLUE2Manager
 objectClass: GLUE2ComputingManager
-GLUE2EntityCreationTime: 2013-08-29T08:37:55Z
+GLUE2EntityCreationTime: <%=now%>
 GLUE2EntityName: Computing Manager on <%=@fqdn%>
 GLUE2ComputingManagerTotalPhysicalCPUs: <%=ce_physcpu%>
 GLUE2ComputingManagerTotalLogicalCPUs: <%=ce_logcpu%>
@@ -29,6 +30,6 @@ GLUE2EntityOtherInfo: <%=cap%>
 <%end-%>
 GLUE2ManagerID: <%=@fqdn-%>_ComputingElement_Manager
 GLUE2ManagerProductName: <%=@batch_system%>
-GLUE2ManagerProductVersion: <%=@batch_system-%>_<%=defined? @batchversion ? @batchversion : 'undef'%>
+GLUE2ManagerProductVersion: <%=@batch_system.upcase-%>_<%=@batchversion%>
 GLUE2ManagerServiceForeignKey: <%=@fqdn-%>_ComputingElement
 GLUE2ComputingManagerComputingServiceForeignKey: <%=@fqdn-%>_ComputingElement

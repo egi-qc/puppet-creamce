@@ -1,0 +1,77 @@
+<%
+now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
+startepoch=Time.now.strftime("%s").to_i-@uptime_seconds.to_i
+starttime=Time.at(startepoch).utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
+if (defined? @argusservice)
+    argusenabled="TRUE"
+else
+    argusenabled="FALSE"
+end
+-%>
+
+dn: GLUE2EndpointID=<%=@fqdn-%>_org.glite.ce.CREAM,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2Endpoint
+objectClass: GLUE2ComputingEndpoint
+GLUE2EntityName: <%=@fqdn-%>_org.glite.ce.CREAM
+GLUE2EntityCreationTime: <%=now%>
+GLUE2EntityOtherInfo: HostDN=CN=<%=@fqdn-%>,OU=computers,DC=cern,DC=ch
+GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-endpoint-static
+GLUE2EntityOtherInfo: InfoProviderVersion=1.1
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2EntityOtherInfo: MiddlewareName=EMI
+GLUE2EntityOtherInfo: MiddlewareVersion=<%=@emiversion%>
+GLUE2EntityOtherInfo: ArgusEnabled=<%=argusenabled%>
+GLUE2EndpointStartTime: <%=starttime%>
+GLUE2EndpointID: <%=@fqdn-%>_org.glite.ce.CREAM
+GLUE2EndpointURL: https://<%=@fqdn-%>:<%=ce_port-%>/ce-cream/services
+GLUE2EndpointCapability: executionmanagement.jobexecution
+GLUE2EndpointTechnology: webservice
+GLUE2EndpointInterfaceName: org.glite.ce.CREAM
+GLUE2EndpointInterfaceVersion: 2.1
+GLUE2EndpointWSDL: https://<%=@fqdn-%>:<%=ce_port-%>/ce-cream/services/CREAM2?wsdl
+GLUE2EndpointSupportedProfile: http://www.ws-i.org/Profiles/BasicProfile-1.0.html
+GLUE2EndpointSemantics: http://wiki.italiangrid.org/twiki/bin/view/CREAM/UserGuide
+GLUE2EndpointImplementor: gLite
+GLUE2EndpointImplementationName: CREAM
+GLUE2EndpointImplementationVersion: 1.16.1
+GLUE2EndpointQualityLevel: production
+GLUE2EndpointHealthState: unknown
+GLUE2EndpointHealthStateInfo: N/A
+GLUE2EndpointServingState: production
+GLUE2EndpointIssuerCA: <%=@certissuer%>
+<%@trustedcas.split(/\n/).each do | trustedca | -%>
+GLUE2EndpointTrustedCA: <%=trustedca%>
+<%end-%>
+GLUE2EndpointDownTimeInfo: See the GOC DB for downtimes: https://goc.egi.eu/
+GLUE2EndpointServiceForeignKey: <%=@fqdn-%>_ComputingElement
+GLUE2ComputingEndpointStaging: staginginout
+GLUE2ComputingEndpointJobDescription: glite:jdl
+GLUE2ComputingEndpointComputingServiceForeignKey: <%=@fqdn-%>_ComputingElement
+
+dn: GLUE2PolicyID=<%=@fqdn-%>_org.glite.ce.CREAM_Policy,GLUE2EndpointID=<%=@fqdn-%>_org.glite.ce.CREAM,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2Policy
+objectClass: GLUE2AccessPolicy
+GLUE2EntityCreationTime: <%=now%>
+GLUE2EntityName: Access control rules for Endpoint <%=@fqdn-%>_org.glite.ce.CREAM
+GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-endpoint-static
+GLUE2EntityOtherInfo: InfoProviderVersion=1.1
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2PolicyID: <%=@fqdn-%>_org.glite.ce.CREAM_Policy
+GLUE2PolicyScheme: org.glite.standard
+<% @grid_queues.each do | queue, value |
+  vonames=value["vonames"]
+  vonames.each do | owner |
+-%>
+GLUE2PolicyRule: VO:<%=owner%>
+<%end-%>
+<%end-%>
+<% @grid_queues.each do | queue, value |
+  vonames=value["vonames"]
+  vonames.each do | owner | 
+-%>
+GLUE2PolicyUserDomainForeignKey: <%=owner%>
+<%end-%>
+<%end-%>
+GLUE2AccessPolicyEndpointForeignKey: <%=@fqdn-%>_org.glite.ce.CREAM

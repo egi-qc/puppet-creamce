@@ -54,5 +54,6 @@ class creamce::gip inherits creamce::params {
     include creamce::gip::ldif::staticfilecesebind
     include creamce::gip::ldif::computingshare
     include creamce::gip::ldif::staticfilecluster
+    include creamce::gip::ldif::benchmark
   }
 }

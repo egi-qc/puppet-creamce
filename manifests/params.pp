@@ -58,9 +58,12 @@ class creamce::params {
   #
   # execution environment static info
   #
+  # fixme
+  $execution_environments   = hiera('execution_environments',[$::fqdn])
+
   # wrong! this is CE specific
   $cores                      = hiera('cores','0')           
-  $benchmark_info             = hiera('benchmark_info','((specfp2000 0), (specint2000 0), (HEP-SPEC06 0))')
+  $benchmark_info             = hiera('benchmark_info','((specfp2000 0), (specint2000 0), (HEP-SPEC06 0))') # 
   $java_opts                  = hiera('java_opts','-Xms512m -Xmx2048m')
   
 # structure of the site

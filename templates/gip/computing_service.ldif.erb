@@ -1,0 +1,25 @@
+<%
+now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
+sharelist=Array.new
+@grid_queues.each do | queue, value |
+  vonames=value["vonames"]
+  vonames.each do | owner |
+     sharelist.push(queue+'_'+owner)
+  end
+end
+-%>
+dn: GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2Service
+objectClass: GLUE2ComputingService
+GLUE2EntityCreationTime: <%=now%>
+GLUE2EntityName: Computing Service <%=@fqdn-%>_ComputingElement
+GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-computingservice-static
+GLUE2EntityOtherInfo: InfoProviderVersion=1.1
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2ServiceID: <%=@fqdn-%>_ComputingElement
+GLUE2ServiceType: org.glite.ce.CREAM
+GLUE2ServiceCapability: executionmanagement.jobexecution
+GLUE2ServiceQualityLevel: production
+GLUE2ServiceComplexity: endpointType=2, share=<%=sharelist.count-%>, resource=<%=execution_environments.count%>
+GLUE2ServiceAdminDomainForeignKey: <%=@sitename%>
