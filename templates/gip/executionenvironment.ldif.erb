@@ -46,7 +46,7 @@ else
    cpuType = 'multi'
 end              
 if (ce_physcpu_perhost > 0)
-   if smpSize == (ce_logcpu_perhost/ce_physcpu_perhost):
+   if ce_smpsize == (ce_logcpu_perhost/ce_physcpu_perhost):
        coreType = 'single'
    else
        coreType = 'multi'
