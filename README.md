@@ -1,4 +1,0 @@
-puppet-creamce
-==============
-
-puppet module to install and configure a cream CE (EMI3)
