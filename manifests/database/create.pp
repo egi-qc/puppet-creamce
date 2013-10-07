@@ -17,7 +17,8 @@ class creamce::database::create inherits creamce::params {
 
   exec {'drop_test_db':
     command => "/usr/bin/mysql -u root mysql -p'${mysql_password}' -e \"drop database test;\"",
-    onlyif  => "/usr/bin/mysql -u root mysql -p'${mysql_password}' -e \"connect test;\" 2>/dev/null"
+    onlyif  => "/usr/bin/mysql -u root mysql -p'${mysql_password}' -e \"connect test;\" 2>/dev/null",
+    loglevel => notice,
   }
 
 }

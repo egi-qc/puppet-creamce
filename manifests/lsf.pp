@@ -51,5 +51,13 @@ class creamce::lsf inherits creamce::params {
     mode => 0755,
     content => template("creamce/gip/scheduler.conf.lsf.erb"),    
   }
-
+  
+  file {"/usr/libexec/lsf_local_submit_attributes.sh":
+        ensure => present,
+        owner => "root",
+        group => "root",
+        mode => 0755,
+        content => template("creamce/lsf_local_submit_attributes.sh.erb"),
+  }
+      
 }

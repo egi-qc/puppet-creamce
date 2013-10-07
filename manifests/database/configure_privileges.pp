@@ -31,6 +31,7 @@ class creamce::database::configure_privileges inherits creamce::params {
     logoutput => true,
     path => '/bin:/usr/local/sbin:/usr/bin:/usr/local/bin',
     require => Database_grant["${cream_db_user}@${cream_db_host}/${cream_db_name}","${cream_db_minpriv_user}@${cream_db_host}/${information_db_name}","${cream_db_minpriv_user}@${cream_db_host}/${delegation_db_name}","${cream_db_minpriv_user}@${cream_db_host}/${cream_db_name}"],
+    loglevel => notice,
   }
   
 }

@@ -13,6 +13,7 @@ class creamce::database::configure_files inherits creamce::params {
     owner => "root",
     group => "ldap",
     mode => 0640,
+    loglevel => err,
   }
   
   #
@@ -24,6 +25,7 @@ class creamce::database::configure_files inherits creamce::params {
     owner => "root",
     group => "root",
     mode => 0600,
+    loglevel => err,
   }
   
   file {"/etc/glite-ce-cream/populate_delegationcreamdb.tmp.sql":
@@ -32,5 +34,6 @@ class creamce::database::configure_files inherits creamce::params {
     owner => "root",
     group => "root",
     mode => 0600,
+    loglevel => err,
   }
 }
