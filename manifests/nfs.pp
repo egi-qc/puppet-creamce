@@ -23,9 +23,9 @@ class creamce::nfs inherits creamce::params {
   }
   file {'/var/cache/info-dynamic-lsf':
     ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '1777',
+    owner  => 'tomcat',
+    group  => 'ldap',
+    mode   => '2770',
   }    
   file {'/opt/edg/var/nfs':
     ensure => directory,
