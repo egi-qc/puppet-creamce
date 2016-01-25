@@ -1,4 +1,8 @@
 class creamce::tomcat inherits params {
+
+  $tomcat_cert='/etc/grid-security/tomcat-cert.pem'
+  $tomcat_key='/etc/grid-security/tomcat-key.pem'
+
   #
   # tomcat setup is done in a simple way; no need to have a module for now 
   # 
@@ -9,6 +13,26 @@ class creamce::tomcat inherits params {
     ensure => absent,
   }
   
+  #
+  # derive tomcat certs
+  #
+  file { "${tomcat_cert}":
+    ensure => file,
+    owner => "tomcat",
+    group => "root",
+    mode => 0644,
+    source => [$host_certificate],
+    notify => Service[$tomcat]
+  }
+  file { "${tomcat_key}":
+    ensure => file,
+    owner => "tomcat",
+    group => "root",
+    mode => 0400,
+    source => [$host_private_key],
+    notify => Service[$tomcat]
+  }
+
   file {"/etc/${tomcat}/server.xml":
     ensure => present,
     content => template("creamce/server.xml.erb"),
@@ -27,29 +51,9 @@ class creamce::tomcat inherits params {
     mode => 0664,
   }
 
-  file {"$tomcat_server_lib/bcprov.jar":
-    ensure => link,
-    target => "/usr/share/java/bcprov.jar",
-  }
-  file {"$tomcat_server_lib/canl.jar":
-    ensure => link,
-    target => "/usr/share/java/canl.jar",
-  }
-  file {"$tomcat_server_lib/canl-java-tomcat.jar":
-    ensure => link,
-    target => "/usr/share/java/canl-java-tomcat.jar",
-  }
-  file {"$tomcat_server_lib/commons-io.jar":
-    ensure => link,
-    target => "/usr/share/java/commons-io.jar",
-  }
   file {"$tomcat_server_lib/commons-logging.jar":
     ensure => link,
     target => "/usr/share/java/commons-logging.jar",
-  }
-  
-  file {["$tomcat_server_lib/log4j.jar","$tomcat_server_lib/trustmanager.jar","$tomcat_server_lib/trustmanager-tomcat.jar","$tomcat_server_lib/[bcprov].jar","$tomcat_server_lib/[commons-logging].jar","$tomcat_server_lib/[log4j].jar","$tomcat_server_lib/[trustmanager].jar","$tomcat_server_lib/[trustmanager-tomcat].jar"] :
-    ensure => absent,
   }
   
   service { $tomcat:
@@ -59,5 +63,7 @@ class creamce::tomcat inherits params {
     hasrestart => true,
     alias => "tomcat",
   }
-  Package[$tomcat] -> File["$tomcat_server_lib/commons-logging.jar","$tomcat_server_lib/bcprov.jar","$tomcat_server_lib/canl.jar","$tomcat_server_lib/canl-java-tomcat.jar","$tomcat_server_lib/canl-java-tomcat.jar","$tomcat_server_lib/commons-io.jar","$tomcat_server_lib/[bcprov].jar","$tomcat_server_lib/[log4j].jar","$tomcat_server_lib/[trustmanager].jar","$tomcat_server_lib/[trustmanager-tomcat].jar"] -> File["/etc/${tomcat}/server.xml"] -> Service[$tomcat]
+  
+  Package[$tomcat] -> File["$tomcat_server_lib/commons-logging.jar"] -> File["/etc/${tomcat}/server.xml"] -> Service[$tomcat]
+  
 }

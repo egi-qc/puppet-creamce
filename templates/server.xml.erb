@@ -1,18 +1,34 @@
+<!--
+  Built by puppet
+  Do not edit
+-->
 <Server port="8005" shutdown="SHUTDOWN">
   <Service name="Catalina">
-
+<% if @tomcat == "tomcat6" %>
     <Connector port="<%=@ce_port%>" SSLEnabled="true"
                maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
                enableLookups="false" disableUploadTimeout="true"
                acceptCount="100" debug="0" scheme="https" secure="true"
                sSLImplementation="eu.emi.security.canl.tomcat.CANLSSLImplementation"
                truststore="/etc/grid-security/certificates/"
-               hostcert="/etc/grid-security/tomcat-cert.pem"
-               hostkey="/etc/grid-security/tomcat-key.pem"
+               hostcert="<%=@tomcat_cert%>"
+               hostkey="<%=@tomcat_key%>"
                updateinterval="<%=@crl_update_millis%>"
                clientAuth="true" sslProtocol="TLS" 
                crlcheckingmode="require"/>
-
+<% else %>
+    <Connector port="<%=@ce_port%>" SSLEnabled="true"
+               maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
+               enableLookups="false" disableUploadTimeout="true"
+               acceptCount="100" debug="0" scheme="https" secure="true"
+               sslImplementationName="eu.emi.security.canl.tomcat.CANLSSLImplementation"
+               truststore="/etc/grid-security/certificates/"
+               hostcert="<%=@tomcat_cert%>"
+               hostkey="<%=@tomcat_key%>"
+               updateinterval="<%=@crl_update_millis%>"
+               clientAuth="true" sslProtocol="TLS" 
+               crlcheckingmode="require"/>
+<% end %>
     <Engine name="Catalina" defaultHost="localhost">
       <Host name="localhost" appBase="webapps" />
     </Engine>

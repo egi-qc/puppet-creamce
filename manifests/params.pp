@@ -1,14 +1,14 @@
 class creamce::params {
   $sitename                  = hiera("sitename","")
   $max_connections           = hiera("max_connections","999")
-  $mysql_password            = hiera("mysql_password"           ,randompass())
+  $mysql_password            = hiera("mysql_password")
   $cream_db_name             = hiera("cream_db_name"            ,"creamdb")
   $cream_db_user             = hiera("cream_db_user"            ,"cream")
-  $cream_db_password         = hiera("cream_db_password"        ,randompass())
+  $cream_db_password         = hiera("cream_db_password")
   $cream_db_host             = hiera("cream_db_host"            ,"localhost")
   $cream_db_sandbox_path     = hiera("cream_db_sandbox_path"    ,"/var/cream_sandbox")
   $cream_db_minpriv_user     = hiera("cream_db_minpriv_user"    ,"minprivuser")
-  $cream_db_minpriv_password = hiera("cream_db_minpriv_password",randompass())
+  $cream_db_minpriv_password = hiera("cream_db_minpriv_password")
   $cream_db_version          = hiera("cream_db_version"         ,"2.6")
   $delegation_db_name        = hiera("delegation_db_name"       ,"delegationcreamdb")
   $delegation_db_version     = hiera("delegation_db_version","2.6")
@@ -19,9 +19,9 @@ class creamce::params {
   $information_db_name       = hiera("information_db_name","information_schema")
 
   $batch_system              = hiera("batch_system","lsf")
-  $lsf_primary_master        = hiera("lsf_primary_master")
-  $lsf_secondary_master      = hiera("lsf_secondary_master")
-  $lsf_conf_afs_path         = hiera("lsf_conf_afs_path")
+  # $lsf_primary_master        = hiera("lsf_primary_master")
+  # $lsf_secondary_master      = hiera("lsf_secondary_master")
+  # $lsf_conf_afs_path         = hiera("lsf_conf_afs_path")
   $gridenvfile               = hiera('gridenvfile','/etc/profile.d/grid-env.sh')
   $ce_env                    = hiera('ce_env',unset)
   $cream_pepc_resourceid     = hiera('cream_pepc_resourceid','http://emi.cern.ch/cream')
@@ -35,11 +35,11 @@ class creamce::params {
   $clusterid                 = hiera('clusterid')
   $clustermode               = hiera('clustermode')
   case $::lsbmajdistrelease {
-    5: {
-      $tomcat                    = "tomcat5"
+    6: {
+      $tomcat                = "tomcat6"
     }
     default: {
-      $tomcat                    = "tomcat6"
+      $tomcat                = "tomcat"
     }
   }
   $catalina_home           = hiera('catalina_home',"/usr/share/$tomcat")
@@ -54,6 +54,9 @@ class creamce::params {
   $groupmap                = hiera('groupmap',undef)
   $se_list                 = hiera('se_list',undef)
   $crl_update_millis       = hiera('crl_update_millis',3600000)
+  
+  $host_certificate        = hiera('host_certificate','/etc/grid-security/hostcert.pem')
+  $host_private_key        = hiera('host_private_key','/etc/grid-security/hostkey.pem')
   
   #
   # execution environment static info
@@ -75,7 +78,7 @@ class creamce::params {
   # apel accounting secrets
   #
   $apel_dbname                = hiera('apel_dbname','unset')
-  $apel_dbpass                = hiera('apel_dbpass',randompass())
+  $apel_dbpass                = hiera('apel_dbpass')
   $apel_dbserv                = hiera('apel_dbserv','unset')
 
   #
