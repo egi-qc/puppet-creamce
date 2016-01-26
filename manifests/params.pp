@@ -5,7 +5,7 @@ class creamce::params {
   $cream_db_name             = hiera("cream_db_name"            ,"creamdb")
   $cream_db_user             = hiera("cream_db_user"            ,"cream")
   $cream_db_password         = hiera("cream_db_password")
-  $cream_db_host             = hiera("cream_db_host"            ,"localhost")
+  $cream_db_host             = hiera("cream_db_host"            ,"${::fqdn}")
   $cream_db_sandbox_path     = hiera("cream_db_sandbox_path"    ,"/var/cream_sandbox")
   $cream_db_minpriv_user     = hiera("cream_db_minpriv_user"    ,"minprivuser")
   $cream_db_minpriv_password = hiera("cream_db_minpriv_password")

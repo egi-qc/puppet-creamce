@@ -1,27 +1,57 @@
 class creamce::creamdb inherits creamce::params {
 
-  class {'creamce::database::server':
-    mysql_password    => $mysql_password,
-    max_connections   => $max_connections,
+  # See https://forge.puppetlabs.com/puppetlabs/mysql
+  $override_options = {
+    'mysqld' => {
+      'bind-address' => 'localhost',
+      'max_connections' => $max_connections,
+    }
   }
-  class {'creamce::database::configure_files':
-    require => Class['creamce::database::server'],
+  
+  $enc_cream_passwd = mysql_password("${cream_db_password}")
+  $enc_minpriv_passwd = mysql_password("${cream_db_minpriv_password}")
+  
+  class { 'mysql::server':
+    root_password => $mysql_password,
+    override_options => $override_options
   }
-  class {'creamce::database::configure_users':
-    require => Class['creamce::database::server'],
+  
+  class {'creamce::database::configure_files':}
+  
+  mysql::db { "${cream_db_user}@${cream_db_host}/${cream_db_name}":
+    ensure => 'present',
+    user => "${cream_db_user}",
+    password => $enc_cream_passwd,
+    dbname => "${cream_db_name}",
+    charset => 'utf8',
+    host => "${cream_db_host}",
+    grant => ['ALL'],
+    
   }
-  class {'creamce::database::create':
-    require => Class['creamce::database::server'],
+  
+  mysql::db { "${cream_db_user}@${cream_db_host}/${delegation_db_name}":
+    ensure => 'present',
+    user => "${cream_db_user}",
+    password => $enc_cream_passwd,
+    dbname => "${delegation_db_name}",
+    charset => 'utf8',
+    host => "${cream_db_host}",
+    grant => ['ALL'],
+    
   }
-  class {'creamce::database::configure_tables':
-    require => Class['creamce::database::server','creamce::database::create'],  
+
+  mysql::db { "${cream_db_user}@${cream_db_host}/${information_db_name}":
+    ensure => 'present',
+    user => "${cream_db_user}",
+    password => $enc_cream_passwd,
+    dbname => "${information_db_name}",
+    charset => 'utf8',
+    host => "${cream_db_host}",
+    grant => ['ALL'],
+    
   }
-  class {'creamce::database::configure_privileges':
-    require => Class['creamce::database::server'],
-  }
-  class {'creamce::database::configure_otherpriv':
-    require => Class['creamce::database::server','creamce::database::configure_tables'],
-  }
-#   Class['creamce::database::configure_files'] -> Class['creamce::database::create'] -> Class['creamce::database::configure_users'] -> Class['creamce::database::configure_privileges'] -> Class['creamce::database::configure_tables'] -> Class['creamce::database::configure_otherpriv'] ~> Service['mysqld']
+
+  #class {'creamce::database::configure_tables':}
+  
   
 }
