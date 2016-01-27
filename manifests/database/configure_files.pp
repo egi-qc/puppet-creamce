@@ -19,7 +19,7 @@ class creamce::database::configure_files inherits creamce::params {
   #
   # update mysql templates
   #
-  file {"/etc/glite-ce-cream/populate_creamdb_mysql.tmp.sql":
+  file {"/etc/glite-ce-cream/populate_creamdb_mysql.puppet.sql":
     ensure => present,
     content => template("creamce/populate_creamdb_mysql.sql.erb"),
     owner => "root",
@@ -28,7 +28,7 @@ class creamce::database::configure_files inherits creamce::params {
     loglevel => err,
   }
   
-  file {"/etc/glite-ce-cream/populate_delegationcreamdb.tmp.sql":
+  file {"/etc/glite-ce-cream/populate_delegationcreamdb.puppet.sql":
     ensure => present,
     content => template("creamce/populate_delegationcreamdb.sql.erb"),
     owner => "root",
