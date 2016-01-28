@@ -33,9 +33,9 @@ class creamce::creamdb inherits creamce::params {
   }
   
   class { 'creamce::database::configure_tables':
-    cream_sql_script      => "/etc/glite-ce-cream/populate_delegationcreamdb.puppet.sql",
+    cream_sql_script      => "/etc/glite-ce-cream/populate_creamdb_mysql.puppet.sql",
     delegation_sql_script => "/etc/glite-ce-cream/populate_delegationcreamdb.puppet.sql",
-    require               => Class['creamce::database::configure_files', 'creamce::database::create']
+    subscribe             => Class['creamce::database::configure_files', 'creamce::database::create']
   }
   
   class { 'creamce::database::configure_privileges':
