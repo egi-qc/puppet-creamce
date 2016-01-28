@@ -1,17 +1,19 @@
-class creamce::database::configure_otherpriv inherits creamce::params {
-  #
-  # privileges
-  #
-  exec {"setup minpriv localhost":
-    command => "/usr/bin/mysql -h ${cream_db_host} -u root --password=\"${mysql_password}\" -e \"GRANT SELECT (submissionEnabled,startUpTime) on ${cream_db_name}.db_info to ${cream_db_minpriv_user}@localhost IDENTIFIED BY '${cream_db_minpriv_password}' WITH GRANT OPTION;\"",
-    loglevel => notice,
+class creamce::database::configure_otherpriv (
+  $host_pattern = "${cream_db_host}",
+) inherits creamce::params {
+
+  mysql_grant { "${cream_db_minpriv_user}@${host_pattern}/${cream_db_name}.db_info":
+    privileges => ['SELECT (submissionEnabled,startUpTime)'],
+    options    => ['GRANT'],
+    user       => "${cream_db_minpriv_user}@${host_pattern}",
+    table      => "${cream_db_name}.db_info",
   }
-  exec {"setup minpriv hostname":
-    command =>"/usr/bin/mysql -h ${cream_db_host} -u root --password=\"${mysql_password}\" -e \"GRANT SELECT (submissionEnabled,startUpTime) on ${cream_db_name}.db_info to ${cream_db_minpriv_user}@'${hostname}' IDENTIFIED BY '${cream_db_minpriv_password}' WITH GRANT OPTION;\"",
-    loglevel => notice,
+    
+  mysql_grant { "${cream_db_minpriv_user}@localhost/${cream_db_name}.db_info":
+    privileges => ['SELECT (submissionEnabled,startUpTime)'],
+    options    => ['GRANT'],
+    user       => "${cream_db_minpriv_user}@localhost",
+    table      => "${cream_db_name}.db_info",
   }
-  exec {"setup minpriv fqdn":
-    command => "/usr/bin/mysql -h ${cream_db_host} -u root --password=\"${mysql_password}\" -e \"GRANT SELECT (submissionEnabled,startUpTime) on ${cream_db_name}.db_info to ${cream_db_minpriv_user}@'${fqdn}' IDENTIFIED BY '${cream_db_minpriv_password}' WITH GRANT OPTION;\"",
-    loglevel => notice,
-  }
+
 }

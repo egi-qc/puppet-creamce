@@ -1,24 +1,13 @@
 class creamce::database::create inherits creamce::params {
-  #
-  # database
-  #
 
-  database{"${cream_db_name}":
-    ensure  => present,
+  mysql_database { "${cream_db_name}":
+    ensure => 'present',
+    charset => 'utf8'
   }
   
-  database{"${information_db_name}":
-    ensure  => present,
+  mysql_database { "${delegation_db_name}":
+    ensure => 'present',
+    charset => 'utf8'
   }
   
-  database{"${delegation_db_name}":
-    ensure  => present,
-  }
-
-  exec {'drop_test_db':
-    command => "/usr/bin/mysql -u root mysql -p'${mysql_password}' -e \"drop database test;\"",
-    onlyif  => "/usr/bin/mysql -u root mysql -p'${mysql_password}' -e \"connect test;\" 2>/dev/null",
-    loglevel => notice,
-  }
-
 }

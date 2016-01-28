@@ -1,13 +1,22 @@
-class creamce::database::configure_tables inherits creamce::params {
-  #
-  # create tables
-  #
-  exec {"Setup cream db":
-    command => "/bin/sh /usr/bin/createAndPopulateDB.sh root ${cream_db_password} ${cream_db_name} ${cream_db_version} 'N' /etc/glite-ce-cream/populate_creamdb_mysql.tmp.sql ${cream_db_host} ${cream_sandbox_path}",
-    loglevel => notice,
+class creamce::database::configure_tables (
+  $cream_sql_script      = "/etc/glite-ce-cream/populate_creamdb_mysql.puppet.sql",
+  $delegation_sql_script = "/etc/glite-ce-cream/populate_delegationcreamdb.puppet.sql"
+) inherits creamce::params {
+
+  exec { "creamdb-import":
+    command     => "mysql -h localhost -u root --password=\"${mysql_password}\" ${cream_db_name} < ${cream_sql_script}",
+    logoutput   => true,
+    refreshonly => true,
+    path        => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+    timeout     => 300,
   }
-  exec {"Setup delegation db":
-    command => "/bin/sh /usr/bin/createAndPopulateDB.sh root ${cream_db_password} ${delegation_db_name} ${delegation_db_version} 'N' /etc/glite-ce-cream/populate_delegationcreamdb.tmp.sql ${cream_db_host}",
-    loglevel => notice,
+
+  exec { "delegationdb-import":
+    command     => "mysql -h localhost -u root --password=\"${mysql_password}\" ${delegation_db_name} < ${delegation_sql_script}",
+    logoutput   => true,
+    refreshonly => true,
+    path        => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+    timeout     => 300,
   }
+  
 }

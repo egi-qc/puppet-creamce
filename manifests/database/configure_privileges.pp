@@ -1,37 +1,29 @@
-class creamce::database::configure_privileges inherits creamce::params {
-  #
-  # databaseownership
-  #
-  database_grant{"${cream_db_user}@${cream_db_host}/${cream_db_name}":
-    privileges    => ['ALL'],
+class creamce::database::configure_privileges (
+  $host_pattern = "${cream_db_host}",
+) inherits creamce::params {
+
+  mysql_grant { "${cream_db_user}@${host_pattern}/${cream_db_name}.*":
+    privileges => 'ALL',
+    user       => "${cream_db_user}@${host_pattern}",
+    table      => "${cream_db_name}.*"
   }
 
-  database_grant{"${cream_db_user}@${cream_db_host}/${delegation_db_name}":
-    privileges    => ['ALL'],
+  mysql_grant { "${cream_db_user}@localhost/${cream_db_name}.*":
+    privileges => 'ALL',
+    user       => "${cream_db_user}@localhost",
+    table      => "${cream_db_name}.*"
   }
-  
-  database_grant{"${cream_db_user}@${cream_db_host}/${information_db_name}":
-    privileges    => ['ALL'],
+
+  mysql_grant { "${cream_db_user}@${host_pattern}/${delegation_db_name}.*":
+    privileges => 'ALL',
+    user       => "${cream_db_user}@${host_pattern}",
+    table      => "${delegation_db_name}.*"
   }
-  
-  database_grant{"${cream_db_minpriv_user}@${cream_db_host}/${information_db_name}":
-    privileges    => ['Select_priv','Insert_priv','Update_priv','Alter_Priv','Create_Priv'],
-  }
-  
-  database_grant{"${cream_db_minpriv_user}@${cream_db_host}/${delegation_db_name}":
-    privileges    => ['Select_priv','Insert_priv','Update_priv','Alter_Priv','Create_Priv'],
-  }
-  
-  database_grant{"${cream_db_minpriv_user}@${cream_db_host}/${cream_db_name}":
-    privileges    => ['Select_priv','Insert_priv','Update_priv','Alter_Priv','Create_Priv'],
-  }
-  
-  exec {'drop_empty_users':
-    command => "/usr/bin/mysql -u root mysql -p'${mysql_password}' -e \"delete from user where Password='';flush privileges;\"",
-    logoutput => true,
-    path => '/bin:/usr/local/sbin:/usr/bin:/usr/local/bin',
-    require => Database_grant["${cream_db_user}@${cream_db_host}/${cream_db_name}","${cream_db_minpriv_user}@${cream_db_host}/${information_db_name}","${cream_db_minpriv_user}@${cream_db_host}/${delegation_db_name}","${cream_db_minpriv_user}@${cream_db_host}/${cream_db_name}"],
-    loglevel => notice,
+
+  mysql_grant { "${cream_db_user}@localhost/${delegation_db_name}.*":
+    privileges => 'ALL',
+    user       => "${cream_db_user}@localhost",
+    table      => "${delegation_db_name}.*"
   }
   
 }
