@@ -1,7 +1,7 @@
 EDG_LOCATION=/opt/edg
 EDG_LOCATION_VAR=/opt/edg/var
 EDG_TMP=/tmp
-X509_USER_CERT=/etc/grid-security/hostcert.pem
-X509_USER_KEY=/etc/grid-security/hostkey.pem
-GRIDMAP=/etc/grid-security/grid-mapfile
-GRIDMAPDIR=/etc/grid-security/gridmapdir/
+X509_USER_CERT=<%=@host_certificate%>
+X509_USER_KEY=<%=@%>
+GRIDMAP=<%=@gridmap_file%>
+GRIDMAPDIR=<%=@gridmap_dir%>

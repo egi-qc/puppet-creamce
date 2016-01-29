@@ -71,7 +71,8 @@ class creamce::params {
   $host_private_key        = hiera('host_private_key','/etc/grid-security/hostkey.pem')
   $cacert_dir              = hiera('cacert_dir','/etc/grid-security/certificates')
   $voms_dir                = hiera('voms_dir','/etc/grid-security/vomsdir')
-  $gridmap_dir             = hiera('grimap_dir','/etc/grid-security/gridmapdir')
+  $gridmap_dir             = hiera('gridmap_dir','/etc/grid-security/gridmapdir')
+  $gridmap_file            = hiera('gridmap_file','/etc/grid-security/grid-mapfile')
   $crl_update_millis       = hiera('crl_update_millis',3600000)
   
   #
