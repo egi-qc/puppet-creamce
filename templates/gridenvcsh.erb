@@ -1,16 +1,18 @@
-#
-# This is the file which manipulates the grid environment for tcsh shell.
-#
-# - It saves the exported environment variables to a file,
-# - perform the manipulations in bash, using the bash functions
-# - then it sources the resulted set of environment variables.
-#
-# To see what is going on exactly, how te environment variables are affected
-# have a look to the grid-env.sh file !
-#
-#
+# $gridenvfile is managed by Puppet env.pp.\n#Any changes in here will be overwritten
 
-set mycshtmpfile=`mktemp /tmp/gridenv.XXXXXX`
-bash -c "export ISCSHELL=yes ; source /usr/libexec/grid-env.sh" >> $mycshtmpfile
-source $mycshtmpfile
-rm -f $mycshtmpfile
+setenv PATH=/bin:${PATH}
+setenv MANPATH=/opt/glite/share/man:${MANPATH}
+setenv X509_VOMS_DIR="<%=@voms_dir%>"
+setenv X509_CERT_DIR="<%=@cacert_dir%>"
+setenv GRIDMAPDIR="<%=@gridmap_dir%>"
+setenv LCMAPS_LOG_LEVEL="<%=@lcmaps_log_level%>"
+setenv LCMAPS_DEBUG_LEVEL="<%=@lcmaps_debug_level%>"
+setenv LCAS_LOG_LEVEL="<%=@lcas_log_level%>"
+setenv LCAS_DEBUG_LEVEL="<%=@lcas_debug_level%>"
+setenv GLOBUS_TCP_PORT_RANGE="<%=@globus_tcp_port_range%>"
+setenv CATALINA_HOME="<%=@catalina_home%>"
+<%@ce_env.each do |key, value| -%>
+setenv <%=key%>="<%=value%>"
+<%end-%>
+
+

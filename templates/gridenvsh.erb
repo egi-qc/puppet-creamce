@@ -1,0 +1,18 @@
+# $gridenvfile is managed by Puppet env.pp.\n#Any changes in here will be overwritten
+
+export PATH=/bin:${PATH}
+export MANPATH=/opt/glite/share/man:${MANPATH}
+export X509_VOMS_DIR="<%=@voms_dir%>"
+export X509_CERT_DIR="<%=@cacert_dir%>"
+export GRIDMAPDIR="<%=@gridmap_dir%>"
+export LCMAPS_LOG_LEVEL="<%=@lcmaps_log_level%>"
+export LCMAPS_DEBUG_LEVEL="<%=@lcmaps_debug_level%>"
+export LCAS_LOG_LEVEL="<%=@lcas_log_level%>"
+export LCAS_DEBUG_LEVEL="<%=@lcas_debug_level%>"
+export GLOBUS_TCP_PORT_RANGE="<%=@globus_tcp_port_range%>"
+export CATALINA_HOME="<%=@catalina_home%>"
+<%@ce_env.each do |key, value| -%>
+export <%=key%>="<%=value%>"
+<%end-%>
+
+
