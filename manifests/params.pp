@@ -25,12 +25,9 @@ class creamce::params {
   # $lsf_secondary_master      = hiera("lsf_secondary_master")
   # $lsf_conf_afs_path         = hiera("lsf_conf_afs_path")
   $gridenvfile               = hiera('gridenvfile','/etc/profile.d/grid-env.sh')
-  $ce_env                    = hiera('ce_env',[])
+  $ce_env                    = hiera('ce_env',{})
   $cream_pepc_resourceid     = hiera('cream_pepc_resourceid','http://emi.cern.ch/cream')
-  $gridftp_port              = hiera('gridftp_port',"2811")
-  $gridftp_connections_max   = hiera('gridftp_connections_max',"150")
   $admin_list                = hiera('admin_list',"")
-  $globus_tcp_port_range     = hiera('globus_tcp_port_range',"20000,25000")
   $grid_queues               = hiera('grid_queues')
   $voenv                     = hiera('voenv')
   $computing_service_id      = hiera('computing_service_id')
@@ -65,6 +62,14 @@ class creamce::params {
   $lcas_debug_level        = hiera('lcas_debug_level','0')
   
   #
+  # GridFTP
+  #
+  $gridftp_port              = hiera('gridftp_port',"2811")
+  $gridftp_connections_max   = hiera('gridftp_connections_max',"150")
+  $globus_tcp_port_range     = hiera('globus_tcp_port_range',"20000,25000")
+  
+  
+  #
   # Security
   #
   $host_certificate        = hiera('host_certificate','/etc/grid-security/hostcert.pem')
@@ -73,6 +78,7 @@ class creamce::params {
   $voms_dir                = hiera('voms_dir','/etc/grid-security/vomsdir')
   $gridmap_dir             = hiera('gridmap_dir','/etc/grid-security/gridmapdir')
   $gridmap_file            = hiera('gridmap_file','/etc/grid-security/grid-mapfile')
+  $groupmap_file           = hiera('groupmap_file','/etc/grid-security/groupmapfile')
   $crl_update_millis       = hiera('crl_update_millis',3600000)
   
   #
