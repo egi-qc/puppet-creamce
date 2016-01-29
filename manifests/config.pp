@@ -10,7 +10,7 @@ class creamce::config inherits creamce::params {
   }
   
 
-  file {"/etc/grid-security/gridmapdir":
+  file { "${gridmap_dir}":
     ensure => directory,
     owner => "root",
     group => "root",
@@ -84,36 +84,8 @@ class creamce::config inherits creamce::params {
   }
 
   #
-  # configure glexec
+  # configure gsi
   # 
-  file {"/etc/lcmaps/lcmaps-glexec.db":
-    ensure => present,
-    content => template("creamce/lcmaps-glexec.db.erb"),
-    owner => "root",
-    group => "root",
-    mode => 0640,
-  }
-  file {"/etc/lcas/lcas-glexec.db":
-    ensure => present,
-    content => template("creamce/lcas-glexec.db.erb"),
-    owner => "root",
-    group => "root",
-    mode => 0644,
-  }
-  file {"/etc/glexec.conf":
-    ensure => present,
-    content => template("creamce/glexec.conf.erb"),
-    owner => "root",
-    group => "glexec",
-    mode => 0640,
-  }
-  file {"/etc/glexec":
-    ensure => present,
-    content => template("creamce/glexec-logrotate.erb"),
-    owner => "root",
-    group => "root",
-    mode => 0644,
-  }
   file {"/etc/grid-security/gsi-authz.conf":
     ensure => present,
     content => template("creamce/gsi-authz.erb"),

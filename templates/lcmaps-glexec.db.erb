@@ -11,29 +11,29 @@ posix_enf = "lcmaps_posix_enf.mod"
 " -maxsgid 32"
 
 localaccount = "lcmaps_localaccount.mod"
-" -gridmapfile /etc/grid-security/grid-mapfile"
+" -gridmapfile <%=@gridmap_file%>"
 
 poolaccount = "lcmaps_poolaccount.mod"
 " -override_inconsistency"
-" -gridmapfile /etc/grid-security/grid-mapfile"
-" -gridmapdir /etc/grid-security/gridmapdir"
+" -gridmapfile <%=@gridmap_file%>"
+" -gridmapdir <%=@gridmap_dir%>"
 
 vomslocalgroup = "lcmaps_voms_localgroup.mod"
-" -groupmapfile /etc/grid-security/groupmapfile"
+" -groupmapfile <%=@groupmap_file%>"
 " -mapmin 0"
 
 vomslocalaccount = "lcmaps_voms_localaccount.mod"
-" -gridmapfile /etc/grid-security/grid-mapfile"
+" -gridmapfile <%=@gridmap_file%>"
 " -use_voms_gid"
 
 vomspoolaccount = "lcmaps_voms_poolaccount.mod"
-" -gridmapfile /etc/grid-security/grid-mapfile"
-" -gridmapdir /etc/grid-security/gridmapdir"
+" -gridmapfile <%=@gridmap_file%>"
+" -gridmapdir <%=@gridmap_dir%>"
 " -do_not_use_secondary_gids"
 
 
 proxycheck = "lcmaps_verify_proxy.mod"
-             "-certdir /etc/grid-security/certificates"
+             "-certdir <%=@cacert_dir%>"
 
 
 # policies
