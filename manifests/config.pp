@@ -17,6 +17,17 @@ class creamce::config inherits creamce::params {
     mode => 0700,
   }
   
+  file { "${cream_db_sandbox_path}":
+    ensure => directory,
+    owner  => "tomcat",
+    group  => "tomcat",
+    mode   => 0775,
+  }
+  
+  #
+  # TODO create sandbox for supported vo/groups
+  #    
+  
   file{"/etc/glite/info/service/glite-info-service-cream.conf":
     ensure => present,
     owner => "root",
