@@ -1,7 +1,7 @@
 class creamce::torque inherits creamce::params {
 
   #
-  # configure blah for LSF
+  # configure blah for TORQUE
   #
   file{"/etc/blah.config":
     ensure => present,
