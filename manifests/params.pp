@@ -67,6 +67,10 @@ class creamce::params {
   $bupdater_notify_port      = hiera("bupdater_notify_port", "56554")
   $bupdater_purge_interval   = hiera("bupdater_purge_interval", "2500000")
   $blah_check_children       = hiera("blah_check_children", "30")
+  $blah_logrotate_interval   = hiera("blah_logrotate_interval", "365")
+  $blah_logrotate_size       = hiera("blah_logrotate_size", "10M")
+  $bupdater_logrot_interval  = hiera("bupdater_logrot_interval", "50")
+  $bupdater_logrot_size      = hiera("bupdater_logrot_size", "10M")
   
   $torque_log_dir            = hiera("torque_log_dir", "/var/lib/torque/")
   $torque_multiple_staging   = hiera("torque_multiple_staging","false")

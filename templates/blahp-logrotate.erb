@@ -1,7 +1,7 @@
 /var/log/cream/accounting/blahp.log {
         copytruncate
-        rotate 365
-        size = 10M
+        rotate <%=@blah_logrotate_interval%>
+        size = <%=@blah_logrotate_size%>
         missingok
         nomail
 }

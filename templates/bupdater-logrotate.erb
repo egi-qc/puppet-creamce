@@ -1,7 +1,7 @@
 /var/log/cream/glite-ce-bupdater.log {
         copytruncate
-        rotate 50
-        size = 10M
+        rotate <%=@bupdater_logrot_interval%>
+        size = <%=@bupdater_logrot_size%>
         missingok
         nomail
 }
