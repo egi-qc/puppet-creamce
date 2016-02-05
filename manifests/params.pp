@@ -20,10 +20,6 @@ class creamce::params {
   $argusport                 = hiera("argusport","8154")
   $information_db_name       = hiera("information_db_name","information_schema")
 
-  $batch_system              = hiera("batch_system","lsf")
-  # $lsf_primary_master        = hiera("lsf_primary_master")
-  # $lsf_secondary_master      = hiera("lsf_secondary_master")
-  # $lsf_conf_afs_path         = hiera("lsf_conf_afs_path")
   $gridenvfile               = hiera('gridenvfile','/etc/profile.d/grid-env.sh')
   $ce_env                    = hiera('ce_env',{})
   $cream_pepc_resourceid     = hiera('cream_pepc_resourceid','http://emi.cern.ch/cream')
@@ -53,6 +49,35 @@ class creamce::params {
   $groupmap                = hiera('groupmap',undef)
   $se_list                 = hiera('se_list',undef)
   
+  #
+  # BLAH/LRMS
+  #
+  $batch_system              = hiera("batch_system", undef)
+  $blah_child_poll_timeout   = hiera("blah_child_poll_timeout", "200")
+  $blah_alldone_interval     = hiera("blah_alldone_interval", "86400")
+  $blparser_with_updater     = hiera("blparser_with_updater", "true")
+  $blah_blp_server           = hiera("blah_blp_server", undef)
+  $blah_blp_port             = hiera("blah_blp_port", "33333")
+  $blah_blp_num              = hiera("blah_blp_num", undef)
+  $blah_blp_server1          = hiera("blah_blp_server1", "${blah_blp_server}")
+  $blah_blp_port1            = hiera("blah_blp_port1", "33334")
+  $blah_blp_server2          = hiera("blah_blp_server2", "${blah_blp_server}")
+  $blah_blp_port2            = hiera("blah_blp_port2", "33335")
+  $bupdater_loop_interval    = hiera("bupdater_loop_interval", "30")
+  $bupdater_notify_port      = hiera("bupdater_notify_port", "56554")
+  $bupdater_purge_interval   = hiera("bupdater_purge_interval", "2500000")
+  $blah_check_children       = hiera("blah_check_children", "30")
+  
+  $torque_log_dir            = hiera("torque_log_dir", "/var/lib/torque/")
+  $torque_multiple_staging   = hiera("torque_multiple_staging","false")
+  $torque_tracejob_logs      = hiera("torque_tracejob_logs", "2")
+
+  $lsf_primary_master        = hiera("lsf_primary_master", undef)
+  $lsf_secondary_master      = hiera("lsf_secondary_master", undef)
+  $lsf_conf_afs_path         = hiera("lsf_conf_afs_path", undef)
+
+
+
   #
   # LCAS/LCMAPS
   #

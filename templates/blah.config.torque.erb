@@ -1,0 +1,116 @@
+# WARNING: THIS FILE IS WRITTEN BY PUPPET
+#
+
+# Supported batch systems
+supported_lrms=<%=@batch_system%>
+
+blah_child_poll_timeout=<%=@blah_child_poll_timeout%>
+
+alldone_interval=<%=@blah_alldone_interval%>
+
+# Needed to implement the short term solution for proxy renewal (savannah task #8176) 
+blah_disable_wn_proxy_renewal=yes 
+
+# working on glexec -> sudo support 
+blah_disable_proxy_user_copy=yes
+blah_id_mapping_command_sudo="/usr/bin/sudo -H"
+blah_set_default_workdir_to_home=yes
+
+# DGAS logfile 
+BLAHPD_ACCOUNTING_INFO_LOG=/var/log/cream/accounting/blahp.log
+
+# Path where pbs executables are located 
+pbs_binpath=/usr/bin/
+
+# Path where the pbs conf file is located
+pbs_confpath=/etc
+
+# Path where the pbs logs are located (for pbs $pbs_spoolpath/server_logs)
+pbs_spoolpath=<%=@torque_log_dir%>
+
+# If it is set to yes blah does not check the jobid in the logfiles
+pbs_nochecksubmission=yes
+
+# If it is set to yes blah does NOT use log files to get job status, 
+# but uses only standard LRMS query
+pbs_nologaccess=
+
+# If it is set to no blah scripts for pbs will not try to read 
+# locally from the logs if BLParser is not present
+pbs_fallback=no
+
+<% if @torque_multiple_staging == "true" -%>
+blah_torque_multiple_staging_directive_bug=yes
+<% elsif @torque_multiple_staging == "false" -%>
+blah_torque_multiple_staging_directive_bug=no
+<% end -%>
+
+# Set to yes to use Blah Log Parser for pbs
+pbs_BLParser=yes
+
+<% if @blparser_with_updater == "true" -%>
+
+# New parser section
+job_registry=/var/blah/user_blah_job_registry.bjr
+#
+async_notification_port=<%=@bupdater_loop_interval%>
+bupdater_loop_interval=<%=@bupdater_notify_port%>
+#
+# about 2 months of purge interval.
+purge_interval=<%=@bupdater_purge_interval%>
+                                                                                                                                         
+#Updater location
+bupdater_path=/usr/libexec/BUpdaterPBS
+                                                                                                                                         
+#Notifier location
+bnotifier_path=/usr/libexec/BNotifier
+                                                                                                                                         
+#Updater pid file
+bupdater_pidfile=/var/blah/blah_bupdater.pid
+                                                                                                                                         
+#Notifier pid file
+bnotifier_pidfile=/var/blah/blah_bnotifier.pid
+ 
+#Updater debug level
+bupdater_debug_level=2
+                                                                                                                                         
+#Updater debug log file
+bupdater_debug_logfile=/var/log/cream/glite-ce-bupdater.log
+                                                                                                                                         
+#Notifier debug level
+bnotifier_debug_level=2
+                                                                                                                                         
+#Notifier debug log file
+bnotifier_debug_logfile=/var/log/cream/glite-ce-bnotifier.log
+#
+blah_children_restart_interval=0
+
+#Enable sharing of job registry cache via mmap
+job_registry_use_mmap=yes
+
+#Enable check of execution of bupdater and bnotifier
+blah_check_children_interval=<%=@blah_check_children%>
+
+
+<% elsif @blparser_with_updater == "false" -%>
+
+# Host where Blah Log Parser for pbs is running
+pbs_BLPserver=<%=@blah_blp_server%>
+
+# Port where Blah Log Parser for pbs is running
+pbs_BLPport=<%=@blah_blp_port%>
+
+# Number of Blah Log Parser to try for pbs
+# (if it is null pbs_BLPserver and pbs_BLPport are used)
+pbs_num_BLParser=<%=@blah_blp_num%>
+
+pbs_BLPserver1=<%=@blah_blp_server1%>
+pbs_BLPport1=<%=@blah_blp_port1%>
+
+pbs_BLPserver2=<%=@blah_blp_server2%>
+pbs_BLPport2=<%=@blah_blp_port2%>
+
+<% end -%>
+
+tracejob_logs_to_read=<%=@torque_tracejob_logs%>
+
