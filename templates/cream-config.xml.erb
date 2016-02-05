@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
+<!-- BUILD BY PUPPET -->
+<!-- DO NOT EDIT -->
+
 <service id="CREAM service (core2)">
 
   <commandexecutor id="Delegation executor"
@@ -9,15 +12,15 @@
                    commandworkerpoolsize="0"
                    filename="/usr/share/java/glite-ce-cream-delegationExecutor.jar">
       <parameter name="CREAM_COPY_PROXY_TO_SANDBOX_BIN_PATH" value="/usr/bin/glite-cream-copyProxyToSandboxDir.sh" />
-      <parameter name="CREAM_SANDBOX_DIR" value="/var/cream_sandbox" />
-      <parameter name="DELEGATION_PURGE_RATE" value="720" /> <!-- minutes -->
+      <parameter name="CREAM_SANDBOX_DIR" value="<%=@cream_db_sandbox_path%>" />
+      <parameter name="DELEGATION_PURGE_RATE" value="<%=@deleg_purge_rate%>" /> <!-- minutes -->
   </commandexecutor>
 
   <commandexecutor id="BLAH executor"
                    category="JOB_MANAGEMENT"
-                   commandqueuesize="500"
+                   commandqueuesize="<%=@cream_queue_size%>"
                    commandqueueshared="false"
-                   commandworkerpoolsize="50"
+                   commandworkerpoolsize="<%=@cream_workerpool_size%>"
                    filename="/usr/share/java/glite-ce-cream-blahExecutor.jar">
       <parameter name="BLAHP_BIN_PATH" value="/usr/bin/blahpd" />
       <!-- The following parameter sets the sandbox transfer method (GSIFTP/LRMS)-->
@@ -30,8 +33,8 @@
       <!-- The following parameter sets the BLAH jobId prefix (it MUST be 6 chars long, start with 'cr' and terminate by '_') -->
       <parameter name="BLAH_JOBID_PREFIX" value="cream_" />
       <!-- The following parameter sets the BLAH command timeout specified in seconds-->
-      <parameter name="BLAH_COMMAND_TIMEOUT" value="300"/>
-      <parameter name="LRMS_EVENT_LISTENER_PORT" value="49152"/>
+      <parameter name="BLAH_COMMAND_TIMEOUT" value="<%=@cream_blah_timeout%>"/>
+      <parameter name="LRMS_EVENT_LISTENER_PORT" value="<%=@cream_listener_port%>"/>
       <parameter name="BLPARSER_RETRY_COUNT" value="100" />
       <parameter name="BLPARSER_RETRY_DELAY" value="60000" />
       <parameter name="JOB_WRAPPER_DELEGATION_TIME_SLOT" value="3600" /> <!-- sec. -->
@@ -92,16 +95,58 @@
               removeAbandoned="true"
               removeAbandonedTimeout="30"
   />
-  
-  <adminlist filename="/etc/grid-security/admin-list"/>
+
+<% if @use_argus == 'true' -%>  
+
+  <adminlist filename="<%=@cream_admin_list_file%>"/>
   <argus-pep name="pep-client1"
              resource_id="<%=@cream_pepc_resourceid%>"
-             cert="/etc/grid-security/tomcat-cert.pem"
-             key="/etc/grid-security/tomcat-key.pem"
+             cert="<%=@tomcat_cert%>"
+             key="<%=@tomcat_key%>"
              passwd=""
              mapping_class="org.glite.ce.cream.authz.argus.ActionMapping">
     <endpoint url="https://<%=@argusservice%>:<%=@argusport%>/authz" />
 
   </argus-pep>
+
+<% elsif @use_argus == 'false' -%>
+
+  <authzchain name="chain-1">
+    <plugin name="localuserpip"
+            classname="org.glite.ce.commonj.authz.gjaf.LocalUserPIP">
+      <parameter name="glexec_bin_path"
+                 value="/usr/sbin/glexec" />
+      <parameter name="glexec_probe_cmd"
+                 value="/usr/bin/id" />
+      <parameter name="methods"
+                 value="JobRegister, putProxy, getProxyReq, renewProxyReq, getTerminationTime, destroy" />
+    </plugin>
+    <plugin name="bannerpdp"
+            classname="org.glite.ce.commonj.authz.gjaf.BlackListServicePDP">
+      <parameter name="blackListFile"
+                 value="<%=@cream_ban_list_file%>" />
+    </plugin>
+    <plugin name="admincheckpip"
+            classname="org.glite.ce.commonj.authz.gjaf.AdminCheckerPIP">
+      <parameter name="adminList"
+                 value="<%=@cream_admin_list_file%>" />
+    </plugin>
+
+    <plugin name="gridmappdp"
+            classname="org.glite.ce.commonj.authz.gjaf.GridMapServicePDP">
+      <parameter name="gridMapFile"
+                 value="<%=@gridmap_file%>" />
+    </plugin>
+
+    <plugin name="vomspdp"
+            classname="org.glite.ce.commonj.authz.gjaf.VomsServicePDP">
+      <parameter name="gridMapFile"
+                 value="<%=@gridmap_file%>" />
+    </plugin>
+
+  </authzchain>
+
+<% end -%>
+
 
 </service>

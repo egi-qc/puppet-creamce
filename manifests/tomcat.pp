@@ -1,9 +1,6 @@
-class creamce::tomcat inherits params {
+class creamce::tomcat inherits creamce::params {
 
   require creamce::certificate
-
-  $tomcat_cert='/etc/grid-security/tomcat-cert.pem'
-  $tomcat_key='/etc/grid-security/tomcat-key.pem'
 
   #
   # tomcat setup is done in a simple way; no need to have a module for now 

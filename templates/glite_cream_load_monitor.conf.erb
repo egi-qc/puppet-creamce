@@ -1,14 +1,15 @@
+# BUILT BY PUPPET
 # Thresholds for glite_cream_load_monitor
 # -1 means no limit
 #
-Load1 = 400
-Load5 = 400
-Load15 = 200
-MemUsage = 95
-SwapUsage = 95
-FDNum = 5000
-DiskUsage = 95
-FTPConn = 500
-FDTomcatNum = 8000
-ActiveJobs = -1
-PendingCmds = -1
+Load1 = <%=@cream_limit_load1%>
+Load5 = <%=@cream_limit_load5%>
+Load15 = <%=@cream_limit_load15%>
+MemUsage = <%=@cream_limit_memusage%>
+SwapUsage = <%=@cream_limit_swapusage%>
+FDNum = <%=@cream_limit_fdnum%>
+DiskUsage = <%=@cream_limit_diskusage%>
+FTPConn = <%=@cream_limit_ftpconn%>
+FDTomcatNum = <%=@cream_limit_fdtomcat%>
+ActiveJobs = <%=@cream_limit_activejobs%>
+PendingCmds = <%=@cream_limit_pendjobs%>

@@ -4,6 +4,12 @@ class creamce::config inherits creamce::params {
     lsf: {
       include creamce::lsf
     }
+    pbs: {
+      include creamce::torque
+    }
+    slurm: {
+      include creamce::slurm
+    }
     default: {
       fail "No BATCH system default defined"
     }

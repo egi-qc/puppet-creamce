@@ -15,20 +15,47 @@ class creamce::params {
   $delegation_db_name        = hiera("delegation_db_name"       ,"delegationcreamdb")
   $delegation_db_version     = hiera("delegation_db_version","2.6")
   $interface_version         = hiera("interface_version  ","2.1")
-  $supported_vos             = hiera("supported_vos",undef)
-  $argusservice              = hiera("argusservice",undef)
-  $argusport                 = hiera("argusport","8154")
-  $information_db_name       = hiera("information_db_name","information_schema")
+
+  $cream_limit_load1         = hiera("cream_limit_load1", "400")
+  $cream_limit_load5         = hiera("cream_limit_load5", "400")
+  $cream_limit_load15        = hiera("cream_limit_load15", "200")
+  $cream_limit_memusage      = hiera("cream_limit_memusage", "95")      
+  $cream_limit_swapusage     = hiera("cream_limit_swapusage", "95")      
+  $cream_limit_fdnum         = hiera("cream_limit_fdnum", "5000")      
+  $cream_limit_diskusage     = hiera("cream_limit_diskusage", "95")      
+  $cream_limit_ftpconn       = hiera("cream_limit_ftpconn", "500")      
+  $cream_limit_fdtomcat      = hiera("cream_limit_fdtomcat", "8000")      
+  $cream_limit_activejobs    = hiera("cream_limit_activejobs", "-1")      
+  $cream_limit_pendjobs      = hiera("cream_limit_pendjobs", "-1")
+  $cream_queue_size          = hiera("cream_queue_size", "500")
+  $cream_workerpool_size     = hiera("cream_workerpool_size", "50")
+  $cream_blah_timeout        = hiera("cream_blah_timeout", "300")
+  $cream_listener_port       = hiera("cream_listener_port", "49152")
+  
+  $deleg_purge_rate          = hiera("deleg_purge_rate", "720")
 
   $gridenvfile               = hiera('gridenvfile','/etc/profile.d/grid-env.sh')
   $ce_env                    = hiera('ce_env',{})
-  $cream_pepc_resourceid     = hiera('cream_pepc_resourceid','http://emi.cern.ch/cream')
-  $admin_list                = hiera('admin_list',"")
   $grid_queues               = hiera('grid_queues')
   $voenv                     = hiera('voenv')
   $computing_service_id      = hiera('computing_service_id')
   $clusterid                 = hiera('clusterid')
   $clustermode               = hiera('clustermode')
+  $gippath                   = hiera('gippath',"/var/lib/bdii/gip")
+  $ce_port                   = hiera('ce_port',"8443")
+  $ce_type                   = hiera('ce_type',"cream")
+  $ce_impl_ver               = hiera('ce_impl_ver',"unset") # fixme
+  $info_port                 = hiera('info_port',"2170")
+  $info_type                 = hiera('info_type',"resource")
+  $ce_capability             = hiera('ce_capability',[])
+  $groupmap                  = hiera('groupmap',undef)
+  $se_list                   = hiera('se_list',undef)
+  
+
+
+  #
+  # Tomcat
+  #
   case $::lsbmajdistrelease {
     6: {
       $tomcat                = "tomcat6"
@@ -37,17 +64,11 @@ class creamce::params {
       $tomcat                = "tomcat"
     }
   }
-  $catalina_home           = hiera('catalina_home',"/usr/share/$tomcat")
-  $tomcat_server_lib       = "${catalina_home}/lib"
-  $gippath                 = hiera('gippath',"/var/lib/bdii/gip")
-  $ce_port                 = hiera('ce_port',"8443")
-  $ce_type                 = hiera('ce_type',"cream")
-  $ce_impl_ver             = hiera('ce_impl_ver',"unset") # fixme
-  $info_port               = hiera('info_port',"2170")
-  $info_type               = hiera('info_type',"resource")
-  $ce_capability           = hiera('ce_capability',[])
-  $groupmap                = hiera('groupmap',undef)
-  $se_list                 = hiera('se_list',undef)
+  $catalina_home             = hiera('catalina_home', "/usr/share/$tomcat")
+  $tomcat_server_lib         = "${catalina_home}/lib"
+  $tomcat_cert               = hiera('tomcat_cert', '/etc/grid-security/tomcat-cert.pem')
+  $tomcat_key                = hiera('tomcat_key', '/etc/grid-security/tomcat-key.pem')
+
   
   #
   # BLAH/LRMS
@@ -109,7 +130,15 @@ class creamce::params {
   $gridmap_file            = hiera('gridmap_file','/etc/grid-security/grid-mapfile')
   $groupmap_file           = hiera('groupmap_file','/etc/grid-security/groupmapfile')
   $crl_update_millis       = hiera('crl_update_millis',3600000)
-  
+  $cream_admin_list_file   = hiera('cream_admin_list_file', '/etc/grid-security/admin-list')
+  $cream_ban_list_file     = hiera('cream_ban_list_file', '/etc/lcas/ban_users.db')
+  $supported_vos           = hiera("supported_vos", [])
+  $use_argus               = hiera("use_argus", "true")
+  $argusservice            = hiera("argusservice", undef)
+  $argusport               = hiera("argusport", "8154")
+  $cream_pepc_resourceid   = hiera('cream_pepc_resourceid','http://${cream_db_host}:${ce_port}/cream')
+  $admin_list              = hiera('admin_list', [])
+
   #
   # execution environment static info
   #
