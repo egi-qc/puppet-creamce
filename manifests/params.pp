@@ -128,12 +128,16 @@ class creamce::params {
 
 
   #
-  # LCAS/LCMAPS
+  # LCAS/LCMAPS/GLEXEC
   #
   $lcmaps_log_level        = hiera('lcmaps_log_level','1')
   $lcmaps_debug_level      = hiera('lcmaps_debug_level','0')
   $lcas_log_level          = hiera('lcas_log_level','1')
   $lcas_debug_level        = hiera('lcas_debug_level','0')
+  $lcmaps_rotate_size      = hiera("lcmaps_rotate_size", "10M")
+  $lcmaps_rotate_num       = hiera("lcmaps_rotate_num", "50")
+  $glexec_rotate_size      = hiera("glexec_rotate_size", "10M")
+  $glexec_rotate_num       = hiera("glexec_rotate_num", "50")
   
   #
   # GridFTP
