@@ -35,38 +35,38 @@
       <!-- The following parameter sets the BLAH command timeout specified in seconds-->
       <parameter name="BLAH_COMMAND_TIMEOUT" value="<%=@cream_blah_timeout%>"/>
       <parameter name="LRMS_EVENT_LISTENER_PORT" value="<%=@cream_listener_port%>"/>
-      <parameter name="BLPARSER_RETRY_COUNT" value="100" />
-      <parameter name="BLPARSER_RETRY_DELAY" value="60000" />
-      <parameter name="JOB_WRAPPER_DELEGATION_TIME_SLOT" value="3600" /> <!-- sec. -->
-      <parameter name="JOB_WRAPPER_COPY_PROXY_MIN_RETRY_WAIT" value="60" /> <!-- sec. -->
-      <parameter name="JOB_WRAPPER_COPY_RETRY_COUNT_ISB" value="2" />
-      <parameter name="JOB_WRAPPER_COPY_RETRY_FIRST_WAIT_ISB" value="60" /> <!-- sec. -->
-      <parameter name="JOB_WRAPPER_COPY_RETRY_COUNT_OSB" value="6" />
-      <parameter name="JOB_WRAPPER_COPY_RETRY_FIRST_WAIT_OSB" value="300" /> <!-- sec. -->
+      <parameter name="BLPARSER_RETRY_COUNT" value="<%=@cream_blp_retry_count%>" />
+      <parameter name="BLPARSER_RETRY_DELAY" value="<%=@cream_blp_retry_delay%>" />
+      <parameter name="JOB_WRAPPER_DELEGATION_TIME_SLOT" value="<%=@jw_deleg_time_slot%>" /> <!-- sec. -->
+      <parameter name="JOB_WRAPPER_COPY_PROXY_MIN_RETRY_WAIT" value="<%=@jw_proxy_retry_wait%>" /> <!-- sec. -->
+      <parameter name="JOB_WRAPPER_COPY_RETRY_COUNT_ISB" value="<%=@jw_retry_count_isb%>" />
+      <parameter name="JOB_WRAPPER_COPY_RETRY_FIRST_WAIT_ISB" value="<%=@jw_retry_wait_isb%>" /> <!-- sec. -->
+      <parameter name="JOB_WRAPPER_COPY_RETRY_COUNT_OSB" value="<%=@jw_retry_count_osb%>" />
+      <parameter name="JOB_WRAPPER_COPY_RETRY_FIRST_WAIT_OSB" value="<%=@jw_retry_wait_osb%>" /> <!-- sec. -->
       <!--parameter name="JOB_WRAPPER_TEMPLATE_PATH" value="/etc/glite-ce-cream/" /-->
       <parameter name="GLEXEC_CAT_CMD_PATH" value="/bin/cat" />
-      <parameter name="CREAM_SANDBOX_DIR" value="/var/cream_sandbox" />
+      <parameter name="CREAM_SANDBOX_DIR" value="<%=@cream_db_sandbox_path%>" />
       <parameter name="JOBS_SCRATCH_DIR" value="/var/tmp" />
-      <parameter name="JOB_SUBMISSION_MANAGER_ENABLE" value="true" />
+      <parameter name="JOB_SUBMISSION_MANAGER_ENABLE" value="<%=@cream_enable_limiter%>" />
       <parameter name="JOB_SUBMISSION_MANAGER_SCRIPT_PATH" value="/usr/bin/glite_cream_load_monitor /etc/glite-ce-cream-utils/glite_cream_load_monitor.conf" />
       <!--parameter name="CREAM_JOB_SENSOR_HOST" value="NA" /-->
       <parameter name="CREAM_JOB_SENSOR_PORT" value="49154" />
-      <parameter name="MAX_LEASE_TIME" value="36000" />
-      <parameter name="LEASE_EXECUTION_RATE" value="30" /> <!-- minutes -->
-      <parameter name="HOST_SMP_SIZE" value="8" />
-      <parameter name="JOB_PURGE_RATE" value="300" /> <!-- minutes -->
-      <parameter name="JOB_PURGE_POLICY" value="ABORTED 10 days; CANCELLED 10 days; DONE-OK 10 days; DONE-FAILED 10 days; REGISTERED 2 days;" />
+      <parameter name="MAX_LEASE_TIME" value="<%=@cream_lease_time%>" />
+      <parameter name="LEASE_EXECUTION_RATE" value="<%=@cream_lease_rate%>" /> <!-- minutes -->
+      <parameter name="HOST_SMP_SIZE" value="<%=@cream_smp_size%>" />
+      <parameter name="JOB_PURGE_RATE" value="<%=@cream_job_purge_rate%>" /> <!-- minutes -->
+      <parameter name="JOB_PURGE_POLICY" value="ABORTED <%=@cream_purge_aborted%> days; CANCELLED <%=@cream_purge_cancel%> days; DONE-OK <%=@cream_purge_done%> days; DONE-FAILED <%=@cream_purge_failed%> days; REGISTERED <%=@cream_purge_register%> days;" />
   </commandexecutor>
   
   <dataSource name="datasource_creamdb" 
               type="javax.sql.DataSource"
               factory="org.apache.commons.dbcp.BasicDataSourceFactory"
               driverClassName="org.gjt.mm.mysql.Driver"
-              username="cream" password="<%=@cream_db_password%>"
-              maxActive="200"
-              maxIdle="30"
-              maxWait="10000"
-              url="jdbc:mysql://<%=@cream_db_host%>:3306/creamdb?autoReconnect=true"
+              username="<%=@cream_db_user%>" password="<%=@cream_db_password%>"
+              maxActive="<%=@cream_db_max_active%>"
+              maxIdle="<%=@cream_db_min_idle%>"
+              maxWait="<%=@cream_db_max_wait%>"
+              url="jdbc:mysql://<%=@cream_db_host%>:<%=@cream_db_port%>/creamdb?autoReconnect=true"
               validationQuery="SELECT 1"
               testOnBorrow="true"
               testWhileIdle="true"
@@ -81,11 +81,11 @@
               type="javax.sql.DataSource"
               factory="org.apache.commons.dbcp.BasicDataSourceFactory"
               driverClassName="org.gjt.mm.mysql.Driver"
-              username="cream" password="<%=@cream_db_password%>"
-              maxActive="200"
-              maxIdle="30"
-              maxWait="10000"
-              url="jdbc:mysql://<%=@cream_db_host%>:3306/delegationcreamdb?autoReconnect=true"
+              username="<%=@cream_db_user%>" password="<%=@cream_db_password%>"
+              maxActive="<%=@cream_db_max_active%>"
+              maxIdle="<%=@cream_db_min_idle%>"
+              maxWait="<%=@cream_db_max_wait%>"
+              url="jdbc:mysql://<%=@cream_db_host%>:<%=@cream_db_port%>/delegationcreamdb?autoReconnect=true"
               validationQuery="SELECT 1"
               testOnBorrow="true"
               testWhileIdle="true"
