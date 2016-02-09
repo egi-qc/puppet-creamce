@@ -26,26 +26,26 @@ ce_runtimeenv=ce_info["ce_runtimeenv"]
 subcluster_tmpdir=ce_info["subcluster_tmpdir"]
 subcluster_wntmdir=ce_info["subcluster_wntmdir"]
 -%>
-dn: GlueClusterUniqueID=<%=@fqdn-%>,mds-vo-name=resource,o=grid
+dn: GlueClusterUniqueID=<%=@ce_host-%>,mds-vo-name=resource,o=grid
 objectClass: GlueClusterTop
 objectClass: GlueCluster
 objectClass: GlueInformationService
 objectClass: GlueKey
 objectClass: GlueSchemaVersion
-GlueClusterUniqueID: <%=@fqdn%>
-GlueClusterName: <%=@fqdn%>
+GlueClusterUniqueID: <%=@ce_host%>
+GlueClusterName: <%=@ce_host%>
 GlueForeignKey: GlueSiteUniqueID=<%=@sitename%>
 <%grid_queues.each do | queue, value | -%>
-GlueForeignKey: GlueCEUniqueID=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+GlueForeignKey: GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
 <%end-%>
 <%grid_queues.each do | queue, value | -%>
-GlueClusterService: <%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+GlueClusterService: <%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
 <%end-%>
 GlueInformationServiceURL: ldap://<%=@fqdn-%>:<%=@info_port-%>/mds-vo-name=<%=info_type-%>,o=grid
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
 
-dn: GlueSubClusterUniqueID=<%=@fqdn-%>,GlueClusterUniqueID=<%=@fqdn-%>,mds-vo-name=<%=info_type-%>,o=grid
+dn: GlueSubClusterUniqueID=<%=@ce_host-%>,GlueClusterUniqueID=<%=@ce_host-%>,mds-vo-name=<%=info_type-%>,o=grid
 objectClass: GlueClusterTop
 objectClass: GlueSubCluster
 objectClass: GlueHostApplicationSoftware
@@ -58,8 +58,8 @@ objectClass: GlueHostProcessor
 objectClass: GlueInformationService
 objectClass: GlueKey
 objectClass: GlueSchemaVersion
-GlueSubClusterUniqueID: <%=@fqdn%>
-GlueChunkKey: GlueClusterUniqueID=<%=@fqdn%>
+GlueSubClusterUniqueID: <%=@ce_host%>
+GlueChunkKey: GlueClusterUniqueID=<%=@ce_host%>
 GlueHostArchitecturePlatformType: <%=ce_os_arch%>
 GlueHostArchitectureSMPSize: <%=ce_smpsize%>
 GlueHostBenchmarkSF00: <%=ce_sf00%>
@@ -75,7 +75,7 @@ GlueHostProcessorClockSpeed: <%=ce_cpu_speed%>
 GlueHostProcessorModel: <%=ce_cpu_model%>
 GlueHostProcessorVendor: <%=ce_cpu_vendor%>
 GlueHostProcessorOtherDescription: <%=ce_otherdescr%>
-GlueSubClusterName: <%=@fqdn%>
+GlueSubClusterName: <%=@ce_host%>
 GlueSubClusterPhysicalCPUs: <%=ce_physcpu%>
 GlueSubClusterLogicalCPUs: <%=ce_logcpu%>
 GlueSubClusterTmpDir: <%=subcluster_tmpdir%>

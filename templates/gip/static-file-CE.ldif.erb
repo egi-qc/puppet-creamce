@@ -13,7 +13,7 @@ end-%>
 
 <%@grid_queues.each do | queue, value | 
   vonames=value["vonames"]-%>
-dn: GlueCEUniqueID=<%=fqdn-%>:<%=ce_port-%>/<%=ce_type-%>-<%=batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
+dn: GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
 objectClass: GlueCETop
 objectClass: GlueCE
 objectClass: GlueCEAccessControlBase
@@ -23,18 +23,18 @@ objectClass: GlueCEState
 objectClass: GlueInformationService
 objectClass: GlueKey
 objectClass: GlueSchemaVersion
-GlueCEUniqueID: <%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
-GlueCEHostingCluster: <%=@fqdn%>
+GlueCEUniqueID: <%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+GlueCEHostingCluster: <%=@ce_host%>
 GlueCEName: <%=queue%>
 GlueCEImplementationName: CREAM
 GlueCEImplementationVersion: <%=if (defined? @creamversion); @creamversion else 'undef'; end%>
 GlueCEInfoGatekeeperPort: <%=@ce_port%>
-GlueCEInfoHostName: <%=@fqdn%>
+GlueCEInfoHostName: <%=@ce_host%>
 GlueCEInfoLRMSType: <%=@batch_system%>
 GlueCEInfoLRMSVersion: not defined
 GlueCEInfoTotalCPUs: 0
 GlueCEInfoJobManager: <%=@batch_system%>
-GlueCEInfoContactString: https://<%=@fqdn-%>:<%=@ce_port-%>/ce-cream/services
+GlueCEInfoContactString: https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services
 GlueCEInfoDataDir: unset
 GlueCEStateEstimatedResponseTime: 2146660842
 GlueCEStateFreeCPUs: 0
@@ -55,7 +55,7 @@ GlueCEPolicyMaxSlotsPerJob: 999999999
 GlueCEPolicyPreemption: 0
 GlueCEPolicyPriority: 1
 GlueCEPolicyAssignedJobSlots: 0
-GlueForeignKey: GlueClusterUniqueID=<%=@fqdn%>
+GlueForeignKey: GlueClusterUniqueID=<%=@ce_host%>
 GlueInformationServiceURL: ldap://<%=@fqdn-%>:<%=@info_port-%>/mds-vo-name=<%=@info_type-%>grid
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
@@ -73,7 +73,7 @@ GlueCEAccessControlBaseRule: VO:<%=voname%>
 <%end-%>
 
 <%vonames.each do |voname|-%>
-dn: GlueVOViewLocalID=<%=voname-%>,GlueCEUniqueID=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
+dn: GlueVOViewLocalID=<%=voname-%>,GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
 objectClass: GlueCETop
 objectClass: GlueVOView
 objectClass: GlueCEInfo
@@ -92,7 +92,7 @@ GlueCEStateWorstResponseTime: 2146660842
 GlueCEInfoDefaultSE: <%=defaultse[voname]%>
 GlueCEInfoApplicationDir: <%=voswdir[voname]%>
 GlueCEInfoDataDir: unset
-GlueChunkKey: GlueCEUniqueID=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+GlueChunkKey: GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
 <% if voname.include?("/") -%>
 GlueCEAccessControlBaseRule: VOMS:<%=voname%>
 <% else -%>

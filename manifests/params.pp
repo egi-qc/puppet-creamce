@@ -1,5 +1,9 @@
 class creamce::params {
   $sitename                  = hiera("sitename", "${::fqdn}")
+  $ce_host                   = hiera("ce_host", "${::fqdn}")
+  $ce_port                   = hiera('ce_port', "8443")
+  $ce_type                   = hiera('ce_type', "cream")
+  $ce_impl_ver               = hiera('ce_impl_ver', "unset")           # fixme
   $access_by_domain          = hiera("access_by_domain", "false")
   
   $max_connections           = hiera("max_connections", "999")
@@ -62,9 +66,6 @@ class creamce::params {
   $ce_env                    = hiera('ce_env',{})
   $grid_queues               = hiera('grid_queues')
   $voenv                     = hiera('voenv')
-  $ce_port                   = hiera('ce_port',"8443")
-  $ce_type                   = hiera('ce_type',"cream")
-  $ce_impl_ver               = hiera('ce_impl_ver',"unset") # fixme
   $groupmap                  = hiera('groupmap',undef)
 
   #
@@ -82,6 +83,7 @@ class creamce::params {
   $tomcat_server_lib         = "${catalina_home}/lib"
   $tomcat_cert               = hiera('tomcat_cert', '/etc/grid-security/tomcat-cert.pem')
   $tomcat_key                = hiera('tomcat_key', '/etc/grid-security/tomcat-key.pem')
+  $java_opts                  = hiera('java_opts','-Xms512m -Xmx2048m')
 
   
   #
@@ -161,6 +163,9 @@ class creamce::params {
   #
   # Infosystem
   #
+  $clusters                  = hiera('clusters','unset')
+  $subclusters               = hiera('subclusters','unset')
+  $ce_def                    = hiera('ce_def','unset')
   $clustermode               = hiera('clustermode', "false")
   $clusterid                 = hiera('clusterid', undef)
   $gippath                   = hiera('gippath', "/var/lib/bdii/gip")
@@ -184,12 +189,6 @@ class creamce::params {
   # wrong! this is CE specific
   $cores                      = hiera('cores','0')           
   $benchmark_info             = hiera('benchmark_info','((specfp2000 0), (specint2000 0), (HEP-SPEC06 0))') # 
-  $java_opts                  = hiera('java_opts','-Xms512m -Xmx2048m')
-  
-# structure of the site
-  $clusters                   = hiera('clusters','unset')
-  $subclusters                = hiera('subclusters','unset')
-  $ce_def                     = hiera('ce_def','unset')
   
   #
   # apel accounting secrets
