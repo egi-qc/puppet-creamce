@@ -5,13 +5,12 @@ class creamce::gip inherits creamce::params {
   #
 
   include creamce::gip::plugin::glite_info_cream_glue2
-  include creamce::gip::plugin::glite_info_dynamic_ce
-  include creamce::gip::plugin::glite_info_dynamic_scheduler_wrapper
 
   #
   # common ldif
   #
   # ldif files
+  include creamce::gip::ldif::staticfilece
   include creamce::gip::ldif::computingendpoint
   include creamce::gip::ldif::computingservice
 
@@ -22,7 +21,7 @@ class creamce::gip inherits creamce::params {
     mode   => 0755
   }
   
-  if ($clustermode == "yes") {
+  if ($clustermode == "true") {
     # plugin
     include creamce::gip::plugin::glite_info_provider_service_cream_wrapper
     # provider

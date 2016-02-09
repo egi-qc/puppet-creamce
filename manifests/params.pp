@@ -62,20 +62,10 @@ class creamce::params {
   $ce_env                    = hiera('ce_env',{})
   $grid_queues               = hiera('grid_queues')
   $voenv                     = hiera('voenv')
-  $computing_service_id      = hiera('computing_service_id')
-  $clusterid                 = hiera('clusterid')
-  $clustermode               = hiera('clustermode')
-  $gippath                   = hiera('gippath',"/var/lib/bdii/gip")
   $ce_port                   = hiera('ce_port',"8443")
   $ce_type                   = hiera('ce_type',"cream")
   $ce_impl_ver               = hiera('ce_impl_ver',"unset") # fixme
-  $info_port                 = hiera('info_port',"2170")
-  $info_type                 = hiera('info_type',"resource")
-  $ce_capability             = hiera('ce_capability',[])
   $groupmap                  = hiera('groupmap',undef)
-  $se_list                   = hiera('se_list',undef)
-  
-
 
   #
   # Tomcat
@@ -166,6 +156,24 @@ class creamce::params {
   $argusport               = hiera("argusport", "8154")
   $cream_pepc_resourceid   = hiera('cream_pepc_resourceid','http://${cream_db_host}:${ce_port}/cream')
   $admin_list              = hiera('admin_list', [])
+
+
+  #
+  # Infosystem
+  #
+  $clustermode               = hiera('clustermode', "false")
+  $clusterid                 = hiera('clusterid', undef)
+  $gippath                   = hiera('gippath', "/var/lib/bdii/gip")
+  $info_port                 = hiera('info_port', "2170")
+  $info_type                 = hiera('info_type', "resource")
+  $ce_capability             = hiera('ce_capability', [])
+  $computing_service_id      = hiera('computing_service_id', undef)
+  $se_list                   = hiera('se_list', [])
+  
+
+
+
+
 
   #
   # execution environment static info
