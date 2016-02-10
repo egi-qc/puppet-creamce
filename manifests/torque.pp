@@ -11,4 +11,11 @@ class creamce::torque inherits creamce::params {
     content => template("creamce/blah.config.torque.erb"),
   }
 
+  #
+  # configure infoprovider for TORQUE
+  #
+  package{"lcg-info-dynamic-scheduler-pbs":
+    ensure => present
+  }
+
 }
