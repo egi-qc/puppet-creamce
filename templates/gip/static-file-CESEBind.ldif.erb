@@ -18,9 +18,9 @@ objectClass: GlueGeneralTop
 objectClass: GlueCESEBind
 objectClass: GlueSchemaVersion
 GlueCESEBindSEUniqueID: <%=se%>
-GlueCESEBindCEAccesspoint: <%=sdata['access_point']%>
+GlueCESEBindCEAccesspoint: <%=sdata['mount_dir']%>,<%=sdata['export_dir']%>
 GlueCESEBindCEUniqueID: <%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
-GlueCESEBindMountInfo: <%=sdata['access_point']%>
+GlueCESEBindMountInfo: <%=sdata['mount_dir']%>,<%=sdata['export_dir']%>
 GlueCESEBindWeight: 0
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3

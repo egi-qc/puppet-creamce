@@ -3,7 +3,10 @@ class creamce::params {
   $ce_host                   = hiera("ce_host", "${::fqdn}")
   $ce_port                   = hiera('ce_port', "8443")
   $ce_type                   = hiera('ce_type', "cream")
-  $ce_impl_ver               = hiera('ce_impl_ver', "unset")           # fixme
+  $ce_state                  = hiera('ce_state', "production")
+  $ce_env                    = hiera('ce_env', {})
+  $ce_impl_ver               = hiera('ce_impl_ver', "unset")                        # detect from /etc/glite-ce-cream/service.properties
+  $interface_version         = hiera("interface_version", "2.1")                    # detect from /etc/glite-ce-cream/service.properties
   $access_by_domain          = hiera("access_by_domain", "false")
   
   $max_connections           = hiera("max_connections", "999")
@@ -16,13 +19,12 @@ class creamce::params {
   $cream_db_domain           = hiera("cream_db_domain", "${::domain}")
   $cream_db_minpriv_user     = hiera("cream_db_minpriv_user", "minprivuser")
   $cream_db_minpriv_password = hiera("cream_db_minpriv_password")
-  $cream_db_version          = hiera("cream_db_version", "2.6")
+  $cream_db_version          = hiera("cream_db_version", "2.6")                     # detect from /etc/glite-ce-cream/service.properties
   $cream_db_max_active       = hiera("cream_db_max_active", "200")
   $cream_db_min_idle         = hiera("cream_db_min_idle", "30")
   $cream_db_max_wait         = hiera("cream_db_max_wait", "10000")
   $delegation_db_name        = hiera("delegation_db_name", "delegationcreamdb")
-  $delegation_db_version     = hiera("delegation_db_version", "2.6")
-  $interface_version         = hiera("interface_version", "2.1")
+  $delegation_db_version     = hiera("delegation_db_version", "2.6")                # detect from /etc/glite-ce-cream/service.properties
 
   $cream_db_sandbox_path     = hiera("cream_db_sandbox_path", "/var/cream_sandbox")
   $cream_enable_limiter      = hiera("cream_enable_limiter", "true")
@@ -63,10 +65,6 @@ class creamce::params {
   $jw_retry_wait_osb         = hiera("jw_retry_wait_osb", "300")
 
   $gridenvfile               = hiera('gridenvfile','/etc/profile.d/grid-env.sh')
-  $ce_env                    = hiera('ce_env',{})
-  $grid_queues               = hiera('grid_queues')
-  $voenv                     = hiera('voenv')
-  $groupmap                  = hiera('groupmap',undef)
 
   #
   # Tomcat
@@ -83,7 +81,7 @@ class creamce::params {
   $tomcat_server_lib         = "${catalina_home}/lib"
   $tomcat_cert               = hiera('tomcat_cert', '/etc/grid-security/tomcat-cert.pem')
   $tomcat_key                = hiera('tomcat_key', '/etc/grid-security/tomcat-key.pem')
-  $java_opts                  = hiera('java_opts','-Xms512m -Xmx2048m')
+  $java_opts                 = hiera('java_opts','-Xms512m -Xmx2048m')
 
   
   #
@@ -149,31 +147,34 @@ class creamce::params {
   $gridmap_dir             = hiera('gridmap_dir','/etc/grid-security/gridmapdir')
   $gridmap_file            = hiera('gridmap_file','/etc/grid-security/grid-mapfile')
   $groupmap_file           = hiera('groupmap_file','/etc/grid-security/groupmapfile')
+  $groupmap                = hiera('groupmap',undef)
   $crl_update_millis       = hiera('crl_update_millis',3600000)
   $cream_admin_list_file   = hiera('cream_admin_list_file', '/etc/grid-security/admin-list')
   $cream_ban_list_file     = hiera('cream_ban_list_file', '/etc/lcas/ban_users.db')
-  $supported_vos           = hiera("supported_vos", [])
   $use_argus               = hiera("use_argus", "true")
   $argusservice            = hiera("argusservice", undef)
   $argusport               = hiera("argusport", "8154")
   $cream_pepc_resourceid   = hiera('cream_pepc_resourceid','http://${cream_db_host}:${ce_port}/cream')
   $admin_list              = hiera('admin_list', [])
+  $supported_vos           = hiera("supported_vos", [])
+  $voenv                   = hiera('voenv', {})
 
 
   #
   # Infosystem
   #
-  $clusters                  = hiera('clusters','unset')
-  $subclusters               = hiera('subclusters','unset')
-  $ce_def                    = hiera('ce_def','unset')
-  $clustermode               = hiera('clustermode', "false")
-  $clusterid                 = hiera('clusterid', undef)
-  $gippath                   = hiera('gippath', "/var/lib/bdii/gip")
-  $info_port                 = hiera('info_port', "2170")
-  $info_type                 = hiera('info_type', "resource")
-  $ce_capability             = hiera('ce_capability', [])
-  $computing_service_id      = hiera('computing_service_id', undef)
-  $se_list                   = hiera('se_list', [])
+  $clusters                = hiera('clusters','unset')
+  $subclusters             = hiera('subclusters','unset')
+  $ce_def                  = hiera('ce_def','unset')
+  $clustermode             = hiera('clustermode', "false")
+  $clusterid               = hiera('clusterid', undef)
+  $gippath                 = hiera('gippath', "/var/lib/bdii/gip")
+  $info_port               = hiera('info_port', "2170")
+  $info_type               = hiera('info_type', "resource")
+  $ce_capability           = hiera('ce_capability', [])
+  $computing_service_id    = hiera('computing_service_id', undef)
+  $se_list                 = hiera('se_list', {})
+  $grid_queues             = hiera('grid_queues', {})
   
 
 

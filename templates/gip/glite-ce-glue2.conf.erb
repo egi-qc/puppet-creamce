@@ -1,5 +1,5 @@
 <%
-thisce=@ce_def[@hostname]
+thisce=@ce_def
 clustername=thisce["ce_cluster"]
 subclustername=thisce["ce_subcluster"]
 ce_info=subclusters[subclustername]
@@ -39,11 +39,11 @@ SiteId = <%=@sitename%>
 # Computing Service Id
 # Provided by yaim variable COMPUTING_SERVICE_ID (required if we are in cluster mode)
 # Otherwise Computing Service Id is hostname + the "_ComputingElement" string
-<%if@clustermode-%>
+<% if @clustermode == 'true' -%>
 ComputingServiceId = <%=@computing_service_id%>
-<%else-%>
-ComputingServiceId = <%=@fqdn-%>_ComputingElement
-<%end%>
+<% else -%>
+ComputingServiceId = <%=@ce_host-%>_ComputingElement
+<% end %>
 #
 #
 # NumberOfEndPointType
@@ -54,13 +54,12 @@ NumberOfEndPointType = 2
 #
 #
 # ImplementationVersion is the version of the CREAM service
-ImplementationVersion=<%= defined? @creamversion ? @creamversion : 'undef'%>
+ImplementationVersion=<%= defined? @ce_impl_ver ? @ce_impl_ver : 'undef'%>
 
 #
 #
 # InterfaceVersion is the version of the Service interface
-#fixme: hard coded
-InterfaceVersion=2.1
+InterfaceVersion=<%=@interface_version%>
 
 #
 #
@@ -74,13 +73,22 @@ ServingState = Production
 
 #
 #
+# QualityLevel of the Service Element. It should be usually set to production
+QualityLevel = <%=@ce_state%>
+
+#
+#
 # Owner should be the list of owner VO names
-Owner =  <%=supported_vos.join(" ")%>  
+Owner =  <%=@supported_vos.join(" ")%>  
 
 #
 #
 # Argus is yes if this CREAM CE is using Argus as authorization mechanism
+<% if @use_argus == 'true' -%>
 Argus = yes
+<% else -%>
+Argus = no
+<% end -%>
 
 #
 #
@@ -102,7 +110,7 @@ ACBR = <%=acbrlist%>
 # ExecutionEnvironments
 # The list of the ids of the Execution Environments
 # Format: ExecutionEnvironments = (EE1, EE2, ..., EEn)
-ExecutionEnvironments = (<%=@fqdn%>)
+ExecutionEnvironments = (<%=@ce_host%>)
 
 #
 #
@@ -126,9 +134,11 @@ BATCH_VERSION = <%=@batch_system-%>_<%=defined? @batchversion ? @batchversion : 
 <%CloseSEs=Array.new
 CloseSEsFormatted=Array.new
 @voenv.each do | vo, value |
-  if ! CloseSEs.include?(value['vo_default_se'])
-    CloseSEs.push(value['vo_default_se'])
-    CloseSEsFormatted.push("("+value['vo_default_se']+" none none)")
+  defaultSE = value['vo_default_se']
+  if ! CloseSEs.include?(defaultSE)
+    CloseSEs.push(defaultSE)
+    seObj=@se_list[defaultSE]
+    CloseSEsFormatted.push("("+ defaultSE + " " + seObj['mount_dir'] + " " + seObj['export_dir']+ ")")
   end
 end-%>
 CloseSEs = (<%=CloseSEsFormatted.join(', ')-%>)
@@ -138,7 +148,7 @@ CloseSEs = (<%=CloseSEsFormatted.join(', ')-%>)
 # Format: CECapabilities = (capa1, capa2, ..., capaN)
 CECapabilities = (<%=@ce_capability.join(",")-%>)
 
-<%if ! @clustermode -%>
+<%if @clustermode == 'false' -%>
 # CE in non-cluster mode
 #
 #
@@ -147,86 +157,86 @@ CECapabilities = (<%=@ce_capability.join(",")-%>)
 # specified EE
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_OS_ARCH
-ExecutionEnvironment_<%=@fqdn-%>_ArchitecturePlatformType = <%=ce_platform_type%>
+ExecutionEnvironment_<%=@ce_host-%>_ArchitecturePlatformType = <%=ce_platform_type%>
 #
 # 
 # PhysicalCPUs is the total number of real CPUs/physical chips, including 
 # the nodes that are temporary down or offline 
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_PHYSCPU
-ExecutionEnvironment_<%=@fqdn-%>_PhysicalCPUs = <%=ce_physcpu%>
+ExecutionEnvironment_<%=@ce_host-%>_PhysicalCPUs = <%=ce_physcpu%>
 #
 #
 # LogicalCPUs is the total number of cores/hyperthreaded CPUs, including the 
 # nodes that are temporary down or offline
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_LOGCPU
-ExecutionEnvironment_<%=@fqdn-%>_LogicalCPUs = <%=ce_logcpu%>
+ExecutionEnvironment_<%=@ce_host-%>_LogicalCPUs = <%=ce_logcpu%>
 #
 #
 # SmpSize is the number of Logical CPUs (cores) of the WN
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_SMPSIZE 
-ExecutionEnvironment_<%=@fqdn-%>_SmpSize = <%=ce_smpsize%>
+ExecutionEnvironment_<%=@ce_host-%>_SmpSize = <%=ce_smpsize%>
 #
 # 
 # ProcessorVendor is the name of the processor vendor for the Worker Nodes
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_CPU_VENDOR
-ExecutionEnvironment_<%=@fqdn-%>_ProcessorVendor = <%=ce_cpu_vendor%>
+ExecutionEnvironment_<%=@ce_host-%>_ProcessorVendor = <%=ce_cpu_vendor%>
 #
 #
 # ProcessorModel is the name of the processor model as defined by the vendor 
 # for the Worker Nodes
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_CPU_MODEL
-ExecutionEnvironment_<%=@fqdn-%>_ProcessorModel = <%=ce_cpu_model%>
+ExecutionEnvironment_<%=@ce_host-%>_ProcessorModel = <%=ce_cpu_model%>
 #
 #
 # ProcessorClockSpeed is the processor clock speed expressed in MHz for the 
 # Worker Nodes 
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_CPU_SPEED
-ExecutionEnvironment_<%=@fqdn-%>_ProcessorClockSpeed = <%=ce_cpu_speed%>
+ExecutionEnvironment_<%=@ce_host-%>_ProcessorClockSpeed = <%=ce_cpu_speed%>
 #
 #
 # MainMemoryRAMSize is the total physical memory of a WN expressed in MegaBytes
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_MINPHYSMEM 
-ExecutionEnvironment_<%=@fqdn-%>_MainMemoryRAMSize = <%=ce_minphysmem%>
+ExecutionEnvironment_<%=@ce_host-%>_MainMemoryRAMSize = <%=ce_minphysmem%>
 #
 #
 # MainMemoryVirtualSize is the total virtual memory of a WN expressed in 
 # MegaBytes.
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_MINVIRTMEM
-ExecutionEnvironment_<%=@fqdn-%>_MainMemoryVirtualSize = <%=ce_minvirtmem%>
+ExecutionEnvironment_<%=@ce_host-%>_MainMemoryVirtualSize = <%=ce_minvirtmem%>
 #
 # 
 # OperatingSystemFamily should be filled with the OS family (e.g. linux)
 # It must be set for all the Execution Environments
-ExecutionEnvironment_<%=@fqdn-%>_OperatingSystemFamily = <%=ce_os_family%>
+ExecutionEnvironment_<%=@ce_host-%>_OperatingSystemFamily = <%=ce_os_family%>
 #
 # 
 # OperatingSystemName is the name of the operating system used on the Worker 
 # Nodes 
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_OS
-ExecutionEnvironment_<%=@fqdn-%>_OperatingSystemName = <%=ce_os_name%>
+ExecutionEnvironment_<%=@ce_host-%>_OperatingSystemName = <%=ce_os_name%>
 #
 # 
 # OperatingSystemRelease is the release of the operating system used on the 
 # Worker Nodes
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_OS_RELEASE
-ExecutionEnvironment_<%=@fqdn-%>_OperatingSystemRelease = <%=ce_os_release%>
+ExecutionEnvironment_<%=@ce_host-%>_OperatingSystemRelease = <%=ce_os_release%>
 # 
 #
 # NetworkAdapterInboundIP must be set to either FALSE or TRUE to express the 
 # permission for inbound connectivity for the WNs
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_INBOUNDIP
-ExecutionEnvironment_<%=@fqdn-%>_NetworkAdapterInboundIP = <%=ce_inboundip%>
+ExecutionEnvironment_<%=@ce_host-%>_NetworkAdapterInboundIP = <%=ce_inboundip%>
 #
 #
 # NetworkAdapterOutboundIP must be set to either FALSE or TRUE to express 
@@ -239,12 +249,12 @@ ExecutionEnvironment_<%=@fqdn-%>_NetworkAdapterOutboundIP = <%=ce_outboundip%>
 # Benchmarks is the list of benchmarks
 # Format: Benchmarks = (Benchmark1, Benchmark2, .., Benchmarkn)
 # Format of Benchmarki: (Type Value)
-ExecutionEnvironment_<%=@fqdn-%>_Benchmarks = <%=@benchmark_info%>
+ExecutionEnvironment_<%=@ce_host-%>_Benchmarks = <%=@benchmark_info%>
 #
 #
 # Cores is the number of cores per CPU of the Worker Nodes
 # It must be set for all the Execution Environments
-ExecutionEnvironment_<%=@fqdn-%>_Cores = <%=@cores%>
+ExecutionEnvironment_<%=@ce_host-%>_Cores = <%=@cores%>
 
 #
 #
@@ -270,10 +280,10 @@ Shares = ( <%=sharelist.join(',')-%> )
   vonames.each do | owner | -%>
 SHARE_<%=queue-%>_<%=owner-%>_QUEUENAME=<%=queue%>
 SHARE_<%=queue-%>_<%=owner-%>_OWNER=<%=vonames.join(' ')%>
-SHARE_<%=queue-%>_<%=owner-%>_ENDPOINTS=(<%=@fqdn-%>_org.glite.ce.<%=@ce_type.upcase-%>)
-SHARE_<%=queue-%>_<%=owner-%>_EXECUTIONENVIRONMENTS=(<%=@fqdn-%>)
+SHARE_<%=queue-%>_<%=owner-%>_ENDPOINTS=(<%=@ce_host-%>_org.glite.ce.<%=@ce_type.upcase-%>)
+SHARE_<%=queue-%>_<%=owner-%>_EXECUTIONENVIRONMENTS=(<%=@ce_host-%>)
 SHARE_<%=queue-%>_<%=owner-%>_ACBRS=( VO:<%=owner-%> )
-SHARE_<%=queue-%>_<%=owner-%>_CEIDS=(<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>)  
+SHARE_<%=queue-%>_<%=owner-%>_CEIDS=(<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>)  
   <%end-%>
  <%end-%>
 <%end-%>

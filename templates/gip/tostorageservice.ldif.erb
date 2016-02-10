@@ -1,7 +1,7 @@
 <%
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
 @se_list.each do | sename, details |
-  access_point=details['access_point']
+  access_point=details['mount_dir'] + ',' + details['export_dir']
   type = details['type']
 -%>
 dn: GLUE2ToStorageServiceID=<%=@fqdn-%>_ComputingElement_<%=sename-%>,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
