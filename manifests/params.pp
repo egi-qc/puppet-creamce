@@ -3,7 +3,7 @@ class creamce::params {
   $ce_host                   = hiera("ce_host", "${::fqdn}")
   $ce_port                   = hiera('ce_port', "8443")
   $ce_type                   = hiera('ce_type', "cream")
-  $ce_state                  = hiera('ce_state', "production")
+  $ce_quality_level          = hiera('ce_quality_level', "production")
   $ce_env                    = hiera('ce_env', {})
   $ce_impl_ver               = hiera('ce_impl_ver', "unset")                        # detect from /etc/glite-ce-cream/service.properties
   $interface_version         = hiera("interface_version", "2.1")                    # detect from /etc/glite-ce-cream/service.properties
@@ -172,7 +172,7 @@ class creamce::params {
   $info_port               = hiera('info_port', "2170")
   $info_type               = hiera('info_type', "resource")
   $ce_capability           = hiera('ce_capability', [])
-  $computing_service_id    = hiera('computing_service_id', undef)
+  $computing_service_id    = hiera('computing_service_id', "${ce_host}_ComputingElement")
   $se_list                 = hiera('se_list', {})
   $grid_queues             = hiera('grid_queues', {})
   

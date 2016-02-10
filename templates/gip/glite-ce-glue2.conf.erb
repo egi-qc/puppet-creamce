@@ -39,11 +39,7 @@ SiteId = <%=@sitename%>
 # Computing Service Id
 # Provided by yaim variable COMPUTING_SERVICE_ID (required if we are in cluster mode)
 # Otherwise Computing Service Id is hostname + the "_ComputingElement" string
-<% if @clustermode == 'true' -%>
 ComputingServiceId = <%=@computing_service_id%>
-<% else -%>
-ComputingServiceId = <%=@ce_host-%>_ComputingElement
-<% end %>
 #
 #
 # NumberOfEndPointType
@@ -74,7 +70,7 @@ ServingState = Production
 #
 #
 # QualityLevel of the Service Element. It should be usually set to production
-QualityLevel = <%=@ce_state%>
+QualityLevel = <%=@ce_quality_level%>
 
 #
 #
