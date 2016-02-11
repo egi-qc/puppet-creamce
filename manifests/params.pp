@@ -175,7 +175,14 @@ class creamce::params {
   $computing_service_id    = hiera('computing_service_id', "${ce_host}_ComputingElement")
   $se_list                 = hiera('se_list', {})
   $grid_queues             = hiera('grid_queues', {})
-  
+  $workarea_shared         = hiera('workarea_shared', 'false')
+  $workarea_guaranteed     = hiera('workarea_guaranteed', 'false')
+  $workarea_total          = hiera('workarea_total', 0)
+  $workarea_free           = hiera('workarea_free', 0)
+  $workarea_lifetime       = hiera('workarea_lifetime', 0)
+  $workarea_mslot_total    = hiera('workarea_mslot_total', 0)
+  $workarea_mslot_free     = hiera('workarea_mslot_free', 0)
+  $workarea_mslot_lifetime = hiera('workarea_mslot_lifetime', 0)
 
 
 

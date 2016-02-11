@@ -1,6 +1,6 @@
 <%
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
-thisce=@ce_def[@hostname]
+thisce=@ce_def
 clustername=thisce["ce_cluster"]
 subclustername=thisce["ce_subcluster"]
 ce_info=subclusters[subclustername]
@@ -13,23 +13,48 @@ ce_runtimeenv=ce_info["ce_runtimeenv"]
 subcluster_tmpdir=ce_info["subcluster_tmpdir"]
 subcluster_wntmdir=ce_info["subcluster_wntmdir"]
 -%>
-dn: GLUE2ManagerId=<%=@fqdn-%>_ComputingElement_Manager,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+dn: GLUE2ManagerId=<%=@computing_service_id-%>_Manager,GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
 objectClass: GLUE2Manager
 objectClass: GLUE2ComputingManager
 GLUE2EntityCreationTime: <%=now%>
-GLUE2EntityName: Computing Manager on <%=@fqdn%>
+GLUE2EntityName: Computing Manager on <%=@ce_host%>
 GLUE2ComputingManagerTotalPhysicalCPUs: <%=ce_physcpu%>
 GLUE2ComputingManagerTotalLogicalCPUs: <%=ce_logcpu%>
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-manager-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
-GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
 GLUE2EntityOtherInfo: CPUScalingReferenceSI00=<%=ce_si00%>
 <%@ce_capability.each do | cap | -%>
 GLUE2EntityOtherInfo: <%=cap%>
 <%end-%>
-GLUE2ManagerID: <%=@fqdn-%>_ComputingElement_Manager
+GLUE2ManagerID: <%=@computing_service_id-%>_Manager
 GLUE2ManagerProductName: <%=@batch_system%>
 GLUE2ManagerProductVersion: <%=@batch_system.upcase-%>_<%=@batchversion%>
-GLUE2ManagerServiceForeignKey: <%=@fqdn-%>_ComputingElement
-GLUE2ComputingManagerComputingServiceForeignKey: <%=@fqdn-%>_ComputingElement
+GLUE2ManagerServiceForeignKey: <%=@computing_service_id%>
+GLUE2ComputingManagerComputingServiceForeignKey: <%=@computing_service_id%>
+<% if @workarea_shared.to_s.downcase == 'true' -%>
+GLUE2ComputingManagerWorkingAreaShared: <%=@workarea_shared.to_s%>
+<% end -%>
+<% if @workarea_guaranteed.to_s.downcase == 'true' -%>
+GLUE2ComputingManagerWorkingAreaGuaranteed: <%=@workarea_guaranteed.to_s%>
+<% end -%>
+<% if @workarea_total.to_i > 0 -%>
+GLUE2ComputingManagerWorkingAreaTotal: <%=@workarea_total%>
+<% end -%>
+<% if @workarea_free.to_i > 0 -%>
+GLUE2ComputingManagerWorkingAreaFree: <%=@workarea_free%>
+<% end -%>
+<% if @workarea_lifetime.to_i > 0 -%>
+GLUE2ComputingManagerWorkingAreaLifeTime: <%=@workarea_lifetime%>
+<% end -%>
+<% if @workarea_mslot_total.to_i > 0 -%>
+GLUE2ComputingManagerWorkingAreaMultiSlotTotal: <%=@workarea_mslot_total%>
+<% end -%>
+<% if @workarea_mslot_free.to_i > 0 -%>
+GLUE2ComputingManagerWorkingAreaMultiSlotFree: <%=@workarea_mslot_free%>
+<% end -%>
+<% if @workarea_mslot_lifetime.to_i > 0 -%>
+GLUE2ComputingManagerWorkingAreaMultiSlotLifeTime: <%=@workarea_mslot_lifetime%>
+<% end -%>
+
