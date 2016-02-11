@@ -183,16 +183,7 @@ class creamce::params {
   $workarea_mslot_total    = hiera('workarea_mslot_total', 0)
   $workarea_mslot_free     = hiera('workarea_mslot_free', 0)
   $workarea_mslot_lifetime = hiera('workarea_mslot_lifetime', 0)
-
-
-
-
-
-  #
-  # execution environment static info
-  #
-  # fixme
-  $execution_environments   = hiera('execution_environments',[$::fqdn])
+  $execution_environments  = hiera('execution_environments',[])
 
   # wrong! this is CE specific
   $cores                      = hiera('cores','0')           

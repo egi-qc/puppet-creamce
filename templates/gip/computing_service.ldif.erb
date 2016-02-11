@@ -7,19 +7,24 @@ sharelist=Array.new
      sharelist.push(queue+'_'+owner)
   end
 end
+if @clustermode.downcase == 'true'
+  res_count = @execution_environments.count
+else
+  res_count = 1
+end
 -%>
-dn: GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+dn: GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
 objectClass: GLUE2Service
 objectClass: GLUE2ComputingService
 GLUE2EntityCreationTime: <%=now%>
-GLUE2EntityName: Computing Service <%=@fqdn-%>_ComputingElement
+GLUE2EntityName: Computing Service <%=@computing_service_id%>
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-computingservice-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
-GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
-GLUE2ServiceID: <%=@fqdn-%>_ComputingElement
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
+GLUE2ServiceID: <%=@computing_service_id%>
 GLUE2ServiceType: org.glite.ce.CREAM
 GLUE2ServiceCapability: executionmanagement.jobexecution
-GLUE2ServiceQualityLevel: production
-GLUE2ServiceComplexity: endpointType=2, share=<%=sharelist.count-%>, resource=<%=execution_environments.count%>
+GLUE2ServiceQualityLevel: <%=@ce_quality_level.downcase%>
+GLUE2ServiceComplexity: endpointType=2, share=<%=sharelist.count-%>, resource=<%=res_count%>
 GLUE2ServiceAdminDomainForeignKey: <%=@sitename%>
