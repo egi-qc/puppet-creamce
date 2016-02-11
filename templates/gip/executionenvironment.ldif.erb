@@ -1,9 +1,9 @@
 <%
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
-thisce=@ce_def[@hostname]
+thisce=@ce_def
 clustername=thisce["ce_cluster"]
 subclustername=thisce["ce_subcluster"]
-ce_info=subclusters[subclustername]
+ce_info=@subclusters[subclustername]
 ce_physcpu=ce_info["ce_physcpu"]
 ce_logcpu=ce_info["ce_logcpu"]
 ce_sf00=ce_info["ce_sf00"]
@@ -46,7 +46,7 @@ else
    cpuType = 'multi'
 end              
 if (ce_physcpu_perhost > 0)
-   if ce_smpsize == (ce_logcpu_perhost/ce_physcpu_perhost):
+   if ce_smpsize == (ce_logcpu_perhost/ce_physcpu_perhost)
        coreType = 'single'
    else
        coreType = 'multi'
@@ -57,21 +57,27 @@ end
 
 subcluster_tmpdir=ce_info["subcluster_tmpdir"]
 subcluster_wntmdir=ce_info["subcluster_wntmdir"]
-# we should loop here over the service IDs as well 
+
+if @clustermode.downcase == 'true'
+  res_list = @execution_environments
+else
+  res_list = [ @ce_host ]
+end
 -%>
-dn: GLUE2ResourceID=<%=@fqdn-%>,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+<% res_list.each do | res_id | -%>
+dn: GLUE2ResourceID=<%=res_id-%>,GLUE2ServiceID=<%=@computing_service_id%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
 objectClass: GLUE2Resource
 objectClass: GLUE2ExecutionEnvironment
 GLUE2EntityCreationTime: <%=now%>
-GLUE2EntityName: <%=@fqdn%>
+GLUE2EntityName: <%=res_id%>
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-executionenvironment-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
-GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
 GLUE2EntityOtherInfo: SmpSize=<%=ce_smpsize%>
 GLUE2EntityOtherInfo: Cores=<%=ce_cores%>
-GLUE2ResourceID: <%=@fqdn%>
-GLUE2ResourceManagerForeignKey: <%=@fqdn-%>_ComputingElement_Manager
+GLUE2ResourceID: <%=res_id%>
+GLUE2ResourceManagerForeignKey: <%=@computing_service_id%>_Manager
 GLUE2ExecutionEnvironmentPlatform: <%=ce_platform_type%>
 GLUE2ExecutionEnvironmentTotalInstances: <%=instances%>
 GLUE2ExecutionEnvironmentPhysicalCPUs: <%=ce_physcpu_perhost%>
@@ -88,7 +94,9 @@ GLUE2ExecutionEnvironmentOSName: <%=ce_os_name%>
 GLUE2ExecutionEnvironmentOSVersion: <%=ce_os_release%>
 GLUE2ExecutionEnvironmentConnectivityIn: <%=ce_inboundip.to_s.upcase%>
 GLUE2ExecutionEnvironmentConnectivityOut: <%=ce_outboundip.to_s.upcase%>
-GLUE2ExecutionEnvironmentComputingManagerForeignKey: <%=@fqdn-%>_ComputingElement_Manager
+GLUE2ExecutionEnvironmentComputingManagerForeignKey: <%=@computing_service_id%>_Manager
 GLUE2ExecutionEnvironmentCPUTimeScalingFactor: 1
 GLUE2ExecutionEnvironmentWallTimeScalingFactor: 1
+
+<% end -%>
 
