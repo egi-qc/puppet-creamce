@@ -1,4 +1,4 @@
-<%@grid_queues.each do | queue, value | %>
+<%@grid_queues.each do | queue, value | -%>
 dn: GlueCESEBindGroupCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>,mds-vo-name=resource,o=grid
 objectClass: GlueGeneralTop
 objectClass: GlueCESEBindGroup
@@ -9,9 +9,7 @@ GlueCESEBindGroupSEUniqueID: <%=se%>
 <%end-%>
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
-<%end-%>
 
-<%@grid_queues.each do | queue, value | -%>
 <%@se_list.each do | se, sdata | -%>
 dn: GlueCESEBindSEUniqueID=<%=se-%>,GlueCESEBindGroupCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid 
 objectClass: GlueGeneralTop
@@ -24,5 +22,6 @@ GlueCESEBindMountInfo: <%=sdata['mount_dir']%>,<%=sdata['export_dir']%>
 GlueCESEBindWeight: 0
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
+
 <%end-%>
 <%end-%>
