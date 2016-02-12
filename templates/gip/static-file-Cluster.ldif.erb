@@ -1,31 +1,3 @@
-<%
-thisce=@ce_def
-clustername=thisce["ce_cluster"]
-subclustername=thisce["ce_subcluster"]
-ce_info=@subclusters[subclustername]
-ce_cpu_model=ce_info["ce_cpu_model"]
-ce_cpu_speed=ce_info["ce_cpu_speed"]
-ce_cpu_vendor=ce_info["ce_cpu_vendor"]
-ce_inboundip=ce_info["ce_inboundip"]
-ce_physcpu=ce_info["ce_physcpu"]
-ce_logcpu=ce_info["ce_logcpu"]
-ce_minphysmem=ce_info["ce_minphysmem"]
-ce_minvirtmem=ce_info["ce_minvirtmem"]
-ce_os=ce_info["ce_os"]
-ce_os_family=ce_info["ce_os_family"]
-ce_os_arch=ce_info["ce_os_arch"]
-ce_os_release=ce_info["ce_os_release"]
-ce_os_version=ce_info["ce_os_version"]
-ce_os_name=ce_info["ce_os_name"]
-ce_otherdescr=ce_info["ce_otherdescr"]
-ce_outboundip=ce_info["ce_outboundip"]
-ce_sf00=ce_info["ce_sf00"]
-ce_si00=ce_info["ce_si00"]
-ce_smpsize=ce_info["ce_smpsize"]
-ce_runtimeenv=ce_info["ce_runtimeenv"]
-subcluster_tmpdir=ce_info["subcluster_tmpdir"]
-subcluster_wntmdir=ce_info["subcluster_wntmdir"]
--%>
 dn: GlueClusterUniqueID=<%=@ce_host-%>,mds-vo-name=resource,o=grid
 objectClass: GlueClusterTop
 objectClass: GlueCluster
@@ -45,7 +17,32 @@ GlueInformationServiceURL: ldap://<%=@fqdn-%>:<%=@info_port-%>/mds-vo-name=<%=in
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
 
-dn: GlueSubClusterUniqueID=<%=@ce_host-%>,GlueClusterUniqueID=<%=@ce_host-%>,mds-vo-name=<%=info_type-%>,o=grid
+<%
+@subclusters.each do | res_id, res_info |
+    ce_cpu_model=res_info["ce_cpu_model"]
+    ce_cpu_speed=res_info["ce_cpu_speed"]
+    ce_cpu_vendor=res_info["ce_cpu_vendor"]
+    ce_inboundip=res_info["ce_inboundip"]
+    ce_physcpu=res_info["ce_physcpu"]
+    ce_logcpu=res_info["ce_logcpu"]
+    ce_minphysmem=res_info["ce_minphysmem"]
+    ce_minvirtmem=res_info["ce_minvirtmem"]
+    ce_os=res_info["ce_os"]
+    ce_os_family=res_info["ce_os_family"]
+    ce_os_arch=res_info["ce_os_arch"]
+    ce_os_release=res_info["ce_os_release"]
+    ce_os_version=res_info["ce_os_version"]
+    ce_os_name=res_info["ce_os_name"]
+    ce_otherdescr=res_info["ce_otherdescr"]
+    ce_outboundip=res_info["ce_outboundip"]
+    ce_sf00=res_info["ce_sf00"]
+    ce_si00=res_info["ce_si00"]
+    ce_smpsize=res_info["ce_smpsize"]
+    ce_runtimeenv=res_info["ce_runtimeenv"]
+    subcluster_tmpdir=res_info["subcluster_tmpdir"]
+    subcluster_wntmdir=res_info["subcluster_wntmdir"]
+-%>
+dn: GlueSubClusterUniqueID=<%=res_id-%>,GlueClusterUniqueID=<%=@ce_host-%>,mds-vo-name=<%=info_type-%>,o=grid
 objectClass: GlueClusterTop
 objectClass: GlueSubCluster
 objectClass: GlueHostApplicationSoftware
@@ -58,7 +55,7 @@ objectClass: GlueHostProcessor
 objectClass: GlueInformationService
 objectClass: GlueKey
 objectClass: GlueSchemaVersion
-GlueSubClusterUniqueID: <%=@ce_host%>
+GlueSubClusterUniqueID: <%=res_id%>
 GlueChunkKey: GlueClusterUniqueID=<%=@ce_host%>
 GlueHostArchitecturePlatformType: <%=ce_os_arch%>
 GlueHostArchitectureSMPSize: <%=ce_smpsize%>
@@ -85,4 +82,6 @@ GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
 <%ce_runtimeenv.each do |runtimeenv |-%>
 GlueHostApplicationSoftwareRunTimeEnvironment: <%=runtimeenv%>
+<%end-%>
+
 <%end-%>

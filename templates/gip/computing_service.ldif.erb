@@ -7,11 +7,6 @@ sharelist=Array.new
      sharelist.push(queue+'_'+owner)
   end
 end
-if @clustermode.downcase == 'true'
-  res_count = @execution_environments.count
-else
-  res_count = 1
-end
 -%>
 dn: GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
@@ -26,5 +21,5 @@ GLUE2ServiceID: <%=@computing_service_id%>
 GLUE2ServiceType: org.glite.ce.CREAM
 GLUE2ServiceCapability: executionmanagement.jobexecution
 GLUE2ServiceQualityLevel: <%=@ce_quality_level.downcase%>
-GLUE2ServiceComplexity: endpointType=2, share=<%=sharelist.count-%>, resource=<%=res_count%>
+GLUE2ServiceComplexity: endpointType=2, share=<%=sharelist.count-%>, resource=<%=@subclusters.count%>
 GLUE2ServiceAdminDomainForeignKey: <%=@sitename%>

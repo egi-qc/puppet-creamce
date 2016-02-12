@@ -1,17 +1,13 @@
 <%
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
-thisce=@ce_def
-clustername=thisce["ce_cluster"]
-subclustername=thisce["ce_subcluster"]
-ce_info=subclusters[subclustername]
-ce_physcpu=ce_info["ce_physcpu"]
-ce_logcpu=ce_info["ce_logcpu"]
-ce_sf00=ce_info["ce_sf00"]
-ce_si00=ce_info["ce_si00"]
-ce_smpsize=ce_info["ce_smpsize"]
-ce_runtimeenv=ce_info["ce_runtimeenv"]
-subcluster_tmpdir=ce_info["subcluster_tmpdir"]
-subcluster_wntmdir=ce_info["subcluster_wntmdir"]
+ce_physcpu=0
+ce_logcpu=0
+ce_si00=0
+@subclusters.each do | res_id, res_info |
+    ce_physcpu += res_info["ce_physcpu"].to_i
+    ce_logcpu += res_info["ce_logcpu"].to_i
+    ce_si00 = res_info["ce_si00"] if res_info["ce_si00"].to_i > ce_si00
+end
 -%>
 dn: GLUE2ManagerId=<%=@computing_service_id-%>_Manager,GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
