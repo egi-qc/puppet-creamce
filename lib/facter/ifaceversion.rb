@@ -1,4 +1,4 @@
-Facter.add(:creamversion) do
+Facter.add(:ifaceversion) do
     setcode do
         creampropfile='/etc/glite-ce-cream/service.properties'
         result = "undefined"
@@ -8,7 +8,7 @@ Facter.add(:creamversion) do
             propFile.close()
         
             for line in srvDefs do
-                value = /implementation_version\s*=\s*([0-9]+.[0-9]+.[0-9]+)/.match(line)
+                value = /interface_version\s*=\s*([0-9]+.[0-9]+)/.match(line)
                 if value
                     result = value[1]
                 end
