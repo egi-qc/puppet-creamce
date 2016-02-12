@@ -1,24 +1,27 @@
 <%
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
+epID=@ce_host + "_org.glite.ce.CREAM"
+
 @grid_queues.each do | queue, value |
   vonames=value["vonames"]
   vonames.each do | owner | 
+    share_id=queue + "_" + owner + "_" + @computing_service_id
 -%>
-dn: GLUE2ShareID=<%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+dn: GLUE2ShareID=<%=share_id%>,GLUE2ServiceID=<%=@computing_service_id%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
 objectClass: GLUE2Share
 objectClass: GLUE2ComputingShare
 GLUE2EntityCreationTime: <%=now%>
-GLUE2EntityOtherInfo: CREAMCEId=<%=@fqdn-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
+GLUE2EntityOtherInfo: CREAMCEId=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
 GLUE2EntityOtherInfo: ServiceType=org.glite.ce.CREAM
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-share-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
-GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
-GLUE2ShareID: <%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
+GLUE2ShareID: <%=share_id%>
 GLUE2ShareDescription: Share of <%=queue-%> for <%=owner%>
-GLUE2ShareResourceForeignKey: <%=@fqdn%>
-GLUE2ShareEndpointForeignKey: <%=@fqdn-%>_org.glite.ce.CREAM
-GLUE2ShareServiceForeignKey: <%=@fqdn-%>_ComputingElement
+GLUE2ShareResourceForeignKey: <%=@ce_host%>
+GLUE2ShareEndpointForeignKey: <%=epID%>
+GLUE2ShareServiceForeignKey: <%=@computing_service_id%>
 GLUE2ComputingShareMappingQueue: <%=queue%>
 GLUE2ComputingShareServingState: production
 GLUE2ComputingShareDefaultCPUTime: 999999999
@@ -46,23 +49,23 @@ GLUE2ComputingShareMaxTotalCPUTime: 444444
 GLUE2ComputingShareRequestedSlots: 444444
 GLUE2ComputingShareMaxMultiSlotWallTime: 999999999
 GLUE2ComputingShareMinWallTime: 0
-GLUE2ComputingShareExecutionEnvironmentForeignKey: <%=@fqdn%>
-GLUE2ComputingShareComputingEndpointForeignKey: <%=@fqdn-%>_org.glite.ce.CREAM
-GLUE2ComputingShareComputingServiceForeignKey: <%=@fqdn-%>_ComputingElement
+GLUE2ComputingShareExecutionEnvironmentForeignKey: <%=@ce_host%>
+GLUE2ComputingShareComputingEndpointForeignKey: <%=epID%>
+GLUE2ComputingShareComputingServiceForeignKey: <%=@computing_service_id%>
 
-dn: GLUE2PolicyID=<%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement_policy,GLUE2ShareId=<%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement,GLUE2ServiceID=<%=@fqdn-%>_ComputingElement,GLUE2GroupID=resource,o=glue
+dn: GLUE2PolicyID=<%=share_id%>_policy,GLUE2ShareId=<%=share_id%>,GLUE2ServiceID=<%=@computing_service_id%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
 objectClass: GLUE2Policy
 objectClass: GLUE2MappingPolicy
 GLUE2EntityCreationTime: <%=now%>
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-share-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
-GLUE2EntityOtherInfo: InfoProviderHost=<%=@fqdn%>
-GLUE2PolicyID: <%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement_policy
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
+GLUE2PolicyID: <%=share_id%>_policy
 GLUE2PolicyScheme: org.glite.standard
 GLUE2PolicyRule: VO:<%=owner%>
 GLUE2PolicyUserDomainForeignKey: <%=owner%>
-GLUE2MappingPolicyShareForeignKey: <%=queue-%>_<%=owner-%>_<%=@fqdn-%>_ComputingElement
+GLUE2MappingPolicyShareForeignKey: <%=share_id%>
 
 <%end-%>
 <%end-%>
