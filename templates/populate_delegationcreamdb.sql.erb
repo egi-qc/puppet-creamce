@@ -73,6 +73,6 @@ ALTER TABLE command_queue_parameter ADD CONSTRAINT fk_command_queue_parameter_co
     FOREIGN KEY (commandId) REFERENCES command_queue (id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 /************ Insert values in db_info ***************/
-insert into db_info (version, creationTime, delegationSuffix) values ('<%=@delegation_db_version%>', now(), floor(pow(10,13) + rand()*POW(10,13)));
+insert into db_info (version, creationTime, delegationSuffix) values ('<%=@delegdbversion%>', now(), floor(pow(10,13) + rand()*POW(10,13)));
 
 commit;

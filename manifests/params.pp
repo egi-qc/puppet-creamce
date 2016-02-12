@@ -5,8 +5,6 @@ class creamce::params {
   $ce_type                   = hiera('ce_type', "cream")
   $ce_quality_level          = hiera('ce_quality_level', "production")
   $ce_env                    = hiera('ce_env', {})
-  $ce_impl_ver               = hiera('ce_impl_ver', "unset")                        # detect from /etc/glite-ce-cream/service.properties
-  $interface_version         = hiera("interface_version", "2.1")                    # detect from /etc/glite-ce-cream/service.properties
   $access_by_domain          = hiera("access_by_domain", "false")
   
   $max_connections           = hiera("max_connections", "999")
@@ -19,12 +17,10 @@ class creamce::params {
   $cream_db_domain           = hiera("cream_db_domain", "${::domain}")
   $cream_db_minpriv_user     = hiera("cream_db_minpriv_user", "minprivuser")
   $cream_db_minpriv_password = hiera("cream_db_minpriv_password")
-  $cream_db_version          = hiera("cream_db_version", "2.6")                     # detect from /etc/glite-ce-cream/service.properties
   $cream_db_max_active       = hiera("cream_db_max_active", "200")
   $cream_db_min_idle         = hiera("cream_db_min_idle", "30")
   $cream_db_max_wait         = hiera("cream_db_max_wait", "10000")
   $delegation_db_name        = hiera("delegation_db_name", "delegationcreamdb")
-  $delegation_db_version     = hiera("delegation_db_version", "2.6")                # detect from /etc/glite-ce-cream/service.properties
 
   $cream_db_sandbox_path     = hiera("cream_db_sandbox_path", "/var/cream_sandbox")
   $cream_enable_limiter      = hiera("cream_enable_limiter", "true")

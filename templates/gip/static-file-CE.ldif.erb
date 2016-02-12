@@ -27,7 +27,7 @@ GlueCEUniqueID: <%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>
 GlueCEHostingCluster: <%=@ce_host%>
 GlueCEName: <%=queue%>
 GlueCEImplementationName: CREAM
-GlueCEImplementationVersion: <%=if (defined? @ce_impl_ver); @ce_impl_ver else 'undef'; end%>
+GlueCEImplementationVersion: <%=@creamversion%>
 GlueCEInfoGatekeeperPort: <%=@ce_port%>
 GlueCEInfoHostName: <%=@ce_host%>
 GlueCEInfoLRMSType: <%=@batch_system%>

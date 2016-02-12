@@ -322,6 +322,6 @@ insert into job_status_type_description (type, name) values (9, 'PURGED');
 insert into job_status_type_description (type, name) values (10, 'ABORTED');
 
 /************ Insert values in db_info ***************/    
-insert into db_info (version, creationTime, startUpTime, submissionEnabled) values ('<%=@cream_db_version%>', now(), null, 0);
+insert into db_info (version, creationTime, startUpTime, submissionEnabled) values ('<%=@creamdbversion%>', now(), null, 0);
 
 commit;   
