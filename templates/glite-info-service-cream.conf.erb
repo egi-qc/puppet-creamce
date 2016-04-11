@@ -24,7 +24,7 @@ get_version = rpm -q glite-ce-cream --queryformat '%{version}\n'
 # A command to return the service endpoint to stdout (uses variables set
 # in the init script)
 
-get_endpoint = echo https://<%=@fqdn-%>:<%=@ce_port-%>/ce-cream/services
+get_endpoint = echo https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services
 
 # A command to check the status of the service. The status message should be
 # returned to stdout - it can be multi-line, the output will be massaged

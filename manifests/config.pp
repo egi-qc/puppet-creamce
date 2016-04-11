@@ -34,28 +34,12 @@ class creamce::config inherits creamce::params {
   # TODO create sandbox for supported vo/groups
   #    
   
-  file{"/etc/glite/info/service/glite-info-service-cream.conf":
-    ensure => present,
-    owner => "root",
-    group => "root",
-    mode => 0644,
-    content => template("creamce/glite-info-service-cream.conf.erb"),
-  }
- 
   file{"/etc/sysconfig/edg":
     ensure => present,
     owner => "root",
     group => "root",
     mode => 0644,
     content => template("creamce/edg.erb"),
-  }
- 
-  file{"/etc/glite/info/service/glite-info-glue2-rtepublisher.conf":
-    ensure => present,
-    owner => "root",
-    group => "root",
-    mode => 0644,
-    content => template("creamce/glite-info-glue2-rtepublisher.conf.erb"),
   }
  
   file{"/etc/sysconfig/cream":
