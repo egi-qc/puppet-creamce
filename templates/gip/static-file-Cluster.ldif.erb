@@ -7,13 +7,11 @@ objectClass: GlueSchemaVersion
 GlueClusterUniqueID: <%=@ce_host%>
 GlueClusterName: <%=@ce_host%>
 GlueForeignKey: GlueSiteUniqueID=<%=@sitename%>
-<%grid_queues.each do | queue, value | -%>
+<%@grid_queues.each do | queue, value | -%>
 GlueForeignKey: GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
-<%end-%>
-<%grid_queues.each do | queue, value | -%>
 GlueClusterService: <%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
 <%end-%>
-GlueInformationServiceURL: ldap://<%=@fqdn-%>:<%=@info_port-%>/mds-vo-name=<%=info_type-%>,o=grid
+GlueInformationServiceURL: ldap://<%=@fqdn-%>:<%=@info_port-%>/mds-vo-name=<%=@info_type-%>,o=grid
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
 
@@ -42,7 +40,7 @@ GlueSchemaVersionMinor: 3
     subcluster_tmpdir=res_info["subcluster_tmpdir"]
     subcluster_wntmdir=res_info["subcluster_wntmdir"]
 -%>
-dn: GlueSubClusterUniqueID=<%=res_id-%>,GlueClusterUniqueID=<%=@ce_host-%>,mds-vo-name=<%=info_type-%>,o=grid
+dn: GlueSubClusterUniqueID=<%=res_id-%>,GlueClusterUniqueID=<%=@ce_host-%>,mds-vo-name=<%=@info_type-%>,o=grid
 objectClass: GlueClusterTop
 objectClass: GlueSubCluster
 objectClass: GlueHostApplicationSoftware
@@ -77,7 +75,7 @@ GlueSubClusterPhysicalCPUs: <%=ce_physcpu%>
 GlueSubClusterLogicalCPUs: <%=ce_logcpu%>
 GlueSubClusterTmpDir: <%=subcluster_tmpdir%>
 GlueSubClusterWNTmpDir: <%=subcluster_wntmdir%>
-GlueInformationServiceURL: ldap://<%=@fqdn%>:<%=@info_port-%>/mds-vo-name=<%=info_type-%>,o=grid
+GlueInformationServiceURL: ldap://<%=@fqdn%>:<%=@info_port-%>/mds-vo-name=<%=@info_type-%>,o=grid
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
 <%ce_runtimeenv.each do |runtimeenv |-%>
