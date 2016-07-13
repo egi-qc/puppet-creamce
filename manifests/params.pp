@@ -200,11 +200,9 @@ class creamce::params {
   $apel_dbserv                = hiera('apel_dbserv','unset')
 
   #
-  # nfs settings
+  # yum repositories
   #
-  $nfs_server_cachedir        = hiera('nfs_server_cachedir',unset)
-  $nfs_server_infodir         = hiera('nfs_server_infodir',unset)
-  $nfs_remote_cachedir        = hiera('nfs_remote_cachedir',unset)
-  $nfs_remote_infodir         = hiera('nfs_remote_infodir',unset)
-  $nfs_options                = hiera('nfs_options',unset)
+  $eugridpma_repo_url         = hiera('eugridpma_repo_url', 'http://repository.egi.eu/sw/production/cas/1/current/repo-files/EGI-trustanchors.repo')
+  $eugridpma_repo             = hiera('eugridpma_repo', '/etc/yum.repos.d/EGI-trustanchors.repo')
+
 }
