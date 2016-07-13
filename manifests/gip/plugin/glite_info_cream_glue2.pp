@@ -1,5 +1,9 @@
 class creamce::gip::plugin::glite_info_cream_glue2 inherits creamce::params {
 
+  #
+  # Deprecated
+  #
+  
   package { "glite-info-provider-service":
     ensure => present
   }

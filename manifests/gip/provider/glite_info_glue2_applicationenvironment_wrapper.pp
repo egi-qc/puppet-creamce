@@ -1,4 +1,9 @@
 class  creamce::gip::provider::glite_info_glue2_applicationenvironment_wrapper inherits creamce::params {
+
+  #
+  # Deprecated
+  #
+
   file {"$gippath/provider/glite-info-glue2-applicationenvironment-wrapper":
     ensure => present,
     owner => "root",

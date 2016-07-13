@@ -1,5 +1,9 @@
 class creamce::gip::provider::glite_info_provider_services_wrapper inherits creamce::params {
 
+  #
+  # Deprecated
+  #
+  
   package { "glite-info-provider-service":
     ensure => present,
   }

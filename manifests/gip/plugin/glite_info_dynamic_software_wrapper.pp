@@ -1,5 +1,9 @@
 class creamce::gip::plugin::glite_info_dynamic_software_wrapper inherits creamce::params {
 
+  #
+  # Deprecated
+  #
+  
   package { "glite-ce-cream-utils":
     ensure => present
   }
