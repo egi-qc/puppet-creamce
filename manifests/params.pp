@@ -1,5 +1,6 @@
 class creamce::params {
-  $sitename                  = hiera("sitename", "${::fqdn}")
+  $sitename                  = hiera("site_name", "${::fqdn}")
+  $siteemail                 = hiera("site_email", "")
   $ce_host                   = hiera("ce_host", "${::fqdn}")
   $ce_port                   = hiera('ce_port', "8443")
   $ce_type                   = hiera('ce_type', "cream")
@@ -179,6 +180,13 @@ class creamce::params {
   $workarea_mslot_total    = hiera('workarea_mslot_total', 0)
   $workarea_mslot_free     = hiera('workarea_mslot_free', 0)
   $workarea_mslot_lifetime = hiera('workarea_mslot_lifetime', 0)
+  
+  #
+  # Locallogger
+  #
+  $loclog_user                = hiera('locallogger_user', 'glite')
+  $loclog_group               = hiera('locallogger_group', 'glite')
+  $loclog_dir                 = hiera('locallogger_dir', '/var/lib/glite')
 
   # wrong! this is CE specific
   $cores                      = hiera('cores','0')           

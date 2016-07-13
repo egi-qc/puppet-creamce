@@ -1,48 +1,61 @@
 class creamce::locallogger inherits creamce::params {
 
   require creamce::certificate
+  
+  package { "glite-lb-logger":
+    ensure   => present,
+  }
+  
+  group { "${loclog_group}":
+    ensure   => present,
+  }
+  
+  user { "${loclog_user}":
+    ensure   => present,
+    gid      => "${loclog_group}",
+    require  => Group["${loclog_group}"],
+  }
 
-  file { ["/var/lib/glite","/var/lib/glite/.certs"]:
-    ensure => directory,
-    owner  => 'glite',
-    group  => 'glite',
-    mode  => 0755,
+  file { ["${loclog_dir}","${loclog_dir}/.certs"]:
+    ensure   => directory,
+    owner    => "${loclog_user}",
+    group    => "${loclog_group}",
+    mode     => 0755,
+    require  => User["${loclog_user}"],
   }
     
-  file { "/var/lib/glite/.certs/hostcert.pem":
+  file { "${loclog_dir}/.certs/hostcert.pem":
     ensure  => file,
-    owner   => "glite",
-    group   => "glite",
+    owner   => "${loclog_user}",
+    group   => "${loclog_group}",
     mode    => 0644,
-    source  => [${host_certificate}],
-    require => File["/var/lib/glite/.certs"],
-    #notify => Service['glite-lb-locallogger']
+    source  => [ "${host_certificate}" ],
+    require => File["${loclog_dir}/.certs"],
+    notify  => Service['glite-lb-logd']
   }
-  file { "/var/lib/glite/.certs/hostkey.pem":
+  
+  file { "${loclog_dir}/.certs/hostkey.pem":
     ensure  => file,
-    owner   => "glite",
-    group   => "glite",
+    owner   => "${loclog_user}",
+    group   => "${loclog_group}",
     mode    => 0400,
-    source  => [${host_private_key}],
-    require => File["/var/lib/glite/.certs"],
-    #notify => Service['glite-lb-locallogger']
+    source  => [ "${host_private_key}" ],
+    require => File["${loclog_dir}/.certs"],
+    notify  => Service['glite-lb-logd']
+  }
+  
+  file {"/etc/cron.d/locallogger.cron":
+    ensure    => present,
+    content   => template("creamce/locallogger.cron.erb"),
+    mode      => 0644,
+    require   => [ File["${loclog_dir}/.certs/hostcert.pem"], Package["glite-lb-logger"] ],
   }
 
   service {"glite-lb-logd":
     ensure     => running,
     hasstatus  => true,
     hasrestart => true,
+    require    => Package["glite-lb-logger"],
   }
-  service {"glite-lb-locallogger":
-    ensure     => running,
-    hasstatus  => true,
-    hasrestart => true,
-  }
-  service {"glite-lb-interlogd":
-    ensure     => running,
-    hasstatus  => true,
-    hasrestart => true,
-  }
-  
 
 }

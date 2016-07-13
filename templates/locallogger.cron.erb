@@ -1,0 +1,9 @@
+# Workaround for bug 22389
+HOME=/
+<% unless @siteemail == "" -%>
+MAILTO=<%=@siteemail%>
+<%end-%>
+
+
+0 */6 * * * root touch <%=@loclog_dir%>/.certs/hostcert.pem
+
