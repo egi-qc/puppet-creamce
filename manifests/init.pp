@@ -1,26 +1,25 @@
 class creamce inherits creamce::params {
   
-  case $::operatingsystem {
-    RedHat,SLC,SL:   {
-      require fetchcrl,bdii,mysql
-      include creamce::certificate
-      include creamce::gridftp
-      include creamce::nfs
-      include creamce::tomcat 
-      include creamce::install
-      include creamce::config
-      include creamce::acl
-      include creamce::locallogger
-      include creamce::gip
-      include creamce::apel
-      
-      Class['install'] -> Class['tomcat'] -> Class['config'] -> Class['gip']
-    }
+  if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease >= 7 {
+  
+    include creamce::config
+    include creamce::tomcat
+    include creamce::creamdb
     
-    default: {
-      # There is some fedora configuration present but I can't actually get it to work.
-    }
+    include creamce::gridftp
+    
+    #include creamce::glexec
+
+    include creamce::gip
+
+    include creamce::locallogger
+
+  } else {
+  
+    # TODO
+  
   }
+  
 }
 
   

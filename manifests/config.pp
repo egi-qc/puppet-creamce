@@ -2,6 +2,8 @@ class creamce::config inherits creamce::params {
   
   require creamce::install
   
+  require creamce::env
+  
   case $batch_system {
     lsf: {
       include creamce::lsf
