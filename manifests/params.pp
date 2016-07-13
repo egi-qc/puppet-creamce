@@ -204,7 +204,5 @@ class creamce::params {
   #
   $cream_repo_url             = hiera('cream_repo_url', '')
   $cream_repo                 = hiera('cream_repo_file', '/etc/yum.repos.d/creamce.repo')
-  $eugridpma_repo_url         = hiera('eugridpma_repo_url', 'http://repository.egi.eu/sw/production/cas/1/current/repo-files/EGI-trustanchors.repo')
-  $eugridpma_repo             = hiera('eugridpma_repo_file', '/etc/yum.repos.d/EGI-trustanchors.repo')
 
 }
