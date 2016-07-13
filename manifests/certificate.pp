@@ -2,12 +2,12 @@ class creamce::certificate inherits creamce::params {
 
   exec { "download_yumrepo":
     command => "/usr/bin/wget -q ${eugridpma_repo_url} -O ${eugridpma_repo}",
-    creates => "/etc/yum.repos.d/${eugridpma_repo}",
+    creates => "${eugridpma_repo}",
   }
 
   file{ "${eugridpma_repo}":
-    mode => 0644,
-    require => Exec["download_yumrepo"],
+    mode     => 0644,
+    require  => Exec["download_yumrepo"],
   }
   
   package { "ca-policy-egi-core":
