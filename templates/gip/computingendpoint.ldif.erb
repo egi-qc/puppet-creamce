@@ -20,12 +20,12 @@ GLUE2EntityOtherInfo: MiddlewareVersion=<%=@emiversion%>
 GLUE2EntityOtherInfo: ArgusEnabled=<%=@use_argus.to_s.upcase%>
 GLUE2EndpointStartTime: <%=starttime%>
 GLUE2EndpointID: <%=epID%>
-GLUE2EndpointURL: https://<%=@ce_host-%>:<%=ce_port-%>/ce-cream/services
+GLUE2EndpointURL: https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services
 GLUE2EndpointCapability: executionmanagement.jobexecution
 GLUE2EndpointTechnology: webservice
 GLUE2EndpointInterfaceName: org.glite.ce.CREAM
 GLUE2EndpointInterfaceVersion: <%=@ifaceversion%>
-GLUE2EndpointWSDL: https://<%=@ce_host-%>:<%=ce_port-%>/ce-cream/services/CREAM2?wsdl
+GLUE2EndpointWSDL: https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services/CREAM2?wsdl
 GLUE2EndpointSupportedProfile: http://www.ws-i.org/Profiles/BasicProfile-1.0.html
 GLUE2EndpointSemantics: http://wiki.italiangrid.org/twiki/bin/view/CREAM/UserGuide
 GLUE2EndpointImplementor: gLite

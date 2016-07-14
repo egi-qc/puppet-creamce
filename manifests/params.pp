@@ -160,6 +160,8 @@ class creamce::params {
   #
   # Infosystem
   #
+  $info_user               = hiera("bdii::params::user","ldap")
+  $info_group              = hiera("bdii::params::group","ldap")
   $clusters                = hiera('clusters','unset')
   $subclusters             = hiera('subclusters','unset')
   $ce_def                  = hiera('ce_def','unset')
