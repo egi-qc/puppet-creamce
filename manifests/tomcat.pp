@@ -1,53 +1,63 @@
 class creamce::tomcat inherits creamce::params {
 
+  require creamce::yumrepos
   require creamce::certificate
 
   #
   # tomcat setup is done in a simple way; no need to have a module for now 
   # 
-  package {$tomcat:
-    ensure => present,
-  }
-  package {"tomcat-native":
+  package { "tomcat-native":
     ensure => absent,
   }
   
-  #
-  # derive tomcat certs
-  #
-  file { "${tomcat_cert}":
-    ensure => file,
-    owner => "tomcat",
-    group => "root",
-    mode => 0644,
-    source => [$host_certificate],
-    notify => Service[$tomcat]
+  package { "$tomcat":
+    ensure  => present,
+    require => Package["tomcat-native"],
   }
+  
+  package { "canl-java-tomcat":
+    ensure => present,
+    
+  }
+  
+  file { "${tomcat_cert}":
+    ensure   => file,
+    owner    => "tomcat",
+    group    => "root",
+    mode     => 0644,
+    source   => [$host_certificate],
+    require  => Package["$tomcat"],
+    notify   => Service[$tomcat]
+  }
+  
   file { "${tomcat_key}":
-    ensure => file,
-    owner => "tomcat",
-    group => "root",
-    mode => 0400,
-    source => [$host_private_key],
-    notify => Service[$tomcat]
+    ensure   => file,
+    owner    => "tomcat",
+    group    => "root",
+    mode     => 0400,
+    source   => [$host_private_key],
+    require  => Package["$tomcat"],
+    notify   => Service[$tomcat]
   }
 
   file {"/etc/${tomcat}/server.xml":
-    ensure => present,
+    ensure  => present,
     content => template("creamce/server.xml.erb"),
-    owner => "tomcat",
-    group => "tomcat",
-    mode => 0664,
-    notify => Service["$tomcat"]
-
+    owner   => "tomcat",
+    group   => "tomcat",
+    mode    => 0664,
+    notify  => Service["$tomcat"],
+    require => Package["${tomcat}", "canl-java-tomcat"],
   }
   
   file {"/etc/${tomcat}/${tomcat}.conf":
-    ensure => present,
+    ensure  => present,
     content => template("creamce/tomcat.conf.erb"),
-    owner => "root",
-    group => "root",
-    mode => 0664,
+    owner   => "root",
+    group   => "root",
+    mode    => 0664,
+    notify  => Service["$tomcat"],
+    require => Package["${tomcat}", "canl-java-tomcat"],
   }
 
   file {"$tomcat_server_lib/commons-logging.jar":
@@ -55,14 +65,13 @@ class creamce::tomcat inherits creamce::params {
     target => "/usr/share/java/commons-logging.jar",
   }
   
-  service { $tomcat:
+  service { "$tomcat":
     ensure     => running,
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    alias => "tomcat",
+    alias      => "tomcat",
+    require    => File["$tomcat_server_lib/commons-logging.jar"]
   }
-  
-  Package[$tomcat] -> File["$tomcat_server_lib/commons-logging.jar"] -> File["/etc/${tomcat}/server.xml"] -> Service[$tomcat]
   
 }

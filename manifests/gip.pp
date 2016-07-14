@@ -1,5 +1,8 @@
 class creamce::gip inherits creamce::params {
 
+  require creamce::yumrepos
+  require bdii
+
   package { "glite-info-provider-service":
     ensure => present
   }
@@ -8,6 +11,13 @@ class creamce::gip inherits creamce::params {
     ensure => present
   }
 
+  package { "dynsched-generic":
+    ensure => present
+  }
+
+  package { "glue-schema":
+    ensure => present
+  }
 
   #
   # common plugin 

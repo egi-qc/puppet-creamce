@@ -1,5 +1,6 @@
 class creamce::locallogger inherits creamce::params {
 
+  require creamce::yumrepos
   require creamce::certificate
   
   package { "glite-lb-logger":
