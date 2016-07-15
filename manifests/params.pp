@@ -182,6 +182,7 @@ class creamce::params {
   $workarea_mslot_total    = hiera('workarea_mslot_total', 0)
   $workarea_mslot_free     = hiera('workarea_mslot_free', 0)
   $workarea_mslot_lifetime = hiera('workarea_mslot_lifetime', 0)
+  $gridft_pub_dir          = hiera('gridftp_pub_dir', '/opt/glite/var/info')
   
   #
   # Locallogger
