@@ -8,6 +8,33 @@ class creamce::gip inherits creamce::params {
     require  => Class[Bdii::Config],
   }
 
+  case $batch_system {
+    lsf: {
+      package { "info-dynamic-scheduler-lsf":
+        ensure  => present,
+        require => Package["dynsched-generic"],
+        notify  => Class[Bdii::Service],
+      }
+    }
+    pbs: {
+      package { "lcg-info-dynamic-scheduler-pbs":
+        ensure  => present,
+        require => Package["dynsched-generic"],
+        notify  => Class[Bdii::Service],
+      }
+    }
+    slurm: {
+      package { "info-dynamic-scheduler-slurm":
+        ensure  => present,
+        require => Package["dynsched-generic"],
+        notify  => Class[Bdii::Service],
+      }
+    }
+    default: {
+      warning "No package installed for lrms infoprovider"
+    }
+  }
+
   # ##################################################################################################
   # common plugin 
   # ##################################################################################################
