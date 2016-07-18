@@ -156,6 +156,17 @@ class creamce::gip inherits creamce::params {
       notify  => Class[Bdii::Service],
     }
   
+    # Usually installed by rpm scriptlets
+    #file {"$gippath/plugin/glite-info-dynamic-scheduler-wrapper":
+    #  ensure => present,
+    #  owner   => "${info_user}",
+    #  group   => "${info_group}",
+    #  mode => 0755,
+    #  content => template("creamce/gip/glite-info-dynamic-scheduler-wrapper.erb"),
+    #  require => Package["dynsched-generic"],
+    #  notify  => Class[Bdii::Service],
+    #}
+
     # ################################################################################################
     # providers
     # ################################################################################################
