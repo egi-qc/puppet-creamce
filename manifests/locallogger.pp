@@ -31,8 +31,8 @@ class creamce::locallogger inherits creamce::params {
     group   => "${loclog_group}",
     mode    => 0644,
     source  => [ "${host_certificate}" ],
-    require => File["${loclog_dir}/.certs"],
-    notify  => Service['glite-lb-logd']
+    require => File["${loclog_dir}/.certs", "${host_certificate}"],
+    notify  => Service["glite-lb-logd", "glite-lb-interlogd"]
   }
   
   file { "${loclog_dir}/.certs/hostkey.pem":
@@ -41,8 +41,8 @@ class creamce::locallogger inherits creamce::params {
     group   => "${loclog_group}",
     mode    => 0400,
     source  => [ "${host_private_key}" ],
-    require => File["${loclog_dir}/.certs"],
-    notify  => Service['glite-lb-logd']
+    require => File["${loclog_dir}/.certs", "${host_private_key}"],
+    notify  => Service["glite-lb-logd", "glite-lb-interlogd"]
   }
   
   file {"/etc/cron.d/locallogger.cron":
@@ -52,11 +52,18 @@ class creamce::locallogger inherits creamce::params {
     require   => [ File["${loclog_dir}/.certs/hostcert.pem"], Package["glite-lb-logger"] ],
   }
 
-  service {"glite-lb-logd":
+  service { "glite-lb-logd":
     ensure     => running,
     hasstatus  => true,
     hasrestart => true,
     require    => Package["glite-lb-logger"],
+  }
+
+  service { "glite-lb-interlogd":
+    ensure     => running,
+    hasstatus  => true,
+    hasrestart => true,
+    require    => Service["glite-lb-logd"],
   }
 
 }
