@@ -153,7 +153,6 @@ class creamce::params {
   $argusport               = hiera("argusport", "8154")
   $cream_pepc_resourceid   = hiera('cream_pepc_resourceid','http://${cream_db_host}:${ce_port}/cream')
   $admin_list              = hiera('admin_list', [])
-  $supported_vos           = hiera("supported_vos", [])
   $voenv                   = hiera('voenv', {})
 
 

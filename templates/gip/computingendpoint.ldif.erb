@@ -56,10 +56,10 @@ GLUE2EntityOtherInfo: InfoProviderVersion=1.1
 GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
 GLUE2PolicyID: <%=epID%>
 GLUE2PolicyScheme: org.glite.standard
-<% @supported_vos.each do | owner | -%>
+<% @voenv.each do | owner, value | -%>
 GLUE2PolicyRule: VO:<%=owner%>
 <%end-%>
-<% @supported_vos.each do | owner | -%>
+<% @voenv.each do | owner, value | -%>
 GLUE2PolicyUserDomainForeignKey: <%=owner%>
 <%end-%>
 GLUE2AccessPolicyEndpointForeignKey: <%=epID%>

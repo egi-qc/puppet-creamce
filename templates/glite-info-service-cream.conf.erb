@@ -53,14 +53,14 @@ get_starttime = perl -e '@st=stat($ENV{CREAM_PID_FILE});print "@st[10]\n";'
 # Null entries will be omitted
 # Needs to be set at config time, no easy way to get it dynamically
 
-get_owner = echo -e "<%=@supported_vos.join('\n')%>"
+get_owner = echo -e "<%=@voenv.keys().join('\n')%>"
 
 # A list of AccessControlBaseRule strings to indicate who is allowed to
 # have access to the service - at the simplest this is the same as the
 # Owner but with the VO names prefixed by "VO:"
 # Needs to be set at config time, no easy way to get it dynamically
 <% acbr='' -%>
-<% @supported_vos.each do | vo | -%>
+<% @voenv.each do | vo, value | -%>
 <% acbr=acbr+'VO:'+vo+'\n' -%>
 <% end-%>
 

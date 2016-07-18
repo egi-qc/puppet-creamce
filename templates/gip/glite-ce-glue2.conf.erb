@@ -42,7 +42,7 @@ QualityLevel = <%=@ce_quality_level%>
 #
 #
 # Owner should be the list of owner VO names
-Owner =  <%=@supported_vos.join(" ")%>  
+Owner =  <%=@voenv.keys().join(" ")%>  
 
 #
 #
@@ -64,7 +64,7 @@ EMIES = no
 # have access to the service - at the simplest this is the same as the
 # Owner but with the VO names prefixed by "VO:"
 <%acbrlist=''
-@supported_vos.each do |vo| 
+@voenv.each do | vo, value | 
   acbrlist=acbrlist+" VO:"+vo 
 end -%>
 ACBR = <%=acbrlist%>
