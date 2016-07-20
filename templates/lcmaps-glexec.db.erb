@@ -31,19 +31,25 @@ vomspoolaccount = "lcmaps_voms_poolaccount.mod"
 " -gridmapdir <%=@gridmap_dir%>"
 " -do_not_use_secondary_gids"
 
-
+<% if @config_glexec -%>
 proxycheck = "lcmaps_verify_proxy.mod"
              "-certdir <%=@cacert_dir%>"
-
+<%else-%>
+good = "lcmaps_dummy_good.mod"
+<%end-%>
 
 # policies
 withvoms:
+<% if @config_glexec -%>
 proxycheck -> vomslocalgroup
+<%end-%>
 vomslocalgroup -> vomslocalaccount
 vomslocalaccount -> posix_enf | vomspoolaccount
 vomspoolaccount -> posix_enf
 
 standard:
+<% if @config_glexec -%>
 proxycheck -> localaccount
+<%end-%>
 localaccount -> posix_enf | poolaccount
 poolaccount -> posix_enf

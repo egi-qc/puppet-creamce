@@ -2,6 +2,8 @@ class creamce::glexec inherits creamce::params {
 
   require creamce::yumrepos
   
+  $config_glexec = true
+
   package { "lcmaps-plugins-basic":
     ensure => present
   }

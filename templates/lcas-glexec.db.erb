@@ -1,2 +1,8 @@
+<% if @config_glexec -%>
 pluginname=/usr/lib64/lcas/lcas_voms.mod,pluginargs="-vomsdir <%=@voms_dir%> -certdir <%=@cacert_dir%> -authfile <%=@gridmap_file%> -authformat simple -use_user_dn"
 pluginname=/usr/lib64/lcas/lcas_check_executable.mod,pluginargs="-exec /usr/bin/id"
+<%else-%>
+pluginname=/usr/lib64/lcas/lcas_userban.mod,pluginargs=ban_users.db
+pluginname=/usr/lib64/lcas/lcas_voms.mod,pluginargs="-vomsdir <%=@voms_dir%> -certdir <%=@cacert_dir%> -authfile <%=@gridmap_file%> -authformat simple -use_user_dn"
+<%end-%>
+
