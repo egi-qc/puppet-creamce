@@ -129,9 +129,8 @@ class creamce::params {
   #
   # GridFTP
   #
-  $gridftp_port              = hiera('gridftp_port',"2811")
-  $gridftp_connections_max   = hiera('gridftp_connections_max',"150")
-  $globus_tcp_port_range     = hiera('globus_tcp_port_range',"20000,25000")
+  $gridftp_port              = hiera("gridftp::params::port", "2811")
+  $globus_tcp_port_range     = hiera("gridftp::params::globus_tcp_port_range", "20000,25000")
   
   
   #

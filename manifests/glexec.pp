@@ -1,40 +1,11 @@
 class creamce::glexec inherits creamce::params {
 
-  require creamce::yumrepos
+  require creamce::lcmaps
   
   $config_glexec = true
 
-  package { "lcmaps-plugins-basic":
-    ensure => present
-  }
-
-  package { "lcmaps-plugins-voms":
-    ensure => present
-  }
-
-  package { "lcmaps-plugins-verify-proxy":
-    ensure => present
-  }
-
-  package { "lcas-plugins-basic":
-    ensure => present
-  }
-
-  package { "lcas-plugins-voms":
-    ensure => present
-  }
-
-  package { "lcas-plugins-check-executable":
-    ensure => present
-  }
-
-  package { "lcg-expiregridmapdir":
-    ensure => present
-  }
-
   package { "glexec":
     ensure  => present,
-    require => Package["lcmaps-plugins-basic", "lcmaps-plugins-voms", "lcmaps-plugins-verify-proxy", "lcas-plugins-basic", "lcas-plugins-voms", "lcas-plugins-check-executable", "lcg-expiregridmapdir"]
   }
 
   file { "/usr/sbin/glexec":
