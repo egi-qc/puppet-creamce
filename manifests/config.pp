@@ -89,24 +89,6 @@ class creamce::config inherits creamce::params {
   }
 
   #
-  # configure gsi
-  # 
-  file {"/etc/grid-security/gsi-authz.conf":
-    ensure => present,
-    content => template("creamce/gsi-authz.erb"),
-    owner => "root",
-    group=> "root",
-    mode => 0644,
-  }
-  file {"/etc/grid-security/gsi-pep-callout.conf":
-    ensure => present,
-    content => template("creamce/gsi-pep-callout.conf.erb"),
-    owner => "root",
-    group=> "root",
-    mode => 0644,
-  }
-  
-  #
   # logrotation for BLAH
   #
   file {"/etc/logrotate.d/blahp-logrotate":

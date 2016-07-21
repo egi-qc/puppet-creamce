@@ -39,13 +39,7 @@ class creamce::gridftp inherits creamce::params {
       owner   => "root",
       group   => "root",
       mode    => 0644,
-      content => "pep_ssl_server_capath ${cacert_dir}
-pep_ssl_client_cert ${host_certificate}
-pep_ssl_client_key ${host_private_key}
-pep_timeout 30
-xacml_resourceid ${cream_pepc_resourceid}
-pep_url https://${argusservice}:${argusport}/authz
-",
+      content => template("creamce/gsi-pep-callout.conf.erb"),
       require => Class[Gridftp::Config],
       notify  => Class[Gridftp::Service],
     }
