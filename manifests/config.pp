@@ -4,22 +4,6 @@ class creamce::config inherits creamce::params {
   
   require creamce::env
   
-  case $batch_system {
-    lsf: {
-      include creamce::lsf
-    }
-    pbs: {
-      include creamce::torque
-    }
-    slurm: {
-      include creamce::slurm
-    }
-    default: {
-      fail "No BATCH system default defined"
-    }
-  }
-  
-
   file { "${gridmap_dir}":
     ensure => directory,
     owner => "root",
@@ -70,6 +54,14 @@ class creamce::config inherits creamce::params {
     mode => 0640,
     #fixme: do we need to notify tomcat ?
   }
+
+  file { "${cream_admin_list_file}":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => 0644,
+    content => template("creamce/adminlist.erb"),
+  }  
 
   #
   # from BLAH
