@@ -1,0 +1,9 @@
+# built by puppet, DO NOT EDIT
+# use cron_deny_extras parameter to manage extra items
+<%@user_table.each do | user, udata | -%>
+<%=user%>
+<%end-%>
+<%@cron_deny_extras.each do | euser | -%>
+<%=euser%>
+<%end-%>
+

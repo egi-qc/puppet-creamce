@@ -1,0 +1,35 @@
+# cleanup-grid-accounts.conf
+#
+# this file is sourced by cleanup-grid-accounts.sh (option "-c")
+
+# directory naming the grid accounts to be cleaned up;
+# by default the gridmapdir (option "-d"):
+# DIR=
+
+# list of extra (e.g. "sgm") accounts to be cleaned up (option "-e"):
+# EXTRA=
+
+# "true" to force cleanup of non-local directories (option "-F"):
+# FORCE=false
+
+# maximum idle time (in days) of any grid account file or subdirectory,
+# before it will be cleaned up (option "-i"):
+# IDLE=15
+
+# minimum value for the "IDLE" parameter (safeguard):
+# IDLE_MIN=7
+
+# minimum value for a grid account UID (safeguard):
+# UID_MIN=100
+
+# "true" if a verbose log is wanted (option "-v"):
+# VERBOSE=false
+
+# by default the list of pool accounts named in the gridmapdir;
+# any non-empty string overrides the default list:
+ACCOUNTS='
+<%@user_table.each do | user, udata | -%>
+<%=user%>
+<%end-%>
+'
+

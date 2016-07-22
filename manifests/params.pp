@@ -62,6 +62,11 @@ class creamce::params {
   $jw_retry_wait_osb         = hiera("jw_retry_wait_osb", "300")
 
   $gridenvfile               = hiera('gridenvfile','/etc/profile.d/grid-env.sh')
+  
+  $cga_logfile               = hiera("cga_logfile", "/var/log/cleanup-grid-accounts.log")
+  $cga_cron_sched            = hiera("cga_cron_sched", "30 1 * * *")
+  $at_deny_extras            = hiera("at_deny_extras", [])
+  $cron_deny_extras          = hiera("cron_deny_extras", [])
 
   #
   # Tomcat
