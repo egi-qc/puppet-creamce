@@ -4,13 +4,6 @@ class creamce::config inherits creamce::params {
   
   require creamce::env
   
-  file { "${gridmap_dir}":
-    ensure => directory,
-    owner => "root",
-    group => "root",
-    mode => 0700,
-  }
-  
   file { "${cream_db_sandbox_path}":
     ensure => directory,
     owner  => "tomcat",
