@@ -1,0 +1,56 @@
+# sudoers file for cream.
+#
+# This file contains specific configuration for cream.
+
+# User alias specification (for cream)
+
+<%
+  @sudo_table.each do | voname, groups |
+     groups.each do | group, sudo_list |
+-%>
+Runas_Alias GLEXEC_<%=group-%> = \
+<%     last_user = sudo_list.pop
+       sudo_list.each do | user | -%>
+    <%=user%>, \
+<%     end-%>
+<%     if last_user -%>
+    <%=last_user%>
+
+<%     end-%>
+<%   end-%>
+<% end-%>
+
+Runas_Alias GLEXEC_ACCOUNTS = \
+<%
+  @sudo_table.each do | voname, groups |
+     g_names = groups.keys
+     last_group = g_names.pop
+     g_names.each do | group |
+-%>
+    <%=group%>, \
+<%   end-%>
+<%   if last_group -%>
+    <%=last_group%>
+
+<%   end-%>
+<% end-%>
+
+# Cmnd alias specification (for cream)
+
+Cmnd_Alias GLEXEC_CMDS = /bin/echo, /bin/mkdir, /bin/cp, /bin/cat, /usr/bin/groups, /usr/bin/whoami, /bin/dd, /bin/mv, /usr/bin/id, /bin/kill, /usr/libexec/<%=@batch_system-%>_submit.sh, /usr/libexec/<%=@batch_system-%>_status.sh, /usr/libexec/<%=@batch_system-%>_cancel.sh, /usr/libexec/<%=@batch_system-%>_hold.sh, /usr/libexec/<%=@batch_system-%>_resume.sh, /usr/libexec/glite-cream-copyProxyToSandboxDir.sh, /usr/libexec/glite-cream-createsandboxdir, /usr/libexec/glite-ce-cream-purge-sandbox, /usr/libexec/glite-ce-cream-purge-proxy,  /usr/libexec/glite-ce-cream-create-wrapper, /bin/ls 
+
+
+# Defaults specification (for cream)
+
+<% unless @sudo_logfile == "" -%>
+Defaults        logfile=<%=@sudo_logfile-%>  # Added for cream
+<%end-%>
+Defaults>GLEXEC_ACCOUNTS !requiretty # Added for cream
+Defaults>GLEXEC_ACCOUNTS env_keep += "BLAHPD_LOCATION BLAHPD_CONFIG_LOCATION"
+
+
+# User privilege specification (for cream)
+root    ALL=(ALL) ALL  # Added for cream
+tomcat  ALL=(GLEXEC_ACCOUNTS) NOPASSWD: GLEXEC_CMDS  # Added for cream
+
+

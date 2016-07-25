@@ -67,6 +67,7 @@ class creamce::params {
   $cga_cron_sched            = hiera("cga_cron_sched", "30 1 * * *")
   $at_deny_extras            = hiera("at_deny_extras", [])
   $cron_deny_extras          = hiera("cron_deny_extras", [])
+  $sudo_logfile              = hiera("sudo_logfile", "")
 
   #
   # Tomcat
