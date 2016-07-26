@@ -8,9 +8,24 @@ module Puppet::Parser::Functions
     
     voenv.each do | voname, vodata |
       vodata['users'].each do | user_prefix, udata |
-        (udata['first_uid']...(udata['first_uid'] + udata.fetch('pool_size', def_pool_size))).each do | idx |
-          result["#{user_prefix}#{idx}"] = { 
-            'uid'        => udata['uid'],
+      
+        pool_size = udata.fetch('pool_size', def_pool_size)
+        if pool_size > 0
+        
+          (0...pool_size).each do | idx |
+            result["%s%04d" % [user_prefix, idx]] = { 
+              'uid'        => udata['first_uid'] + idx,
+              'groups'     => udata['groups'],
+              'gridmapdir' => "#{gridmapdir}",
+              'homedir'    => "#{udata.fetch('homedir', '/home')}",
+              'shell'      => "#{udata.fetch('shell', '/bin/bash')}"
+            }
+          
+          end
+        else
+          # static account
+          result["#{user_prefix}"] = { 
+            'uid'        => udata['first_uid'],
             'groups'     => udata['groups'],
             'gridmapdir' => "#{gridmapdir}",
             'homedir'    => "#{udata.fetch('homedir', '/home')}",

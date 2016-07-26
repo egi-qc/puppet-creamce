@@ -12,9 +12,17 @@ module Puppet::Parser::Functions
         gItem[norm_group] = Array.new
         vodata['users'].each do | user_prefix, udata |
           if udata["groups"][0] == group
-            (udata['first_uid']...(udata['first_uid'] + udata.fetch('pool_size', def_pool_size))).each do | idx |
-              gItem[norm_group].push("#{user_prefix}#{idx}")
+          
+            pool_size = udata.fetch('pool_size', def_pool_size)
+            if def_pool_size > 0
+              (0...pool_size).each do | idx |
+                gItem[norm_group].push("%s%04d" % [user_prefix, idx])
+              end
+            else
+              # static account
+              gItem[norm_group].push("#{user_prefix}")
             end
+            
           end
         end
       end
