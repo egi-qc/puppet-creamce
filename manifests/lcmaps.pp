@@ -26,8 +26,4 @@ class creamce::lcmaps inherits creamce::params {
     ensure => present
   }
 
-  package { "lcg-expiregridmapdir":
-    ensure => present
-  }
-
 }

@@ -148,6 +148,8 @@ class creamce::params {
   $voms_dir                = hiera('voms_dir','/etc/grid-security/vomsdir')
   $gridmap_dir             = hiera('gridmap_dir','/etc/grid-security/gridmapdir')
   $gridmap_file            = hiera('gridmap_file','/etc/grid-security/grid-mapfile')
+  $gridmap_extras          = hiera("gridmap_extras", [])
+  $gridmap_cron_sched      = hiera("gridmap_cron_sched", "5 * * * *")
   $groupmap_file           = hiera('groupmap_file','/etc/grid-security/groupmapfile')
   $groupmap                = hiera('groupmap',undef)
   $crl_update_millis       = hiera('crl_update_millis',3600000)

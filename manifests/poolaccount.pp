@@ -30,6 +30,10 @@ class creamce::poolaccount inherits creamce::params {
     ensure     => "present",
   }
   
+  package { "lcg-expiregridmapdir":
+    ensure => present
+  }
+  
   group { "edguser":
     gid    => 152,
   }
@@ -99,8 +103,28 @@ class creamce::poolaccount inherits creamce::params {
     content  => template("creamce/at_deny.erb")
   }
   
-  #
-  # TODO missing groupmap-file
-  #
+  #################################################################################################
+  # https://twiki.cern.ch/twiki/bin/view/LCG/YaimGuide400
+  #################################################################################################
+
+
+  file  { "/etc/cron.d/lcg-expiregridmapdir":
+    ensure   => file,
+    owner    => "root",
+    group    => "root",
+    mode     => 0644,
+    content  => "${gridmap_cron_sched} root /usr/sbin/lcg-expiregridmapdir.pl -e 240 -v >> /var/log/lcg-expiregridmapdir.log 2>&1\n",
+    require  => Package["lcg-expiregridmapdir"],
+  }
   
+  $gridmap_table = build_groupmap($voenv)
+  
+  file { "${groupmap_file}":
+    ensure   => file,
+    owner    => "root",
+    group    => "root",
+    mode     => 0644,
+    content  => template("creamce/groupmapfile.erb")
+  }
+
 }
