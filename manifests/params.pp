@@ -68,6 +68,7 @@ class creamce::params {
   $at_deny_extras            = hiera("at_deny_extras", [])
   $cron_deny_extras          = hiera("cron_deny_extras", [])
   $sudo_logfile              = hiera("sudo_logfile", "")
+  $default_pool_size         = hiera("default_pool_size", 100)
 
   #
   # Tomcat

@@ -1,6 +1,7 @@
 module Puppet::Parser::Functions
   newfunction(:build_sudo_table, :type => :rvalue, :doc => "This function converts user table structure") do |args|
     voenv = args[0]
+    def_pool_size = args[1]
 
     result = Hash.new
     
@@ -11,7 +12,7 @@ module Puppet::Parser::Functions
         gItem[norm_group] = Array.new
         vodata['users'].each do | user_prefix, udata |
           if udata["groups"][0] == group
-            (udata['first_uid']...(udata['first_uid'] + udata['pool_size'])).each do | idx |
+            (udata['first_uid']...(udata['first_uid'] + udata.fetch('pool_size', def_pool_size))).each do | idx |
               gItem[norm_group].push("#{user_prefix}#{idx}")
             end
           end

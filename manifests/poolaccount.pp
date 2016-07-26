@@ -49,7 +49,7 @@ class creamce::poolaccount inherits creamce::params {
   $group_table = build_group_definitions($voenv)
   create_resources(group, $group_table)
   
-  $user_table = build_user_definitions($voenv, $gridmap_dir)
+  $user_table = build_user_definitions($voenv, $gridmap_dir, $default_pool_size)
   create_resources(pooluser, $user_table)
   
   file { "/etc/cleanup-grid-accounts.conf":
@@ -117,14 +117,24 @@ class creamce::poolaccount inherits creamce::params {
     require  => Package["lcg-expiregridmapdir"],
   }
   
-  $gridmap_table = build_groupmap($voenv)
+  $groupmap_table = build_groupmap($voenv)
   
   file { "${groupmap_file}":
     ensure   => file,
     owner    => "root",
     group    => "root",
     mode     => 0644,
-    content  => template("creamce/groupmapfile.erb")
+    content  => template("creamce/groupmapfile.erb"),
+  }
+  
+  $gridmap_table = build_gridmap($voenv, $default_pool_size)
+  
+  file { "${gridmap_file}":
+    ensure   => file,
+    owner    => "root",
+    group    => "root",
+    mode     => 0644,
+    content  => template("creamce/gridmapfile.erb"),
   }
 
 }
