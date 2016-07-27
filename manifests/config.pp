@@ -4,6 +4,8 @@ class creamce::config inherits creamce::params {
   
   require creamce::env
   
+  require creamce::poolaccount
+  
   file { "${cream_db_sandbox_path}":
     ensure => directory,
     owner  => "tomcat",
@@ -11,9 +13,8 @@ class creamce::config inherits creamce::params {
     mode   => 0775,
   }
   
-  #
-  # TODO create sandbox for supported vo/groups
-  #    
+  $sb_definitions = build_sb_definitions($voenv, $cream_db_sandbox_path, File["$cream_db_sandbox_path"])
+  create_resources(file, $sb_definitions)
   
   file{"/etc/sysconfig/edg":
     ensure => present,
