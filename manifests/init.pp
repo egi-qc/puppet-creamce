@@ -17,8 +17,31 @@ class creamce inherits creamce::params {
     include creamce::locallogger
 
     #
-    # TODO install systemd scripts from emi-cream-ce
+    # Virtual master service for systemd
     #
+
+    file { "/lib/systemd/system/glite-services.target":
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => 0644,
+      content => "[Unit]
+Description=Master service for CREAM CE
+Requires=tomcat.service glite-lb-logd.service glite-ce-blah-parser.service
+",
+    }
+
+    file { [ "/etc/systemd/system/tomcat.service.d/10-glite-services.conf",
+             "/etc/systemd/system/glite-lb-logd.service.d/10-glite-services.conf",
+             "/etc/systemd/system/glite-ce-blah-parser.service.d/10-glite-services.conf" ]:
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => 0644,
+      content => "[Unit]
+PartOf=glite-services.target
+",
+    }
 
   } else {
   
