@@ -78,38 +78,34 @@ class creamce::config inherits creamce::params {
   # logrotation for BLAH
   #
   file {"/etc/logrotate.d/blahp-logrotate":
-    ensure => present,
+    ensure  => present,
     content => template("creamce/blahp-logrotate.erb"),
-    owner => "root",
-    group => "root",
-    mode => 0644,
+    owner   => "root",
+    group   => "root",
+    mode    => 0644,
   }
+
   file {"/etc/logrotate.d/bnotifier-logrotate":
-    ensure => present,
+    ensure  => present,
     content => template("creamce/bnotifier-logrotate.erb"),
-    owner => "root",
-    group => "root",
-    mode => 0644,
+    owner   => "root",
+    group   => "root",
+    mode    => 0644,
   }
+
   file {"/etc/logrotate.d/bupdater-logrotate":
-    ensure => present,
+    ensure  => present,
     content => template("creamce/bupdater-logrotate.erb"),
-    owner => "root",
-    group => "root",
-    mode => 0644,
+    owner   => "root",
+    group   => "root",
+    mode    => 0644,
   }
-  file {"/etc/logrotate.d/glexec-logrotate":
-    ensure => present,
-    content => template("creamce/glexec-logrotate.erb"),
-    owner => "root",
-    group => "root",
-    mode => 0644,
-  }
+
   file {["/opt/edg","/opt/edg/var"]:
     ensure => directory,
-    owner => "root",
-    group => "root",
-    mode => 0755,
+    owner  => "root",
+    group  => "root",
+    mode   => 0755,
   }
 }
 
