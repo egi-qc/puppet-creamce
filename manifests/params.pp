@@ -198,10 +198,6 @@ class creamce::params {
   $loclog_group               = hiera('locallogger_group', 'glite')
   $loclog_dir                 = hiera('locallogger_dir', '/var/lib/glite')
 
-  # wrong! this is CE specific
-  $cores                      = hiera('cores','0')           
-  $benchmark_info             = hiera('benchmark_info','((specfp2000 0), (specint2000 0), (HEP-SPEC06 0))') # 
-  
   #
   # apel accounting secrets
   #

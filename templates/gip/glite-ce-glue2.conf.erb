@@ -134,10 +134,10 @@ CECapabilities = (<%=@ce_capability.join(",")-%>)
     ce_os_version=res_info["ce_os_version"]
     ce_otherdescr=res_info["ce_otherdescr"]
     ce_outboundip=res_info["ce_outboundip"]
-    ce_sf00=res_info["ce_sf00"]
-    ce_si00=res_info["ce_si00"]
+    ce_benchmarks=res_info["ce_benchmarks"]
     ce_smpsize=res_info["ce_smpsize"]
     ce_runtimeenv=res_info["ce_runtimeenv"]
+    ce_cores=res_info["ce_cores"]
     if (ce_os_arch == "x86_64")
         ce_platform_type="amd64"
     else
@@ -242,12 +242,27 @@ ExecutionEnvironment_<%=res_id-%>_NetworkAdapterOutboundIP = <%=ce_outboundip%>
 # Benchmarks is the list of benchmarks
 # Format: Benchmarks = (Benchmark1, Benchmark2, .., Benchmarkn)
 # Format of Benchmarki: (Type Value)
-ExecutionEnvironment_<%=res_id-%>_Benchmarks = <%=@benchmark_info%>
+<%
+benchstr = nil
+ce_benchmarks.each do | benchname, benchvalue |
+  if benchstr == nil
+    benchstr = "((#{benchname} #{benchvalue})"
+  else
+    benchstr << ", (#{benchname} #{benchvalue})"
+  end
+end
+if benchstr == nil
+  benchstr = "()"
+else
+  benchstr << ")"
+end
+-%>
+ExecutionEnvironment_<%=res_id-%>_Benchmarks = test_<%=benchstr%>
 #
 #
 # Cores is the number of cores per CPU of the Worker Nodes
 # It must be set for all the Execution Environments
-ExecutionEnvironment_<%=res_id-%>_Cores = <%=@cores%>
+ExecutionEnvironment_<%=res_id-%>_Cores = <%=ce_cores%>
 <%end-%>
 
 #

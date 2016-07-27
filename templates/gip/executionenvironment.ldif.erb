@@ -4,8 +4,6 @@ now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
 @subclusters.each do | res_id, res_info |
     ce_physcpu=res_info["ce_physcpu"]
     ce_logcpu=res_info["ce_logcpu"]
-    ce_sf00=res_info["ce_sf00"]
-    ce_si00=res_info["ce_si00"]
     ce_smpsize=res_info["ce_smpsize"]
     ce_runtimeenv=res_info["ce_runtimeenv"]
     ce_cpu_model=res_info["ce_cpu_model"] 

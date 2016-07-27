@@ -33,8 +33,8 @@ GlueSchemaVersionMinor: 3
     ce_os_name=res_info["ce_os_name"]
     ce_otherdescr=res_info["ce_otherdescr"]
     ce_outboundip=res_info["ce_outboundip"]
-    ce_sf00=res_info["ce_sf00"]
-    ce_si00=res_info["ce_si00"]
+    ce_sf00=res_info["ce_benchmarks"].fetch('specfp2000', nil)
+    ce_si00=res_info["ce_benchmarks"].fetch('specint2000', nil)
     ce_smpsize=res_info["ce_smpsize"]
     ce_runtimeenv=res_info["ce_runtimeenv"]
     subcluster_tmpdir=res_info["subcluster_tmpdir"]
@@ -57,8 +57,12 @@ GlueSubClusterUniqueID: <%=res_id%>
 GlueChunkKey: GlueClusterUniqueID=<%=@ce_host%>
 GlueHostArchitecturePlatformType: <%=ce_os_arch%>
 GlueHostArchitectureSMPSize: <%=ce_smpsize%>
+<% if ce_sf00 != nil -%>
 GlueHostBenchmarkSF00: <%=ce_sf00%>
+<% end -%>
+<% if ce_si00 != nil -%>
 GlueHostBenchmarkSI00: <%=ce_si00%>
+<% end -%>
 GlueHostMainMemoryRAMSize: <%=ce_minphysmem%>
 GlueHostMainMemoryVirtualSize: <%=ce_minvirtmem%>
 GlueHostNetworkAdapterInboundIP: <%=ce_inboundip.to_s.upcase%>
