@@ -1,6 +1,7 @@
 class creamce::gip inherits creamce::params {
 
   require creamce::yumrepos
+  require creamce::poolaccount
   include bdii
 
   package { ["glite-info-provider-service", "glite-ce-cream-utils", "dynsched-generic", "glue-schema"]:
@@ -34,6 +35,49 @@ class creamce::gip inherits creamce::params {
       warning "No package installed for lrms infoprovider"
     }
   }
+  
+  # ##################################################################################################
+  # vo tag dir setup
+  # ##################################################################################################
+
+  file { "${gridft_pub_dir}":
+    ensure => directory,
+    owner  => "root",
+    group  => "root",
+    mode   => 0755,
+  }
+  
+  $cluster_paths = prefix(keys($subclusters), "${gridft_pub_dir}/")
+  file { $cluster_paths:
+    ensure => directory,
+    owner  => "root",
+    group  => "root",
+    mode   => 0755,
+  }
+  
+  define tagspace ($pub_dir, $sub_cluster, $a_owner, $a_group, $req_list) {
+  
+    file { "${pub_dir}/${sub_cluster}/${title}":
+      ensure  => directory,
+      owner   => "${a_owner}",
+      group   => "${a_group}",
+      mode    => 0755,
+      require => $req_list,
+    }
+
+    file { "${pub_dir}/${sub_cluster}/${title}/${title}.list":
+      ensure  => file,
+      owner   => "${a_owner}",
+      group   => "${a_group}",
+      mode    => 0644,
+      require => File["${pub_dir}/${sub_cluster}/${title}"],
+    }
+
+  }
+  
+  $tagdir_defs = build_tagdir_definitions($voenv, $subclusters, $gridft_pub_dir, File[$cluster_paths])
+  create_resources(tagspace, $tagdir_defs)
+
 
   # ##################################################################################################
   # common plugin 

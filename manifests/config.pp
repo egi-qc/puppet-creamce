@@ -101,11 +101,5 @@ class creamce::config inherits creamce::params {
     mode    => 0644,
   }
 
-  file {["/opt/edg","/opt/edg/var"]:
-    ensure => directory,
-    owner  => "root",
-    group  => "root",
-    mode   => 0755,
-  }
 }
 
