@@ -208,7 +208,6 @@ class creamce::params {
   #
   # yum repositories
   #
-  $cream_repo_url             = hiera('cream_repo_url', '')
-  $cream_repo                 = hiera('cream_repo_file', '/etc/yum.repos.d/creamce.repo')
+  $cream_repo_urls            = hiera('cream_repo_urls', [])
 
 }
