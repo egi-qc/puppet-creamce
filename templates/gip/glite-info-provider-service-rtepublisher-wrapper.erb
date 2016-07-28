@@ -1,6 +1,3 @@
 #!/bin/sh
-export PATH=/bin:/sbin:/usr/sbin:/bin:/usr/bin:/usr/bin
-export RTEPublisher_HOST=<%=@ce_host%>
-export GRIDFTP_PATH=<%=@gridft_pub_dir%>
 /usr/bin/glite-info-service /etc/glite/info/service/glite-info-service-rtepublisher.conf <%=@sitename%>
 /usr/bin/glite-info-glue2-endpoint /etc/glite/info/service/glite-info-glue2-rtepublisher.conf <%=@computing_service_id%>
