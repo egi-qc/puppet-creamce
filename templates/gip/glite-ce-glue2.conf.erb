@@ -47,7 +47,7 @@ Owner =  <%=@voenv.keys().join(" ")%>
 #
 #
 # Argus is yes if this CREAM CE is using Argus as authorization mechanism
-<% if @use_argus == 'true' -%>
+<% if @use_argus -%>
 Argus = yes
 <% else -%>
 Argus = no

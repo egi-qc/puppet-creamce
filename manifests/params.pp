@@ -158,7 +158,7 @@ class creamce::params {
   $crl_update_millis       = hiera('crl_update_millis',3600000)
   $cream_admin_list_file   = hiera('cream_admin_list_file', '/etc/grid-security/admin-list')
   $cream_ban_list_file     = hiera('cream_ban_list_file', '/etc/lcas/ban_users.db')
-  $use_argus               = hiera("use_argus", "true")
+  $use_argus               = hiera("use_argus", true)
   $argusservice            = hiera("argusservice", undef)
   $argusport               = hiera("argusport", "8154")
   $cream_pepc_resourceid   = hiera('cream_pepc_resourceid','http://${cream_db_host}:${ce_port}/cream')

@@ -96,7 +96,7 @@
               removeAbandonedTimeout="30"
   />
 
-<% if @use_argus == 'true' -%>  
+<% if @use_argus -%>  
 
   <adminlist filename="<%=@cream_admin_list_file%>"/>
   <argus-pep name="pep-client1"
@@ -109,7 +109,7 @@
 
   </argus-pep>
 
-<% elsif @use_argus == 'false' -%>
+<% else -%>
 
   <authzchain name="chain-1">
     <plugin name="localuserpip"

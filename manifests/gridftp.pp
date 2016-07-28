@@ -5,7 +5,7 @@ class creamce::gridftp inherits creamce::params {
   
   $config_glexec = false
     
-  if $use_argus == "true" {
+  if $use_argus {
     $gridftp_auth_plugin = "argus-gsi-pep-callout"
   } else {
     $gridftp_auth_plugin = "lcas-lcmaps-gt4-interface"
@@ -21,7 +21,7 @@ class creamce::gridftp inherits creamce::params {
     notify  => Class[Gridftp::Service],
   }
   
-  if $use_argus == "true" {
+  if $use_argus {
   
     # Documentation: https://twiki.cern.ch/twiki/bin/view/EGEE/AuthZPEPGSIConfig
     file { "/etc/grid-security/gsi-authz.conf":

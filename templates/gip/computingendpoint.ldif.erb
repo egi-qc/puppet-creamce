@@ -17,7 +17,11 @@ GLUE2EntityOtherInfo: InfoProviderVersion=1.1
 GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
 GLUE2EntityOtherInfo: MiddlewareName=EMI
 GLUE2EntityOtherInfo: MiddlewareVersion=<%=@emiversion%>
-GLUE2EntityOtherInfo: ArgusEnabled=<%=@use_argus.to_s.upcase%>
+<% if @use_argus -%>
+GLUE2EntityOtherInfo: ArgusEnabled=TRUE
+<% else -%>
+GLUE2EntityOtherInfo: ArgusEnabled=FALSE
+<% end -%>
 GLUE2EndpointStartTime: <%=starttime%>
 GLUE2EndpointID: <%=epID%>
 GLUE2EndpointURL: https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services
