@@ -1,0 +1,31 @@
+# WARNING: THIS FILE IS WRITTEN BY PUPPET
+#
+
+# Supported batch systems
+supported_lrms=<%=@batch_system%>
+
+blah_child_poll_timeout=<%=@blah_child_poll_timeout%>
+
+alldone_interval=<%=@blah_alldone_interval%>
+
+# Needed to implement the short term solution for proxy renewal (savannah task #8176) 
+blah_disable_wn_proxy_renewal=yes 
+
+# working on glexec -> sudo support 
+blah_disable_proxy_user_copy=yes
+blah_id_mapping_command_sudo="/usr/bin/sudo -H"
+blah_set_default_workdir_to_home=yes
+
+# DGAS logfile 
+BLAHPD_ACCOUNTING_INFO_LOG=/var/log/cream/accounting/blahp.log
+
+<% if @blparser_with_updater == "true" -%>
+
+  # TODO configure update
+
+<% elsif @blparser_with_updater == "false" -%>
+
+  # TODO configure with old blparser
+
+<% end -%>
+

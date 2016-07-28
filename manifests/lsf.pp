@@ -1,12 +1,17 @@
 class creamce::lsf inherits creamce::params {
 
+  require creamce::config
+  require creamce::gip
+  
   #
   # add and configure LSF batch system
   # 
   include lsf
 
   package {["emi-lsf-utils","btools","info-dynamic-scheduler-lsf"]:
-    ensure => present,
+    ensure  => present,
+    require => Package["dynsched-generic"],
+    notify  => Class[Bdii::Service],
   }
 
   #
@@ -18,7 +23,6 @@ class creamce::lsf inherits creamce::params {
     group => "root",
     mode => 0644,
     content => template("creamce/blah.config.lsf.erb"),
-#    notify  => Service[$tomcat],
   }
 
   file{"/etc/profile.lsf":

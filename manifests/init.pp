@@ -17,6 +17,27 @@ class creamce inherits creamce::params {
     include creamce::locallogger
 
     #
+    # Batch system support
+    #
+    case $batch_system {
+      condor: {
+        include creamce::condor
+      }
+      lsf: {
+        include creamce::lsf
+      }
+      pbs: {
+        include creamce::torque
+      }
+      slurm: {
+        include creamce::slurm
+      }
+      default: {
+        warning "No package installed for lrms infoprovider"
+      }
+    }
+    
+    #
     # Virtual master service for systemd
     #
 
