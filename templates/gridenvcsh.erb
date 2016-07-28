@@ -1,18 +1,29 @@
-# $gridenvfile is managed by Puppet env.pp.\n#Any changes in here will be overwritten
+# $gridenvfile is managed by Puppet env.pp.
+# Any changes in here will be overwritten
 
-setenv PATH=/bin:${PATH}
-setenv MANPATH=/opt/glite/share/man:${MANPATH}
-setenv X509_VOMS_DIR="<%=@voms_dir%>"
-setenv X509_CERT_DIR="<%=@cacert_dir%>"
-setenv GRIDMAPDIR="<%=@gridmap_dir%>"
-setenv LCMAPS_LOG_LEVEL="<%=@lcmaps_log_level%>"
-setenv LCMAPS_DEBUG_LEVEL="<%=@lcmaps_debug_level%>"
-setenv LCAS_LOG_LEVEL="<%=@lcas_log_level%>"
-setenv LCAS_DEBUG_LEVEL="<%=@lcas_debug_level%>"
-setenv GLOBUS_TCP_PORT_RANGE="<%=@globus_tcp_port_range%>"
-setenv CATALINA_HOME="<%=@catalina_home%>"
-<%@ce_env.each do |key, value| -%>
+setenv X509_VOMS_DIR="<%=@voms_dir-%>"
+setenv X509_CERT_DIR="<%=@cacert_dir-%>"
+setenv GRIDMAPDIR="<%=@gridmap_dir-%>"
+setenv LCMAPS_LOG_LEVEL="<%=@lcmaps_log_level-%>"
+setenv LCMAPS_DEBUG_LEVEL="<%=@lcmaps_debug_level-%>"
+setenv LCAS_LOG_LEVEL="<%=@lcas_log_level-%>"
+setenv LCAS_DEBUG_LEVEL="<%=@lcas_debug_level-%>"
+setenv GLOBUS_TCP_PORT_RANGE="<%=@globus_tcp_port_range-%>"
+setenv CATALINA_HOME="<%=@catalina_home-%>"
+setenv GLITE_USER="<%=@loclog_user-%>"
+setenv GLITE_LOCATION_VAR=/var
+setenv GLITE_LOCATION=/usr
+setenv GLITE_HOST_KEY="<%=@loclog_dir-%>/.certs/hostcert.pem"
+setenv GLITE_HOST_CERT="<%=@loclog_dir-%>/.certs/hostcert.pem"
+setenv CREAM_PID_FILE=/var/run/<%=@tomcat-%>.pid
+setenv BLAHPD_LOCATION=/usr
+setenv BLAHPD_CONFIG_LOCATION=/etc/blah.config
+<%@ce_env.each do | key, value | -%>
+<% if key == "PATH" or key == "MANPATH" or key == "LD_LIBRARY_PATH" -%>
+setenv <%=key%>="<%=value%>":${<%=key%>}
+<% else -%>
 setenv <%=key%>="<%=value%>"
+<% end -%>
 <%end-%>
 
 
