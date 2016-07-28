@@ -32,7 +32,7 @@ get_endpoint = echo https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services
 # The return code should indicate the status:
 # 0 = OK, 1 = Critical, 2 = Warning, 3 = Unknown, other = Other
 
-get_status = glite-info-service-test CREAM && /sbin/service <%=@tomcat-%> status
+get_status = glite-info-service-test CREAM && systemctl show <%=@tomcat-%> -p SubState | cut -d = -f 2-
 
 # The URL of a WSDL document describing the service
 # If the string does not start with "http" this will be omitted
@@ -47,7 +47,7 @@ semantics_URL = https://edms.cern.ch/document/595770
 # StartTime: A command to return the service start time.
 # This should be a unix timestamp, the info provider converts it to ISO8601
 
-get_starttime = perl -e '@st=stat($ENV{CREAM_PID_FILE});print "@st[10]\n";'
+get_starttime = date -d "`systemctl show <%=@tomcat-%> -p ActiveEnterTimestamp | cut -d = -f 2-`" +%s
 
 # Owner: this should return a list of owner VO names, one per line
 # Null entries will be omitted

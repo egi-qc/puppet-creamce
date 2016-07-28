@@ -21,12 +21,12 @@ service_type = org.glite.RTEPublisher
 # This should be a command which returns the service interface version
 # in the format 3[.2[.1]] - just hardwire to 1.0.0 here
 
-get_version = rpm -q --qf %{V} lcg-info-dynamic-software
+get_version = echo "1.0.0"
 
 # A command to return the service endpoint to stdout (uses variables set
 # in the init script)
 
-get_endpoint = echo gsiftp://$RTEPUBLISHER_HOST:$RTEPUBLISHER_PORT$RTEPUBLISHER_PATH
+get_endpoint = echo gsiftp://<%=@gridftp_host-%>:<%=@gridftp_port-%><%=@gridft_pub_dir-%>
 
 # A command to check the status of the service. The status message should be
 # returned to stdout - it can be multi-line, the output will be massaged
@@ -34,7 +34,7 @@ get_endpoint = echo gsiftp://$RTEPUBLISHER_HOST:$RTEPUBLISHER_PORT$RTEPUBLISHER_
 # The return code should indicate the status:
 # 0 = OK, 1 = Critical, 2 = Warning, 3 = Unknown, other = Other
 
-get_status = glite-info-service-test RTEPUBLISHER && /sbin/service globus-gridftp status
+get_status = glite-info-service-test RTEPUBLISHER && systemctl show globus-gridftp-server -p SubState | cut -d = -f 2-
 
 # The URL of a WSDL document describing the service
 # If the string does not start with "http" this will be omitted
@@ -49,18 +49,22 @@ semantics_URL = http://grid-deployment.web.cern.ch/grid-deployment/eis/docs/ExpS
 # StartTime: A command to return the service start time.
 # This should be a unix timestamp, the info provider converts it to ISO8601
 
-get_starttime = perl -e '@st=stat($ENV{GRIDFTP_PROC_FILE});print "@st[10]\n";'
+get_starttime = date -d "`systemctl show globus-gridftp-server -p ActiveEnterTimestamp | cut -d = -f 2-`" +%s
 
 # Owner: this should return a list of owner VO names, one per line
 # Null entries will be omitted
 
-get_owner = glite-info-service-rtepublisher vos
+get_owner = echo -e "<%=@voenv.keys().join('\n')%>"
 
 # A list of AccessControlBaseRule strings to indicate who is allowed to
 # have access to the service - at the simplest this is the same as the
 # Owner but with the VO names prefixed by "VO:"
+<% acbr='' -%>
+<% @voenv.each do | vo, value | -%>
+<% acbr=acbr+'VO:'+vo+'\n' -%>
+<% end-%>
 
-get_acbr = glite-info-service-rtepublisher vos | sed 's!\(.*\)!VOMS:/\1/Role=lcgadmin!'
+get_acbr = echo -e "<%=acbr%>"
 
 # ServiceData entries if any, as a list of key=value pairs
 # This will normally call a separate script

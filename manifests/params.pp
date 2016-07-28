@@ -136,7 +136,9 @@ class creamce::params {
   #
   # GridFTP
   #
+  $gridftp_host              = hiera("gridftp::params::hostname", "${::fqdn}")
   $gridftp_port              = hiera("gridftp::params::port", "2811")
+  $gridft_pub_dir            = hiera('gridftp_pub_dir', '/var/info')
   $globus_tcp_port_range     = hiera("gridftp::params::globus_tcp_port_range", "20000,25000")
   
   
@@ -171,7 +173,6 @@ class creamce::params {
   $info_group              = hiera("bdii::params::group","ldap")
   $clusters                = hiera('clusters','unset')
   $subclusters             = hiera('subclusters','unset')
-  $ce_def                  = hiera('ce_def','unset')
   $clustermode             = hiera('clustermode', "false")
   $clusterid               = hiera('clusterid', undef)
   $gippath                 = hiera('gippath', "/var/lib/bdii/gip")
@@ -189,7 +190,6 @@ class creamce::params {
   $workarea_mslot_total    = hiera('workarea_mslot_total', 0)
   $workarea_mslot_free     = hiera('workarea_mslot_free', 0)
   $workarea_mslot_lifetime = hiera('workarea_mslot_lifetime', 0)
-  $gridft_pub_dir          = hiera('gridftp_pub_dir', '/var/info')
   
   #
   # Locallogger
