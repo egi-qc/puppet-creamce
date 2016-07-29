@@ -1,0 +1,33 @@
+# Built by puppet, DO NOT EDIT
+
+SERVERHOST              <%=@torque_server%>
+ADMIN1                  root
+ADMIN3                  edguser ldap
+<% if @torque_server == @ce_host -%>
+ADMINHOSTS              <%=@torque_server%>
+<% else -%>
+ADMINHOSTS              <%=@torque_server%> <%=@ce_host%>
+<% end -%>
+RMCFG[base]             TYPE=PBS
+SERVERPORT              40559
+SERVERMODE              NORMAL
+
+# Set PBS server polling interval. If you have short # queues or/and jobs it is worth to set a short interval. (10 seconds)
+
+RMPOLLINTERVAL        00:00:10
+
+# a max. 10 MByte log file in a logical location
+
+LOGFILE               /var/log/maui.log
+LOGFILEMAXSIZE        10000000
+LOGLEVEL              1
+
+# Set the delay to 1 minute before Maui tries to run a job again, # in case it failed to run the first time.
+# The default value is 1 hour.
+
+DEFERTIME       00:01:00
+
+# Necessary for MPI grid jobs
+ENABLEMULTIREQJOBS TRUE
+
+
