@@ -117,6 +117,8 @@ class creamce::params {
   $torque_tracejob_logs      = hiera("torque_tracejob_logs", "2")
   $torque_use_maui           = hiera("torque_use_maui", true)
   $torque_sched_opts         = hiera("torque_sched_opts", { "cycle_time" => "0" })
+  $torque_ssh_cron_sched     = hiera("torque_ssh_cron_sched", "05 1,7,13,19 * * *")
+  $munge_key_path            = hiera("munge_key_path", "")
 
   $lsf_primary_master        = hiera("lsf_primary_master", undef)
   $lsf_secondary_master      = hiera("lsf_secondary_master", undef)
