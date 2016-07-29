@@ -63,5 +63,24 @@ class creamce::lsf inherits creamce::params {
         mode => 0755,
         content => template("creamce/lsf_local_submit_attributes.sh.erb"),
   }
+  
+  # configure apel parser
+  package { ["batchacct-common", "batchacct-cecol", "oracle-instantclient-tnsnames.ora"]:
+    ensure => present,
+  }
+  
+  file { "/etc/batchacct/connection":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => 0400,
+    content => template("creamce/apelconf.erb"),
+    require => Package["batchacct-common", "batchacct-cecol", "oracle-instantclient-tnsnames.ora"],
+    notify  => Service['batchacct-cecold'],
+  }
+  
+  service { "batchacct-cecold":
+    ensure => running
+  }
       
 }
