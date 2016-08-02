@@ -11,8 +11,7 @@ defaultse=Hash.new
 end-%>
 
 
-<%@grid_queues.each do | queue, value | 
-  vonames=value["vonames"]-%>
+<%@queue_vo_map.each do | queue, vodata | -%>
 dn: GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
 objectClass: GlueCETop
 objectClass: GlueCE
@@ -59,21 +58,18 @@ GlueForeignKey: GlueClusterUniqueID=<%=@ce_host%>
 GlueInformationServiceURL: ldap://<%=@fqdn-%>:<%=@info_port-%>/mds-vo-name=<%=@info_type-%>grid
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
-<%@ce_capability.each do |cap |-%>
+<%@ce_capability.each do | cap |-%>
 GlueCECapability:  <%=cap%>
 <%end-%>
-<%vonames.each do |voname |-%>
-GlueCEInfoApplicationDir: <%=voappdir[voname]%>
-GlueCEInfoDefaultSE: <%=defaultse[voname]%>
-<% if voname.include?("/") -%>
-GlueCEAccessControlBaseRule: VOMS:<%=voname%>
-<% else -%>
-GlueCEAccessControlBaseRule: VO:<%=voname%>
-<%end-%>
-<%end-%>
+<% vodata.each do | owner, fqans | -%>
+GlueCEInfoApplicationDir: <%=voappdir[owner]%>
+GlueCEInfoDefaultSE: <%=defaultse[owner]%>
+GlueCEAccessControlBaseRule: VO:<%=owner%>
+<%# TODO GlueCEAccessControlBaseRule: VOMS:fqan -%>
+<%end%><%# end of vodata.each -%>
 
-<%vonames.each do |voname|-%>
-dn: GlueVOViewLocalID=<%=voname-%>,GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
+<%vodata.each do | owner, fqans | -%>
+dn: GlueVOViewLocalID=<%=owner-%>,GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
 objectClass: GlueCETop
 objectClass: GlueVOView
 objectClass: GlueCEInfo
@@ -82,31 +78,22 @@ objectClass: GlueCEAccessControlBase
 objectClass: GlueCEPolicy
 objectClass: GlueKey
 objectClass: GlueSchemaVersion
-GlueVOViewLocalID: <%=voname%>
+GlueVOViewLocalID: <%=owner%>
 GlueCEStateRunningJobs: 0
 GlueCEStateWaitingJobs: 444444
 GlueCEStateTotalJobs: 0
 GlueCEStateFreeJobSlots: 0
 GlueCEStateEstimatedResponseTime: 2146660842
 GlueCEStateWorstResponseTime: 2146660842
-GlueCEInfoDefaultSE: <%=defaultse[voname]%>
-GlueCEInfoApplicationDir: <%=voswdir[voname]%>
+GlueCEInfoDefaultSE: <%=defaultse[owner]%>
+GlueCEInfoApplicationDir: <%=voswdir[owner]%>
 GlueCEInfoDataDir: unset
 GlueChunkKey: GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
-<% if voname.include?("/") -%>
-GlueCEAccessControlBaseRule: VOMS:<%=voname%>
-<% else -%>
-GlueCEAccessControlBaseRule: VO:<%=voname%>
-<%end-%>
+GlueCEAccessControlBaseRule: VO:<%=owner%>
+<%# TODO GlueCEAccessControlBaseRule: VOMS:fqan -%>
+<%# TODO GlueCEAccessControlBaseRule: DENY:fqan -%>
 GlueSchemaVersionMajor: 1
 GlueSchemaVersionMinor: 3
-<% if ! voname.include?("/") -%>
-<% vonames.each do |other | -%>
-<% if other.include?("/") -%>
-GlueCEAccessControlBaseRule: DENY:<%=other%>
-<%end-%>
-<%end-%>
-<%end-%>
 
-<%end-%>
-<%end-%>
+<%end%><%# end of vodata.each -%>
+<%end%><%# end of queue_vo_map.each -%>

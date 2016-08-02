@@ -265,34 +265,30 @@ ExecutionEnvironment_<%=res_id-%>_Benchmarks = test_<%=benchstr%>
 ExecutionEnvironment_<%=res_id-%>_Cores = <%=ce_cores%>
 <%end-%>
 
+
+<% 
+sharelist=Array.new
+
+@queue_vo_map.each do | queue, vodata |
+  vodata.each do | owner, fqans |
+     sharelist.push(queue + '_' + owner)
+-%>
+SHARE_<%=queue-%>_<%=owner-%>_QUEUENAME=<%=queue%>
+<%# TODO implement access fqan-based -%>
+SHARE_<%=queue-%>_<%=owner-%>_ACBRS=( VO:<%=owner-%> )
+SHARE_<%=queue-%>_<%=owner-%>_OWNER=<%=owner%>
+SHARE_<%=queue-%>_<%=owner-%>_ENDPOINTS=(<%=@ce_host-%>_org.glite.ce.CREAM)
+SHARE_<%=queue-%>_<%=owner-%>_EXECUTIONENVIRONMENTS=(<%=@ce_host-%>)
+SHARE_<%=queue-%>_<%=owner-%>_CEIDS=(<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>)  
+
+<%end-%>
+<%end-%>
+
 #
 #
 # Shares. The list of shares.
 # Format: Shares = (share1, share2, ..., sharen)
-<%
-sharelist=Array.new
-@grid_queues.each do | queue, value |
-  vonames=value["vonames"]
-  vonames.each do | owner |
-     sharelist.push(queue+'_'+owner)
-  end
-end
--%>
-
 
 Shares = ( <%=sharelist.join(',')-%> )
 
-
-
-<%@grid_queues.each do | queue, value |
-  vonames=value["vonames"]
-  vonames.each do | owner | -%>
-SHARE_<%=queue-%>_<%=owner-%>_QUEUENAME=<%=queue%>
-SHARE_<%=queue-%>_<%=owner-%>_OWNER=<%=vonames.join(' ')%>
-SHARE_<%=queue-%>_<%=owner-%>_ENDPOINTS=(<%=@ce_host-%>_org.glite.ce.CREAM)
-SHARE_<%=queue-%>_<%=owner-%>_EXECUTIONENVIRONMENTS=(<%=@ce_host-%>)
-SHARE_<%=queue-%>_<%=owner-%>_ACBRS=( VO:<%=owner-%> )                                                              # wrong: missing groups of fqan
-SHARE_<%=queue-%>_<%=owner-%>_CEIDS=(<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>)  
-  <%end-%>
- <%end-%>
 <%end-%>

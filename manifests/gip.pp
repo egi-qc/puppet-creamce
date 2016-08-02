@@ -4,6 +4,8 @@ class creamce::gip inherits creamce::params {
   require creamce::poolaccount
   include bdii
 
+  $queue_vo_map = build_queue_vo_map($grid_queues, $voenv)
+
   package { ["glite-info-provider-service", "glite-ce-cream-utils", "dynsched-generic", "glue-schema"]:
     ensure   => present,
     require  => Class[Bdii::Config],

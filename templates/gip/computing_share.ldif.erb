@@ -2,9 +2,8 @@
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
 epID=@ce_host + "_org.glite.ce.CREAM"
 
-@grid_queues.each do | queue, value |
-  vonames=value["vonames"]
-  vonames.each do | owner | 
+@queue_vo_map.each do | queue, vodata |
+  vodata.each do | owner, fqans |
     share_id=queue + "_" + owner + "_" + @computing_service_id
 -%>
 dn: GLUE2ShareID=<%=share_id%>,GLUE2ServiceID=<%=@computing_service_id%>,GLUE2GroupID=resource,o=glue
