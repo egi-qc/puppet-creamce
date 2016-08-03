@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ -e /etc/glite-ce-cream/service.properties ] ; then
+    source /etc/glite-ce-cream/service.properties
+fi
+
+# TODO investigate error
+#certissuer= `/usr/bin/openssl x509 -noout -issuer -nameopt RFC2253 -in <%=@host_certificate-%> | sed -e 's/issuer=\s//g'`
+certsubject=`/usr/bin/openssl x509 -noout -subject -nameopt RFC2253 -in <%=@host_certificate-%> | sed -e 's/subject=\s//g'`
+
+trustedcas=""
+for file in <%=@cacert_dir-%>/*.pem;  do
+    if [ -n "${trustedcas}" ] ; then trustedcas="${trustedcas}\n" ; fi ;
+    cadn=`/usr/bin/openssl x509 -noout -subject -nameopt RFC2253 -in $file | sed -e 's/subject=\s//g'` ;
+    trustedcas="${trustedcas}GLUE2EndpointTrustedCA: ${cadn}";
+done
+
+if [ -n "${trustedcas}" ] ; then 
+    sed -e 's|@creamversion@|'${implementation_version:-undefined}'|g' \
+        -e 's|@certissuer@|'"${certissuer:-undefined}"'|g' \
+        -e 's|@certsubject@|'"${certsubject:-undefined}"'|g' \
+        -e 's|GLUE2EndpointTrustedCA: @trustedca@|'"${trustedcas}"'|g' \
+        -i $1 ;
+else
+    sed -e 's|@creamversion@|'${implementation_version:-undefined}'|g' \
+        -e 's|@certissuer@|'"${certissuer:-undefined}"'|g' \
+        -e 's|@certsubject@|'"${certsubject:-undefined}"'|g' \
+        -e '|GLUE2EndpointTrustedCA: @trustedca@|d' \
+        -i $1 ;
+fi
+

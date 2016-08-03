@@ -11,7 +11,7 @@ objectClass: GLUE2Endpoint
 objectClass: GLUE2ComputingEndpoint
 GLUE2EntityName: <%=epID%>
 GLUE2EntityCreationTime: <%=now%>
-GLUE2EntityOtherInfo: HostDN=<%=@certsubject.strip%>
+GLUE2EntityOtherInfo: HostDN=@certsubject@
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-endpoint-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
 GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
@@ -28,21 +28,19 @@ GLUE2EndpointURL: https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services
 GLUE2EndpointCapability: executionmanagement.jobexecution
 GLUE2EndpointTechnology: webservice
 GLUE2EndpointInterfaceName: org.glite.ce.CREAM
-GLUE2EndpointInterfaceVersion: <%=@ifaceversion%>
+GLUE2EndpointInterfaceVersion: 2.1
 GLUE2EndpointWSDL: https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services/CREAM2?wsdl
 GLUE2EndpointSupportedProfile: http://www.ws-i.org/Profiles/BasicProfile-1.0.html
 GLUE2EndpointSemantics: http://wiki.italiangrid.org/twiki/bin/view/CREAM/UserGuide
 GLUE2EndpointImplementor: gLite
 GLUE2EndpointImplementationName: CREAM
-GLUE2EndpointImplementationVersion: <%=@creamversion%>
+GLUE2EndpointImplementationVersion: @creamversion@
 GLUE2EndpointQualityLevel: <%=@ce_quality_level%>
 GLUE2EndpointHealthState: unknown
 GLUE2EndpointHealthStateInfo: N/A
 GLUE2EndpointServingState: production
-GLUE2EndpointIssuerCA: <%=@certissuer.strip%>
-<%@trustedcas.split(/\n/).each do | trustedca | -%>
-GLUE2EndpointTrustedCA: <%=trustedca.strip%>
-<%end-%>
+GLUE2EndpointIssuerCA: @certissuer@
+GLUE2EndpointTrustedCA: @trustedca@
 GLUE2EndpointDownTimeInfo: See the GOC DB for downtimes: https://goc.egi.eu/
 GLUE2EndpointServiceForeignKey: <%=@computing_service_id%>
 GLUE2ComputingEndpointStaging: staginginout

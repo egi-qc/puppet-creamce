@@ -10,6 +10,22 @@ class creamce::gip inherits creamce::params {
     ensure   => present,
     require  => Class[Bdii::Config],
   }
+  
+  file { "/var/tmp/puppet-creamce":
+    ensure => directory,
+    owner  => "root",
+    group  => "root",
+    mode   => 0644,
+  }
+  
+  file { "/var/tmp/puppet-creamce/replace_infos.sh":
+    ensure  => file,
+    owner  => "root",
+    group  => "root",
+    mode   => 0744,
+    content => template("creamce/replace_infos.sh.erb"),
+    require => File["/var/tmp/puppet-creamce"],
+  }
 
   # ##################################################################################################
   # vo tag dir setup
@@ -65,8 +81,13 @@ class creamce::gip inherits creamce::params {
     mode    => 0755,
     content => template("creamce/gip/glite-ce-glue2.conf.erb"),
     require => Package["glite-ce-cream-utils"],
+    notify  => Exec["replace_ce_glue2_facts"],
   }
 
+  exec { "replace_ce_glue2_facts":
+    command => "/var/tmp/puppet-creamce/replace_infos.sh /etc/glite-ce-glue2/glite-ce-glue2.conf",
+  }
+  
   file { "$gippath/plugin/glite-info-cream-glue2":
     ensure  => file,
     owner   => "${info_user}",
@@ -111,8 +132,14 @@ class creamce::gip inherits creamce::params {
     mode    => 0644,
     content => template("creamce/gip/static-file-CE.ldif.erb"),
     require => Class[Bdii::Config],
+    notify  => Exec["replace_static_CE_facts"],
+  }
+  
+  exec { "replace_static_CE_facts":
+    command => "/var/tmp/puppet-creamce/replace_infos.sh $gippath/ldif/static-file-CE.ldif",
     notify  => Class[Bdii::Service],
-  }  
+  }
+  
   file { "$gippath/ldif/ComputingEndpoint.ldif":
     ensure  => file,
     mode    => 0644,
@@ -120,8 +147,14 @@ class creamce::gip inherits creamce::params {
     group   => "${info_group}",
     content => template("creamce/gip/computingendpoint.ldif.erb"),
     require => Class[Bdii::Config],
+    notify  => Exec["replace_endpoint_facts"],
+  }
+  
+  exec { "replace_endpoint_facts":
+    command => "/var/tmp/puppet-creamce/replace_infos.sh $gippath/ldif/ComputingEndpoint.ldif",
     notify  => Class[Bdii::Service],
   }
+  
   file { "$gippath/ldif/ComputingService.ldif":
     ensure  => file,
     mode    => 0644,
@@ -154,6 +187,7 @@ class creamce::gip inherits creamce::params {
       command => "/bin/touch  $gippath/ldif/ComputingShare.ldif",
       require => Class[Bdii::Config],
     }  
+
     exec {'ComputingManager.ldif.dummy':
       command => "/bin/touch  $gippath/ldif/ComputingManager.ldif",
       require => Class[Bdii::Config],
@@ -229,6 +263,7 @@ class creamce::gip inherits creamce::params {
       require => Class[Bdii::Config],
       notify  => Class[Bdii::Service],
     }
+
     file { "$gippath/ldif/ComputingShare.ldif":
       ensure  => file,
       mode    => 0644,
@@ -238,6 +273,7 @@ class creamce::gip inherits creamce::params {
       require => Class[Bdii::Config],
       notify  => Class[Bdii::Service],
     }
+
     file { "$gippath/ldif/ExecutionEnvironment.ldif":
       ensure  => file,
       mode    => 0644,
@@ -247,6 +283,7 @@ class creamce::gip inherits creamce::params {
       require => Class[Bdii::Config],
       notify  => Class[Bdii::Service],
     }
+
     file { "$gippath/ldif/Benchmark.ldif":
       ensure  => file,
       mode    => 0644,
@@ -256,6 +293,7 @@ class creamce::gip inherits creamce::params {
       require => Class[Bdii::Config],
       notify  => Class[Bdii::Service],
     }
+
     file { "$gippath/ldif/ToStorageService.ldif":
       ensure  => file,
       mode    => 0644,
@@ -265,6 +303,7 @@ class creamce::gip inherits creamce::params {
       require => Class[Bdii::Config],
       notify  => Class[Bdii::Service],
     }
+
     file {"$gippath/ldif/static-file-CESEBind.ldif":
       ensure  => file,
       owner   => "${info_user}",
@@ -274,6 +313,7 @@ class creamce::gip inherits creamce::params {
       require => Class[Bdii::Config],
       notify  => Class[Bdii::Service],
     }
+
     file {"$gippath/ldif/static-file-Cluster.ldif":
       ensure  => file,
       owner   => "${info_user}",
