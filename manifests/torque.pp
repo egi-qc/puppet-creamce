@@ -138,14 +138,24 @@ KNOWNHOSTS = /etc/ssh/ssh_known_hosts
     ensure => running,
   }
   
-  file { "/etc/munge/munge.key":
-    ensure  => present,
-    owner   => "munge",
-    group   => "munge",
-    mode    => 0400,
-    source  => "${munge_key_path}",
-    require => Package["munge"],
-    notify  => Service["munge"],
+  if $munge_key_path == "" {
+
+    notify { "missing_munge_key":
+      message => "Munge key not installed; it must be installed manually",
+    }
+
+  } else {
+
+    file { "/etc/munge/munge.key":
+      ensure  => present,
+      owner   => "munge",
+      group   => "munge",
+      mode    => 0400,
+      source  => "${munge_key_path}",
+      require => Package["munge"],
+      notify  => Service["munge"],
+    }
+
   }
 
 }
