@@ -134,10 +134,6 @@ KNOWNHOSTS = /etc/ssh/ssh_known_hosts
     require => Package["torque-client"],
   }
   
-  service { "munge":
-    ensure => running,
-  }
-  
   if $munge_key_path == "" {
 
     notify { "missing_munge_key":
@@ -146,6 +142,10 @@ KNOWNHOSTS = /etc/ssh/ssh_known_hosts
 
   } else {
 
+    service { "munge":
+      ensure => running,
+    }
+  
     file { "/etc/munge/munge.key":
       ensure  => present,
       owner   => "munge",
