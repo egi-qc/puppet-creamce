@@ -72,7 +72,7 @@ class creamce::params {
   $at_deny_extras            = hiera("at_deny_extras", [])
   $cron_deny_extras          = hiera("cron_deny_extras", [])
   $sudo_logfile              = hiera("sudo_logfile", "")
-  $default_pool_size         = hiera("default_pool_size", 100)
+  $default_pool_size         = hiera("default_pool_size", "100")
 
   #
   # Tomcat
@@ -98,7 +98,7 @@ class creamce::params {
   $batch_system              = hiera("batch_system", undef)
   $blah_child_poll_timeout   = hiera("blah_child_poll_timeout", "200")
   $blah_alldone_interval     = hiera("blah_alldone_interval", "86400")
-  $blparser_with_updater     = hiera("blparser_with_updater", "true")
+  $blparser_with_updater     = hiera("blparser_with_updater", true)
   $blah_blp_server           = hiera("blah_blp_server", undef)
   $blah_blp_port             = hiera("blah_blp_port", "33333")
   $blah_blp_num              = hiera("blah_blp_num", undef)

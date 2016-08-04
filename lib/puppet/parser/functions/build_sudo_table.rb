@@ -13,7 +13,7 @@ module Puppet::Parser::Functions
         vodata['users'].each do | user_prefix, udata |
           if udata["groups"][0] == group
           
-            pool_size = udata.fetch('pool_size', def_pool_size)
+            pool_size = udata.fetch('pool_size', def_pool_size.to_i)
             if def_pool_size > 0
               (0...pool_size).each do | idx |
                 gItem[norm_group].push("%s%04d" % [user_prefix, idx])

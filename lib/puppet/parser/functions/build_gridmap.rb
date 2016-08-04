@@ -14,7 +14,7 @@ module Puppet::Parser::Functions
           if norm_fqan.include? "NULL"
             # TODO
           else
-            if udata.fetch('pool_size', def_pool_size) > 0
+            if udata.fetch('pool_size', def_pool_size.to_i) > 0
               fqanlist.push(Array[norm_fqan, ".#{user}"])
             else
               # static account

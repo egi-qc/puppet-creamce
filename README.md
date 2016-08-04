@@ -14,6 +14,7 @@ cream_db_minpriv_password : minp@$$w0rd
 apel_dbpass :               apelp@$$w0rd
 batch_system :              pbs
 use_argus :                 false
+default_pool_size :         10
 
 grid_queues :
     long :  { 

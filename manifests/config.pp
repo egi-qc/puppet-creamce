@@ -85,20 +85,24 @@ class creamce::config inherits creamce::params {
     mode    => 0644,
   }
 
-  file {"/etc/logrotate.d/bnotifier-logrotate":
-    ensure  => present,
-    content => template("creamce/bnotifier-logrotate.erb"),
-    owner   => "root",
-    group   => "root",
-    mode    => 0644,
-  }
+  if $blparser_with_updater {
+  
+    file {"/etc/logrotate.d/bnotifier-logrotate":
+      ensure  => present,
+      content => template("creamce/bnotifier-logrotate.erb"),
+      owner   => "root",
+      group   => "root",
+      mode    => 0644,
+    }
 
-  file {"/etc/logrotate.d/bupdater-logrotate":
-    ensure  => present,
-    content => template("creamce/bupdater-logrotate.erb"),
-    owner   => "root",
-    group   => "root",
-    mode    => 0644,
+    file {"/etc/logrotate.d/bupdater-logrotate":
+      ensure  => present,
+      content => template("creamce/bupdater-logrotate.erb"),
+      owner   => "root",
+      group   => "root",
+      mode    => 0644,
+    }
+  
   }
 
 }

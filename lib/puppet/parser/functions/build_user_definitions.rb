@@ -9,7 +9,7 @@ module Puppet::Parser::Functions
     voenv.each do | voname, vodata |
       vodata['users'].each do | user_prefix, udata |
       
-        pool_size = udata.fetch('pool_size', def_pool_size)
+        pool_size = udata.fetch('pool_size', def_pool_size.to_i)
         if pool_size > 0
         
           (0...pool_size).each do | idx |
