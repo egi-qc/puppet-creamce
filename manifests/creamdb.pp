@@ -7,13 +7,6 @@ class creamce::creamdb inherits creamce::params {
   # See https://forge.puppetlabs.com/puppetlabs/mysql
   # ##################################################################################################
 
-  $override_options = {
-    'mysqld' => {
-      'bind-address' => 'localhost',
-      'max_connections' => $max_connections,
-    }
-  }
-  
   if $access_by_domain == "true" {
     $access_pattern = "%.${cream_db_domain}"
   } else {
@@ -22,7 +15,7 @@ class creamce::creamdb inherits creamce::params {
   
   class { 'mysql::server':
     root_password      => $mysql_password,
-    override_options   => $override_options
+    override_options   => $mysql_override_options
   }
   
   # ##################################################################################################

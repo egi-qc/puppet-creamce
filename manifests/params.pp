@@ -8,7 +8,11 @@ class creamce::params {
   $ce_env                    = hiera('ce_env', {})
   $access_by_domain          = hiera("access_by_domain", "false")
   
-  $max_connections           = hiera("max_connections", "999")
+  $mysql_override_options    = hiera("mysql_override_options", {
+                                         'mysqld' => {
+                                             'bind-address' => 'localhost',
+                                             'max_connections' => "450"
+                                          }})
   $mysql_password            = hiera("mysql_password")
   $cream_db_name             = hiera("cream_db_name", "creamdb")
   $cream_db_user             = hiera("cream_db_user", "cream")
