@@ -1,10 +1,28 @@
 class creamce::install inherits creamce::params {
 
   require creamce::yumrepos
-  require creamce::tomcat
 
-  package { ["glite-ce-cream", "glite-ce-blahp", "mysql-connector-java"]: 
+  package { "tomcat-native":
+    ensure => absent,
+  }
+  
+  package { "$tomcat":
+    ensure  => present,
+    require => Package["tomcat-native"],
+  }
+  
+  package { ["glite-ce-cream", 
+             "glite-ce-blahp",
+             "canl-java-tomcat",
+             "mysql-connector-java"]: 
     ensure   => present,
+    require  => Package["${tomcat}"],
+  }
+  
+  file { "${tomcat_server_lib}/commons-logging.jar":
+    ensure    => link,
+    target    => "/usr/share/java/commons-logging.jar",
+    subscribe => Package["${tomcat}"],
   }
     
 }

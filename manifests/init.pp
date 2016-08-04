@@ -2,8 +2,6 @@ class creamce inherits creamce::params {
   
   if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease >= 7 {
   
-    include creamce::creamdb
-    
     include creamce::config
 
     if $use_argus == "false" {

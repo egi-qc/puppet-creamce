@@ -1,11 +1,69 @@
 class creamce::config inherits creamce::params {
   
+  require creamce::certificate
+  
   require creamce::install
   
   require creamce::env
   
-  require creamce::poolaccount
+  require creamce::sudo
   
+  require creamce::voms
+  
+  require creamce::creamdb
+  
+  # ##################################################################################################
+  # Tomcat setup
+  # ##################################################################################################
+
+  file { "${tomcat_cert}":
+    ensure   => file,
+    owner    => "tomcat",
+    group    => "root",
+    mode     => 0644,
+    source   => [$host_certificate],
+    notify   => Service[$tomcat]
+  }
+  
+  file { "${tomcat_key}":
+    ensure   => file,
+    owner    => "tomcat",
+    group    => "root",
+    mode     => 0400,
+    source   => [$host_private_key],
+    notify   => Service[$tomcat]
+  }
+
+  file {"/etc/${tomcat}/server.xml":
+    ensure  => present,
+    content => template("creamce/server.xml.erb"),
+    owner   => "tomcat",
+    group   => "tomcat",
+    mode    => 0664,
+    notify  => Service["$tomcat"],
+  }
+  
+  file {"/etc/${tomcat}/${tomcat}.conf":
+    ensure  => present,
+    content => template("creamce/tomcat.conf.erb"),
+    owner   => "root",
+    group   => "root",
+    mode    => 0664,
+    notify  => Service["$tomcat"],
+  }
+
+  service { "$tomcat":
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
+    alias      => "tomcat",
+  }
+
+  # ##################################################################################################
+  # CREAM setup
+  # ##################################################################################################
+
   file { "${cream_db_sandbox_path}":
     ensure => directory,
     owner  => "tomcat",
@@ -17,27 +75,29 @@ class creamce::config inherits creamce::params {
   create_resources(file, $sb_definitions)
   
   file{"/etc/sysconfig/edg":
-    ensure => present,
-    owner => "root",
-    group => "root",
-    mode => 0644,
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => 0644,
     content => template("creamce/edg.erb"),
   }
  
   file{"/etc/sysconfig/cream":
-    ensure => present,
-    owner => "root",
-    group => "root",
-    mode => 0400,
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => 0400,
     content => template("creamce/cream.erb"),
+    notify  => Service["$tomcat"],
   }
  
   file {"/etc/glite-ce-cream/cream-config.xml":
-    ensure => present,
+    ensure  => present,
     content => template("creamce/cream-config.xml.erb"),
-    owner => "tomcat",
-    group => "tomcat",
-    mode => 0640,
+    owner   => "tomcat",
+    group   => "tomcat",
+    mode    => 0640,
+    notify  => Service["$tomcat"],
   }
 
   file {"/etc/glite-ce-cream-utils/glite_cream_load_monitor.conf":
@@ -46,7 +106,7 @@ class creamce::config inherits creamce::params {
     owner => "tomcat",
     group => "root",
     mode => 0640,
-    #fixme: do we need to notify tomcat ?
+    notify  => Service["$tomcat"],
   }
 
   file { "${cream_admin_list_file}":
@@ -55,11 +115,13 @@ class creamce::config inherits creamce::params {
     group   => "root",
     mode    => 0644,
     content => template("creamce/adminlist.erb"),
+    notify  => Service["$tomcat"],
   }  
 
-  #
-  # from BLAH
-  #
+  # ##################################################################################################
+  # BLAHP setup (common actions)
+  # ##################################################################################################
+
   file {"/var/log/cream/accounting":
     ensure => directory,
     owner => "root",
