@@ -136,17 +136,16 @@ class creamce::config inherits creamce::params {
     mode => 0771,
   }
 
-  #
-  # logrotation for BLAH
-  #
-  file {"/etc/logrotate.d/blahp-logrotate":
+  $file_to_rotate = "/var/log/cream/accounting/blahp.log"
+  
+  file { "/etc/logrotate.d/blahp-logrotate":
     ensure  => present,
-    content => template("creamce/blahp-logrotate.erb"),
     owner   => "root",
     group   => "root",
     mode    => 0644,
+    content => template("creamce/blahp-logrotate.erb"),
   }
-
+  
   unless $use_blparser {
   
     file {"/etc/logrotate.d/bnotifier-logrotate":

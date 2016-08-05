@@ -15,9 +15,15 @@ class creamce::torque inherits creamce::params {
     ensure  => present,
   }
   
+  # ##################################################################################################
+  # BLAHP setup (TORQUE)
+  # ##################################################################################################
+
   #
-  # configure blah for TORQUE
+  # TODO missing directory /var/lib/torque/server_logs/
+  #      Cannot start bupdater/bnotifier
   #
+  
   file { "/etc/blah.config":
     ensure  => present,
     owner   => "root",
@@ -25,10 +31,33 @@ class creamce::torque inherits creamce::params {
     mode    => 0644,
     content => template("creamce/blah.config.torque.erb"),
   }
+  
+  if $use_blparser {
 
-  #
-  # configure infoprovider for TORQUE
-  #
+    file { "/etc/blparser.conf":
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => 0644,
+      content => template("creamce/blparser.conf.torque.erb"),
+    }
+
+    $file_to_rotate = "/var/log/cream/glite-pbsparser.log"
+    
+    file { "/etc/logrotate.d/glite-pbsparser":
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => 0644,
+      content => template("creamce/blahp-logrotate.erb"),
+    }
+
+  }
+
+  # ##################################################################################################
+  # TORQUE infoproviders
+  # ##################################################################################################
+
   package { "lcg-info-dynamic-scheduler-pbs":
     ensure  => present,
     require => Package[$required_pkgs],
@@ -57,9 +86,9 @@ class creamce::torque inherits creamce::params {
     
   }
   
-  #
-  # configure torque client
-  #
+  # ##################################################################################################
+  # TORQUE client
+  # ##################################################################################################
   
   # TODO missing workaround for bug 5530
 
