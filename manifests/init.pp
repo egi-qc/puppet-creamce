@@ -4,7 +4,7 @@ class creamce inherits creamce::params {
   
     include creamce::config
 
-    if $use_argus == "false" {
+    unless $use_argus {
         include creamce::glexec
     }
 

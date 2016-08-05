@@ -147,7 +147,7 @@ class creamce::config inherits creamce::params {
     mode    => 0644,
   }
 
-  if $blparser_with_updater {
+  unless $use_blparser {
   
     file {"/etc/logrotate.d/bnotifier-logrotate":
       ensure  => present,

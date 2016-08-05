@@ -19,13 +19,13 @@ blah_set_default_workdir_to_home=yes
 # DGAS logfile 
 BLAHPD_ACCOUNTING_INFO_LOG=/var/log/cream/accounting/blahp.log
 
-<% if @blparser_with_updater == "true" -%>
-
-  # TODO configure update
-
-<% elsif @blparser_with_updater == "false" -%>
+<% if @use_blparser -%>
 
   # TODO configure with old blparser
+
+<% else -%>
+
+  # TODO configure update
 
 <% end -%>
 
