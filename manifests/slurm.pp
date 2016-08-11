@@ -1,6 +1,6 @@
 class creamce::slurm inherits creamce::params {
 
-  require creamce::config
+  include creamce::blah
   require creamce::gip
   
   #

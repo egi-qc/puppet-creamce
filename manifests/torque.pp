@@ -1,6 +1,6 @@
 class creamce::torque inherits creamce::params {
 
-  require creamce::config
+  include creamce::blah
   require creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
