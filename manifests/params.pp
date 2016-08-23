@@ -120,6 +120,7 @@ class creamce::params {
   $torque_log_dir            = hiera("torque_log_dir", "/var/lib/torque/")
   $torque_multiple_staging   = hiera("torque_multiple_staging","false")
   $torque_tracejob_logs      = hiera("torque_tracejob_logs", "2")
+  $torque_config_ssh         = hiera("torque_config_ssh", true)
   $torque_use_maui           = hiera("torque_use_maui", true)
   $torque_sched_opts         = hiera("torque_sched_opts", { "cycle_time" => "0" })
   $torque_ssh_cron_sched     = hiera("torque_ssh_cron_sched", "05 1,7,13,19 * * *")
@@ -128,6 +129,11 @@ class creamce::params {
   $lsf_primary_master        = hiera("lsf_primary_master", undef)
   $lsf_secondary_master      = hiera("lsf_secondary_master", undef)
   $lsf_conf_afs_path         = hiera("lsf_conf_afs_path", undef)
+
+  $slurm_config_ssh          = hiera("slurm_config_ssh", true)
+  $slurm_sched_opts          = hiera("slurm_sched_opts", { "cycle_time" => "0" })
+
+  $shosts_equiv_extras       = hiera("shosts_equiv_extras", [])
 
 
 
