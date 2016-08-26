@@ -116,11 +116,12 @@ class creamce::params {
   $bupdater_logrot_interval  = hiera("bupdater_logrot_interval", "50")
   $bupdater_logrot_size      = hiera("bupdater_logrot_size", "10M")
   
+  $torque_config_client      = hiera("torque_config_client", true)
+  $torque_config_ssh         = hiera("torque_config_ssh", true)
   $torque_server             = hiera("torque_server", "${::fqdn}")
   $torque_log_dir            = hiera("torque_log_dir", "/var/lib/torque/")
   $torque_multiple_staging   = hiera("torque_multiple_staging","false")
   $torque_tracejob_logs      = hiera("torque_tracejob_logs", "2")
-  $torque_config_ssh         = hiera("torque_config_ssh", true)
   $torque_use_maui           = hiera("torque_use_maui", true)
   $torque_sched_opts         = hiera("torque_sched_opts", { "cycle_time" => "0" })
   $torque_ssh_cron_sched     = hiera("torque_ssh_cron_sched", "05 1,7,13,19 * * *")

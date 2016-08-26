@@ -90,74 +90,81 @@ class creamce::torque inherits creamce::params {
   # TORQUE client
   # ##################################################################################################
   
-  if $torque_config_ssh {
-
-    exec { "cleanup_sshd_config":
-      command => "/bin/sed -i -e '/^\s*HostbasedAuthentication/d' -e '/^\s*IgnoreUserKnownHosts/d' -e '/^\s*IgnoreRhosts/d' /etc/ssh/sshd_config",
-    }
-
-    exec { "fillin_sshd_config":
-      command => "/bin/echo \"
-HostbasedAuthentication = yes
-IgnoreUserKnownHosts yes
-IgnoreRhosts yes\" >> /etc/ssh/sshd_config",
-      require => Exec["cleanup_sshd_config"],
-    }
-
-
-    $se_host_list = join(keys($se_list), " ")
-    $lrms_host_list = "${torque_server} ${ce_host} ${se_host_list}"
-    $extra_host_list = join($shosts_equiv_extras, " ")
-    $lrms_host_script = "/usr/bin/pbsnodes -a -s ${torque_server}"
-    
-    file { "/usr/sbin/puppet-lrms-shostsconfig":
-      ensure  => present,
-      owner   => "root",
-      group   => "root",
-      mode    => 0744,
-      content => template("creamce/puppet-lrms-shostsconfig.erb"),
-    }
-    
-    file { "/etc/cron.d/puppet-lrms-shostsconfig":
+  if $torque_config_client and $istorqueinstalled == "false" {
+  
+    file { "/etc/torque/server_name":
       ensure  => present,
       owner   => "root",
       group   => "root",
       mode    => 0644,
-      content => "${torque_ssh_cron_sched} root /usr/sbin/puppet-lrms-shostsconfig",
-      require => File["/usr/sbin/puppet-lrms-shostsconfig"],
-    }
-
-    exec { "/usr/sbin/puppet-lrms-shostsconfig":
-      require => File["/usr/sbin/puppet-lrms-shostsconfig"],
-    }
-
-  }
-
-  exec { "register_torque_server":
-    command => "/bin/echo ${torque_server} > /etc/torque/server_name",
-    require => Package["torque-client"],
-  }
-  
-  if $munge_key_path == "" {
-
-    notify { "missing_munge_key":
-      message => "Munge key not installed; it must be installed manually",
-    }
-
-  } else {
-
-    service { "munge":
-      ensure => running,
+      content => "${torque_server}",
+      require => Package["torque-client"],
     }
   
-    file { "/etc/munge/munge.key":
-      ensure  => present,
-      owner   => "munge",
-      group   => "munge",
-      mode    => 0400,
-      source  => "${munge_key_path}",
-      require => Package["munge"],
-      notify  => Service["munge"],
+    if $munge_key_path == "" {
+
+      fail("Munge key not defined")
+
+    } else {
+
+      service { [ "munge", "trqauthd" ]:
+        ensure   => running,
+        require  => File["/etc/torque/server_name"],
+      }
+  
+      file { "/etc/munge/munge.key":
+        ensure  => present,
+        owner   => "munge",
+        group   => "munge",
+        mode    => 0400,
+        source  => "${munge_key_path}",
+        require => Package["munge"],
+        notify  => Service["munge"],
+      }
+
+    }
+
+    if $torque_config_ssh {
+
+      exec { "cleanup_sshd_config":
+        command => "/bin/sed -i -e '/^\s*HostbasedAuthentication/d' -e '/^\s*IgnoreUserKnownHosts/d' -e '/^\s*IgnoreRhosts/d' /etc/ssh/sshd_config",
+      }
+
+      exec { "fillin_sshd_config":
+        command => "/bin/echo \"
+HostbasedAuthentication = yes
+IgnoreUserKnownHosts yes
+IgnoreRhosts yes\" >> /etc/ssh/sshd_config",
+      require => Exec["cleanup_sshd_config"],
+      }
+
+
+      $se_host_list = join(keys($se_list), " ")
+      $lrms_host_list = "${torque_server} ${ce_host} ${se_host_list}"
+      $extra_host_list = join($shosts_equiv_extras, " ")
+      $lrms_host_script = "/usr/bin/pbsnodes -a -s ${torque_server}"
+    
+      file { "/usr/sbin/puppet-lrms-shostsconfig":
+        ensure  => present,
+        owner   => "root",
+        group   => "root",
+        mode    => 0744,
+        content => template("creamce/puppet-lrms-shostsconfig.erb"),
+      }
+    
+      file { "/etc/cron.d/puppet-lrms-shostsconfig":
+        ensure  => present,
+        owner   => "root",
+        group   => "root",
+        mode    => 0644,
+        content => "${torque_ssh_cron_sched} root /usr/sbin/puppet-lrms-shostsconfig",
+        require => File["/usr/sbin/puppet-lrms-shostsconfig"],
+      }
+
+      exec { "/usr/sbin/puppet-lrms-shostsconfig":
+        require => [ File["/usr/sbin/puppet-lrms-shostsconfig"], Service[ "munge", "trqauthd" ] ],
+      }
+
     }
 
   }
