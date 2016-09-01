@@ -6,9 +6,9 @@ class creamce::torque inherits creamce::params {
   $vo_group_table = build_vo_group_table($voenv)
   
   if $torque_use_maui {
-    $required_pkgs = ["torque-client", "munge", "maui-client"]
+    $required_pkgs = [ "torque-client", "maui-client" ]
   } else {
-    $required_pkgs = ["torque-client", "munge"]
+    $required_pkgs = [ "torque-client" ]
   }
 
   package { $required_pkgs:
@@ -19,11 +19,6 @@ class creamce::torque inherits creamce::params {
   # BLAHP setup (TORQUE)
   # ##################################################################################################
 
-  #
-  # TODO missing directory /var/lib/torque/server_logs/
-  #      Cannot start bupdater/bnotifier
-  #
-  
   file { "/etc/blah.config":
     ensure  => present,
     owner   => "root",
@@ -51,8 +46,26 @@ class creamce::torque inherits creamce::params {
       mode    => 0644,
       content => template("creamce/blahp-logrotate.erb"),
     }
+    
+    service { "glite-ce-blah-parser":
+      ensure    => running,
+      subscribe => File["/etc/blparser.conf"],
+    }
 
   }
+  
+  if $istorqueinstalled == "true" {
+
+    service { "glite-ce-blah-parser":
+      ensure    => running,
+      subscribe => File["/etc/blah.config"],
+    }
+
+  }
+  
+  #
+  # TODO check https://wiki.italiangrid.it/twiki/bin/view/CREAM/SystemAdministratorGuideForEMI3#1_2_5_Choose_the_BLAH_BLparser_d
+  #
 
   # ##################################################################################################
   # TORQUE infoproviders
@@ -166,7 +179,13 @@ IgnoreRhosts yes\" >> /etc/ssh/sshd_config",
       }
 
     }
+    
+  }
 
+  if $torque_config_pool {
+    #
+    # TODO 
+    #
   }
 
 }
