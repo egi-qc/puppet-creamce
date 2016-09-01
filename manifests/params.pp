@@ -10,7 +10,7 @@ class creamce::params {
   
   $mysql_override_options    = hiera("mysql_override_options", {
                                          'mysqld' => {
-                                             'bind-address' => 'localhost',
+                                             'bind-address' => '0.0.0.0',
                                              'max_connections' => "450"
                                           }})
   $mysql_password            = hiera("mysql_password")
@@ -118,6 +118,7 @@ class creamce::params {
   
   $torque_config_client      = hiera("torque_config_client", true)
   $torque_config_ssh         = hiera("torque_config_ssh", true)
+  $torque_config_pool        = hiera("torque_config_pool", false)
   $torque_server             = hiera("torque_server", "${::fqdn}")
   $torque_log_dir            = hiera("torque_log_dir", "/var/lib/torque/")
   $torque_multiple_staging   = hiera("torque_multiple_staging","false")

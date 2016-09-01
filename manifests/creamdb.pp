@@ -43,7 +43,6 @@ class creamce::creamdb inherits creamce::params {
     owner    => "root",
     group    => "root",
     mode     => 0600,
-    loglevel => err,
     require  => Class['mysql::server'],
   }
   
@@ -53,7 +52,6 @@ class creamce::creamdb inherits creamce::params {
     owner    => "root",
     group    => "root",
     mode     => 0600,
-    loglevel => err,
     require  => Class['mysql::server'],
   }
 
