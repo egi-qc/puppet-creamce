@@ -27,17 +27,30 @@ Runas_Alias GLEXEC_ACCOUNTS = \
      last_group = g_names.pop
      g_names.each do | group |
 -%>
-    <%=group%>, \
+    GLEXEC_<%=group%>, \
 <%   end-%>
 <%   if last_group -%>
-    <%=last_group%>
+    GLEXEC_<%=last_group%>
 
 <%   end-%>
 <% end-%>
 
 # Cmnd alias specification (for cream)
 
-Cmnd_Alias GLEXEC_CMDS = /bin/echo, /bin/mkdir, /bin/cp, /bin/cat, /usr/bin/groups, /usr/bin/whoami, /bin/dd, /bin/mv, /usr/bin/id, /bin/kill, /usr/libexec/<%=@batch_system-%>_submit.sh, /usr/libexec/<%=@batch_system-%>_status.sh, /usr/libexec/<%=@batch_system-%>_cancel.sh, /usr/libexec/<%=@batch_system-%>_hold.sh, /usr/libexec/<%=@batch_system-%>_resume.sh, /usr/libexec/glite-cream-copyProxyToSandboxDir.sh, /usr/libexec/glite-cream-createsandboxdir, /usr/libexec/glite-ce-cream-purge-sandbox, /usr/libexec/glite-ce-cream-purge-proxy,  /usr/libexec/glite-ce-cream-create-wrapper, /bin/ls 
+Cmnd_Alias GLEXEC_CMDS = \
+    /bin/echo, /bin/mkdir, /bin/cp, /bin/cat, \
+    /usr/bin/groups, /usr/bin/whoami, /bin/dd, \
+    /bin/mv, /usr/bin/id, /bin/kill, /bin/ls, \
+    /usr/libexec/<%=@batch_system-%>_submit.sh, \
+    /usr/libexec/<%=@batch_system-%>_status.sh, \
+    /usr/libexec/<%=@batch_system-%>_cancel.sh, \
+    /usr/libexec/<%=@batch_system-%>_hold.sh, \
+    /usr/libexec/<%=@batch_system-%>_resume.sh, \
+    /usr/bin/glite-cream-copyProxyToSandboxDir.sh, \
+    /usr/bin/glite-cream-createsandboxdir, \
+    /usr/bin/glite-ce-cream-purge-sandbox, \
+    /usr/bin/glite-ce-cream-purge-proxy, \
+    /usr/bin/glite-ce-cream-create-wrapper 
 
 
 # Defaults specification (for cream)
