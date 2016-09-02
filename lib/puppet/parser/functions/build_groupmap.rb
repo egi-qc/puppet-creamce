@@ -23,6 +23,7 @@ module Puppet::Parser::Functions
     
     fqanlist.each do | item |
       unless item[0].include? "Role"
+        result.push(Array["#{item[0]}/Role=NULL/Capability=NULL", item[1]])
         result.push(Array["#{item[0]}/Role=NULL", item[1]])
       end
       result.push(item)
