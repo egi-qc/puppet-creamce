@@ -148,7 +148,8 @@ class creamce::torque inherits creamce::params {
 HostbasedAuthentication = yes
 IgnoreUserKnownHosts yes
 IgnoreRhosts yes\" >> /etc/ssh/sshd_config",
-      require => Exec["cleanup_sshd_config"],
+        require => Exec["cleanup_sshd_config"],
+        notify  => Service["sshd"],
       }
 
 
@@ -176,16 +177,42 @@ IgnoreRhosts yes\" >> /etc/ssh/sshd_config",
 
       exec { "/usr/sbin/puppet-lrms-shostsconfig":
         require => [ File["/usr/sbin/puppet-lrms-shostsconfig"], Service[ "munge", "trqauthd" ] ],
+        notify  => Service["sshd"],
+      }
+      
+      service { "sshd":
+        ensure     => running,
+        enable     => true,
+        hasstatus  => true,
+        hasrestart => true,
+        alias      => "sshd",
       }
 
     }
     
   }
 
-  if $torque_config_pool {
-    #
-    # TODO 
-    #
+  define queue_member ($queue, $group, $dep_resources = undef) {
+      
+    exec { "${title}":
+      command => "/usr/bin/qmgr -c \"set queue ${queue} acl_groups += ${group}\"",
+      unless  => "/usr/bin/qmgr -c \"list queue ${queue} acl_groups\" | awk '/acl_groups/,EOF {print $NF}'| grep -qwi ${group}",
+    }
+      
+    if $dep_resources {
+      $dep_resources -> Exec["${title}"]
+    }
+  }
+
+  if $torque_config_pool {    
+
+    if $torque_config_client and $istorqueinstalled == "false" {
+      $queue_group_table = build_queue_group_tuples($grid_queues, Service["munge", "trqauthd"])
+    }else{
+      $queue_group_table = build_queue_group_tuples($grid_queues, undef)
+    }
+    create_resources(queue_member, $queue_group_table)
+    
   }
 
 }
