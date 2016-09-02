@@ -22,7 +22,9 @@ module Puppet::Parser::Functions
     fqanlist.sort!.reverse!
     
     fqanlist.each do | item |
-      unless item[0].include? "Role"
+      if item[0].include? "Role"
+        result.push(Array["#{item[0]}/Capability=NULL", item[1]])
+      else
         result.push(Array["#{item[0]}/Role=NULL/Capability=NULL", item[1]])
         result.push(Array["#{item[0]}/Role=NULL", item[1]])
       end
