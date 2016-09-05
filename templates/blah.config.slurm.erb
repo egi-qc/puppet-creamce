@@ -45,8 +45,8 @@ slurm_BLParser=yes
 # New parser section
 job_registry=/var/blah/user_blah_job_registry.bjr
 #
-async_notification_port=<%=@bupdater_loop_interval%>
-bupdater_loop_interval=<%=@bupdater_notify_port%>
+async_notification_port=<%=@bupdater_notify_port%>
+bupdater_loop_interval=<%=@bupdater_loop_interval%>
 #
 # about 2 months of purge interval.
 purge_interval=<%=@bupdater_purge_interval%>
