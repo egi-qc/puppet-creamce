@@ -56,7 +56,7 @@ GLUE2EntityName: Access control rules for Endpoint <%=epID-%>
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-endpoint-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
 GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
-GLUE2PolicyID: <%=epID%>
+GLUE2PolicyID: <%=epID%>_Policy
 GLUE2PolicyScheme: org.glite.standard
 <% @voenv.each do | owner, value | -%>
 GLUE2PolicyRule: VO:<%=owner%>
