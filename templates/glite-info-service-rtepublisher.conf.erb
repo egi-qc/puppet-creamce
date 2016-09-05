@@ -49,7 +49,7 @@ semantics_URL = http://grid-deployment.web.cern.ch/grid-deployment/eis/docs/ExpS
 # StartTime: A command to return the service start time.
 # This should be a unix timestamp, the info provider converts it to ISO8601
 
-get_starttime = date -d "`systemctl show globus-gridftp-server -p ActiveEnterTimestamp | cut -d = -f 2-`" +%s
+get_starttime = date -d "`systemctl show globus-gridftp-server -p ActiveEnterTimestamp | cut -d \" \" -f 2-`" +%s
 
 # Owner: this should return a list of owner VO names, one per line
 # Null entries will be omitted
