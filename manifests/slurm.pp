@@ -7,7 +7,7 @@ class creamce::slurm inherits creamce::params {
   # BLAHP setup
   # ##################################################################################################
 
-  file{"/etc/blah.config":
+  file{"${blah_config_file}":
     ensure  => present,
     owner   => "root",
     group   => "root",

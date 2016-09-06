@@ -17,7 +17,7 @@ export GLITE_HOST_KEY="<%=@loclog_dir-%>/.certs/hostcert.pem"
 export GLITE_HOST_CERT="<%=@loclog_dir-%>/.certs/hostcert.pem"
 export CREAM_PID_FILE=/var/run/<%=@tomcat-%>.pid
 export BLAHPD_LOCATION=/usr
-export BLAHPD_CONFIG_LOCATION=/etc/blah.config
+export BLAHPD_CONFIG_LOCATION=<%=@blah_config_file-%>
 export RTEPUBLISHER_PATH=<%=@gridft_pub_dir-%>
 <%@ce_env.each do | key, value | -%>
 <% if key == "PATH" or key == "MANPATH" or key == "LD_LIBRARY_PATH" -%>

@@ -17,7 +17,7 @@ class creamce::lsf inherits creamce::params {
   #
   # configure blah for LSF
   #
-  file{"/etc/blah.config":
+  file{"${blah_config_file}":
     ensure => present,
     owner => "root",
     group => "root",

@@ -7,7 +7,7 @@ class creamce::condor inherits creamce::params {
   # configure blah for Condor
   #
   
-  file{"/etc/blah.config":
+  file{"${blah_config_file}":
     ensure  => present,
     owner   => "root",
     group   => "root",

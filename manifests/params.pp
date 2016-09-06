@@ -96,6 +96,7 @@ class creamce::params {
   # BLAH/LRMS
   #
   $batch_system              = hiera("batch_system", undef)
+  $blah_config_file          = hiera("blah_config_file", "/etc/blah.config")
   $blah_child_poll_timeout   = hiera("blah_child_poll_timeout", "200")
   $blah_alldone_interval     = hiera("blah_alldone_interval", "86400")
   $use_blparser              = hiera("use_blparser", false)
@@ -123,7 +124,7 @@ class creamce::params {
   $torque_log_dir            = hiera("torque_log_dir", "/var/lib/torque/")
   $torque_multiple_staging   = hiera("torque_multiple_staging","false")
   $torque_tracejob_logs      = hiera("torque_tracejob_logs", "2")
-  $torque_use_maui           = hiera("torque_use_maui", true)
+  $torque_use_maui           = hiera("torque_use_maui", false)
   $torque_sched_opts         = hiera("torque_sched_opts", { "cycle_time" => "0" })
   $torque_ssh_cron_sched     = hiera("torque_ssh_cron_sched", "05 1,7,13,19 * * *")
   $munge_key_path            = hiera("munge_key_path", "")

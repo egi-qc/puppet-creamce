@@ -19,7 +19,7 @@ class creamce::torque inherits creamce::params {
   # BLAHP setup (TORQUE)
   # ##################################################################################################
 
-  file { "/etc/blah.config":
+  file { "${blah_config_file}":
     ensure  => present,
     owner   => "root",
     group   => "root",
@@ -58,7 +58,7 @@ class creamce::torque inherits creamce::params {
 
     service { "glite-ce-blah-parser":
       ensure    => running,
-      subscribe => File["/etc/blah.config"],
+      subscribe => File["${blah_config_file}"],
     }
 
   }
