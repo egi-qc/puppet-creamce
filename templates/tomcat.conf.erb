@@ -27,8 +27,8 @@ CATALINA_TMPDIR="/var/cache/tomcat/temp"
 <% end %>
 JAVA_OPTS="-server <%=@java_opts-%> -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"
 SECURITY_MANAGER="false"
-export GLITE_LOCATION_VAR=/var
-export GLITE_LOCATION=/usr
-export BLAHPD_LOCATION=/usr
-export BLAHPD_CONFIG_LOCATION=<%=@blah_config_file-%>
+GLITE_LOCATION_VAR=/var
+GLITE_LOCATION=/usr
+BLAHPD_LOCATION=/usr
+BLAHPD_CONFIG_LOCATION=<%=@blah_config_file-%>
 
