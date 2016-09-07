@@ -159,7 +159,12 @@ class creamce::params {
   $gridftp_port              = hiera("gridftp::params::port", "2811")
   $gridft_pub_dir            = hiera('gridftp_pub_dir', '/var/info')
   $globus_tcp_port_range     = hiera("gridftp::params::globus_tcp_port_range", "20000,25000")
-  
+  $globus_udp_port_range     = hiera("gridftp::params::globus_udp_port_range", undef)
+  $gridftp_configfile        = hiera("gridftp::params::configfile", "/etc/gridftp.conf")
+  $gridftp_configdir         = hiera("gridftp::params::configdir", "/etc/gridftp.d")
+  $gridftp_thread_model      = hiera("gridftp::params::thread_model", undef)
+  $gridftp_force_tls         = hiera("gridftp::params::force_tls", 1)
+  $gridftp_extra_vars        = hiera("gridftp_extra_vars", {})
   
   #
   # Security

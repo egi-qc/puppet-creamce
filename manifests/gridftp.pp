@@ -45,7 +45,12 @@ class creamce::gridftp inherits creamce::params {
     }
 
   } else {
-  
+
+    # workaround for lcas/lcmaps log level setup
+    File <| title == '/etc/sysconfig/globus-gridftp-server' |> {
+      content => template("creamce/gridftp-sysconfig.erb"),
+    }
+
     file { "/etc/lcas/lcas.db":
       ensure  => file,
       owner   => "root",
