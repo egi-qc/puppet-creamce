@@ -2,22 +2,25 @@
 linger = no
 
 lcmaps_db_file = /etc/lcmaps/lcmaps-glexec.db
-lcmaps_log_file = /var/log/glexec/lcas_lcmaps.log
-lcmaps_debug_level = 0
-lcmaps_log_level = 1
+lcmaps_log_file = <%=@glexec_ll_log_file%>
+lcmaps_debug_level = <%=@lcmaps_debug_level%>
+lcmaps_log_level = <%=@lcmaps_log_level%>
 
 lcas_db_file = /etc/lcas/lcas-glexec.db
-lcas_log_file = /var/log/glexec/lcas_lcmaps.log
-lcas_debug_level = 0
-lcas_log_level = 1
+lcas_log_file = <%=@glexec_ll_log_file%>
+lcas_debug_level = <%=@lcas_debug_level%>
+lcas_log_level = <%=@lcas_log_level%>
 
-log_level = 1
+log_level = <%=@glexec_log_level%>
 user_identity_switch_by = lcmaps
 user_white_list = tomcat
 omission_private_key_white_list  = tomcat
 preserve_env_variables =
 create_target_proxy = no
 silent_logging = no
+<% if @glexec_log_file == "" -%>
 log_destination = syslog
-log_file = /var/log/glexec/glexec.log
-
+<% else -%>
+log_destination = file
+log_file = <%=@glexec_log_file%>
+<% end -%>

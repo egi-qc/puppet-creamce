@@ -51,13 +51,17 @@ class creamce::glexec inherits creamce::params {
     require => Package["glexec"]
   }
   
-  file {"/etc/logrotate.d/glexec":
-    ensure  => present,
-    content => template("creamce/glexec-logrotate.erb"),
-    owner   => "root",
-    group   => "root",
-    mode    => 0644,
-    require => Package["glexec"]
+  unless $glexec_log_file == "" {
+
+    file {"/etc/logrotate.d/glexec":
+      ensure  => present,
+      content => template("creamce/glexec-logrotate.erb"),
+      owner   => "root",
+      group   => "root",
+      mode    => 0644,
+      require => Package["glexec"]
+    }
+
   }
 
 }
