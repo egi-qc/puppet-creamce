@@ -17,8 +17,8 @@ setenv GLITE_HOST_KEY="<%=@loclog_dir-%>/.certs/hostcert.pem"
 setenv GLITE_HOST_CERT="<%=@loclog_dir-%>/.certs/hostcert.pem"
 setenv CREAM_PID_FILE=/var/run/<%=@tomcat-%>.pid
 setenv BLAHPD_LOCATION=/usr
-setenv BLAHPD_CONFIG_LOCATION=<%=@blah_config_file-%>
-setenv RTEPUBLISHER_PATH=<%=@gridft_pub_dir-%>
+setenv BLAHPD_CONFIG_LOCATION=<%=@blah_config_file%>
+setenv RTEPUBLISHER_PATH=<%=@gridft_pub_dir%>
 <%@ce_env.each do | key, value | -%>
 <% if key == "PATH" or key == "MANPATH" or key == "LD_LIBRARY_PATH" -%>
 setenv <%=key%>="<%=value%>":${<%=key%>}

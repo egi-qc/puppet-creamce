@@ -188,7 +188,7 @@ class creamce::params {
   $use_argus               = hiera("use_argus", true)
   $argusservice            = hiera("argusservice", undef)
   $argusport               = hiera("argusport", "8154")
-  $cream_pepc_resourceid   = hiera('cream_pepc_resourceid','http://${cream_db_host}:${ce_port}/cream')
+  $cream_pepc_resourceid   = hiera('cream_pepc_resourceid',"http://${ce_host}:${ce_port}/cream")
   $admin_list              = hiera('admin_list', [])
   $voenv                   = hiera('voenv', {})
 
