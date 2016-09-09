@@ -2,7 +2,7 @@ class creamce::params {
   $sitename                  = hiera("creamce::site::name", "${::fqdn}")
   $siteemail                 = hiera("creamce::site::email", "")
   $ce_host                   = hiera("creamce::host", "${::fqdn}")
-  $ce_port                   = hiera('creamce::port', "8443")
+  $ce_port                   = hiera('creamce::port', 8443)
   $ce_type                   = hiera('creamce::type', "cream")
   $ce_quality_level          = hiera('creamce::quality_level', "production")
   $ce_env                    = hiera('creamce::environment', {})
@@ -45,7 +45,7 @@ class creamce::params {
   $cream_blah_timeout        = hiera("creamce::blah_timeout", 300)
   $cream_listener_port       = hiera("creamce::listener_port", 49152)
   $cream_job_purge_rate      = hiera("creamce::job_purge_rate", 300)
-  $cream_blp_retry_delay     = hiera("creamce::blp::retry_delay", 60000)
+  $cream_blp_retry_delay     = hiera("creamce::blp::retry_delay", 60)
   $cream_blp_retry_count     = hiera("creamce::blp::retry_count", 100)
   $cream_lease_time          = hiera("creamce::lease::time", 36000)
   $cream_lease_rate          = hiera("creamce::lease::rate", 30)
@@ -96,7 +96,7 @@ class creamce::params {
   #
   # BLAH/LRMS
   #
-  $batch_system              = hiera("creamce::batch_system", undef)
+  $batch_system              = hiera("creamce::batch_system")
   $blah_config_file          = hiera("blah::config_file", "/etc/blah.config")
   $blah_child_poll_timeout   = hiera("blah::child_poll_timeout", 200)
   $blah_alldone_interval     = hiera("blah::alldone_interval", 86400)
@@ -116,7 +116,7 @@ class creamce::params {
   $bupdater_notify_port      = hiera("blah::bupdater::notify_port", 56554)
   $bupdater_purge_interval   = hiera("blah::bupdater::purge_interval", 2500000)
   $bupdater_logrot_interval  = hiera("blah::bupdater::logrotate::interval", 50)
-  $bupdater_logrot_size      = hiera("blah::bupdater::logrotate::size", 10M)
+  $bupdater_logrot_size      = hiera("blah::bupdater::logrotate::size", "10M")
   
   $torque_config_client      = hiera("torque::config::client", true)
   $torque_config_ssh         = hiera("torque::config::ssh", true)
@@ -183,7 +183,7 @@ class creamce::params {
   $gridmap_cron_sched      = hiera("creamce::gridmap_cron_sched", "5 * * * *")
   $groupmap_file           = hiera('creamce::groupmap_file','/etc/grid-security/groupmapfile')
   $groupmap                = hiera('creamce::groupmap',undef)
-  $crl_update_millis       = hiera('creamce::crl_update_millis',3600000)
+  $crl_update_time         = hiera('creamce::crl_update_time',3600)
   $cream_ban_list_file     = hiera('creamce::ban_list_file', '/etc/lcas/ban_users.db')
   $use_argus               = hiera("creamce::use_argus", true)
   $argusservice            = hiera("creamce::argus::service", undef)
