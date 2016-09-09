@@ -5,8 +5,7 @@ puppet module to install and configure a cream CE (EMI3)
 
 ## YAML configuration Parameters
 
-* **creamce::site::name** (_string_): TODO, default the host name
-* **creamce::site::email** (_string_): TODO, default empty string
+### CREAM service
 * **creamce::host** (_string_): TODO, default the host name
 * **creamce::port** (_integer_): TODO, default 8443
 * **creamce::quality_level** (_string_): TODO, default "production"
@@ -67,9 +66,33 @@ puppet module to install and configure a cream CE (EMI3)
 * **creamce::cga::cron_sched** (_string_): TODO, default "30 1 * * *"
 * **creamce::at_deny_extras** (_list_): TODO, default empty list
 * **creamce::cron_deny_extras** (_list_): TODO, default empty list
-* **creamce::sudo_logfile** (_string_): TODO, default empty string
+* **creamce::sudo_logfile** (_string_): TODO, default syslog
 * **creamce::default_pool_size** (_integer_): TODO, default 100
+* **creamce::site::name** (_string_): TODO, default the host name
+* **creamce::site::email** (_string_): TODO, default undefined
+* **creamce::batch_system** (_string_): TODO, **mandatory**
 
+### BLAH
+* **blah::config_file** (_string_): TODO, default "/etc/blah.config"
+* **blah::child_poll_timeout** (_integer_): TODO, default 200
+* **blah::alldone_interval** (_integer_): TODO, default 86400
+* **blah::use_blparser** (_boolean_): TODO, default false
+* **blah::blp::host** (_string_): TODO, default undefined
+* **blah::blp::port** (_integer_): TODO, default 33333
+* **blah::blp::num** (_integer_): TODO, default 1
+* **blah::blp::host1** (_string_): TODO, default undefined
+* **blah::blp::port1** (_integer_): TODO, default 33334
+* **blah::blp::host2** (_string_): TODO, default undefined
+* **blah::blp::port2** (_integer_): TODO, default 33335
+* **blah::blp::cream_port** (_integer_): TODO, default 56565
+* **blah::check_children** (_integer_): TODO, default 30
+* **blah::logrotate::interval** (_integer_): TODO, default 365
+* **blah::logrotate::size** (_string_): TODO, default "10M"
+* **blah::bupdater::loop_interval** (_integer_): TODO, default 30
+* **blah::bupdater::notify_port** (_integer_): TODO, default 56554
+* **blah::bupdater::purge_interval** (_integer_): TODO, default 2500000
+* **blah::bupdater::logrotate::interval** (_integer_): TODO, default 50
+* **blah::bupdater::logrotate::size** (_string_): TODO, default "10M"
 
 Example of mininal configuration:
 ```
