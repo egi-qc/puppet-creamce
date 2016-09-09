@@ -98,14 +98,15 @@
 
 <% if @use_argus -%>  
 
-  <adminlist filename="<%=@cream_admin_list_file%>"/>
-  <argus-pep name="pep-client1"
-             resource_id="<%=@cream_pepc_resourceid%>"
-             cert="<%=@tomcat_cert%>"
-             key="<%=@tomcat_key%>"
+  <adminlist filename="<%=@cream_admin_list_file-%>"/>
+  <argus-pep name="pep-client"
+             resource_id="<%=@cream_pepc_resourceid-%>"
+             cert="<%=@tomcat_cert-%>"
+             key="<%=@tomcat_key-%>"
              passwd=""
+             timeout="<%=@argus_timeout-%>000"
              mapping_class="org.glite.ce.cream.authz.argus.ActionMapping">
-    <endpoint url="https://<%=@argusservice%>:<%=@argusport%>/authz" />
+    <endpoint url="https://<%=@argusservice-%>:<%=@argusport-%>/authz" />
 
   </argus-pep>
 

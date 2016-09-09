@@ -2,6 +2,6 @@ pep_ssl_server_capath <%=@cacert_dir%>
 pep_ssl_client_cert <%=@host_certificate%>
 pep_ssl_client_key <%=@host_private_key%>
 pep_url https://<%=@argusservice-%>:<%=@argusport-%>/authz
-pep_timeout 30
+pep_timeout <%=@argus_timeout%>
 xacml_resourceid <%=@cream_pepc_resourceid%>
 
