@@ -7,7 +7,7 @@ class creamce::creamdb inherits creamce::params {
   # See https://forge.puppetlabs.com/puppetlabs/mysql
   # ##################################################################################################
 
-  if $access_by_domain == "true" {
+  if $access_by_domain {
     $access_pattern = "%.${cream_db_domain}"
   } else {
     $access_pattern = "${cream_db_host}"
