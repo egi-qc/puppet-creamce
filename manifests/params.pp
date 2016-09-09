@@ -221,6 +221,7 @@ class creamce::params {
   #
   # Locallogger
   #
+  $use_loclog                 = hiera('use_locallogger', true)
   $loclog_user                = hiera('locallogger_user', 'glite')
   $loclog_group               = hiera('locallogger_group', 'glite')
   $loclog_dir                 = hiera('locallogger_dir', '/var/lib/glite')
