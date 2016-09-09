@@ -1,29 +1,49 @@
 # $gridenvfile is managed by Puppet env.pp.
 # Any changes in here will be overwritten
 
-export X509_VOMS_DIR="<%=@voms_dir-%>"
-export X509_CERT_DIR="<%=@cacert_dir-%>"
-export GRIDMAPDIR="<%=@gridmap_dir-%>"
-export LCMAPS_LOG_LEVEL="<%=@lcmaps_log_level-%>"
-export LCMAPS_DEBUG_LEVEL="<%=@lcmaps_debug_level-%>"
-export LCAS_LOG_LEVEL="<%=@lcas_log_level-%>"
-export LCAS_DEBUG_LEVEL="<%=@lcas_debug_level-%>"
-export GLOBUS_TCP_PORT_RANGE="<%=@globus_tcp_port_range-%>"
-export CATALINA_HOME="<%=@catalina_home-%>"
-export GLITE_USER="<%=@loclog_user-%>"
-export GLITE_LOCATION_VAR=/var
-export GLITE_LOCATION=/usr
-export GLITE_HOST_KEY="<%=@loclog_dir-%>/.certs/hostcert.pem"
-export GLITE_HOST_CERT="<%=@loclog_dir-%>/.certs/hostcert.pem"
-export CREAM_PID_FILE=/var/run/<%=@tomcat-%>.pid
-export BLAHPD_LOCATION=/usr
-export BLAHPD_CONFIG_LOCATION=<%=@blah_config_file%>
-export RTEPUBLISHER_PATH=<%=@gridft_pub_dir%>
+X509_VOMS_DIR="<%=@voms_dir-%>"
+export X509_VOMS_DIR
+X509_CERT_DIR="<%=@cacert_dir-%>"
+export X509_CERT_DIR
+GRIDMAPDIR="<%=@gridmap_dir-%>"
+export GRIDMAPDIR
+LCMAPS_LOG_LEVEL="<%=@lcmaps_log_level-%>"
+export LCMAPS_LOG_LEVEL
+LCMAPS_DEBUG_LEVEL="<%=@lcmaps_debug_level-%>"
+export LCMAPS_DEBUG_LEVEL
+LCAS_LOG_LEVEL="<%=@lcas_log_level-%>"
+export LCAS_LOG_LEVEL
+LCAS_DEBUG_LEVEL="<%=@lcas_debug_level-%>"
+export LCAS_DEBUG_LEVEL
+GLOBUS_TCP_PORT_RANGE="<%=@globus_tcp_port_range-%>"
+export GLOBUS_TCP_PORT_RANGE
+CATALINA_HOME="<%=@catalina_home-%>"
+export CATALINA_HOME
+GLITE_USER="<%=@loclog_user-%>"
+export GLITE_USER
+GLITE_LOCATION_VAR=/var
+export GLITE_LOCATION_VAR
+GLITE_LOCATION=/usr
+export GLITE_LOCATION
+GLITE_HOST_KEY="<%=@loclog_dir-%>/.certs/hostkey.pem"
+export GLITE_HOST_KEY
+GLITE_HOST_CERT="<%=@loclog_dir-%>/.certs/hostcert.pem"
+export GLITE_HOST_CERT
+CREAM_PID_FILE=/var/run/<%=@tomcat-%>.pid
+export CREAM_PID_FILE
+BLAHPD_LOCATION=/usr
+export BLAHPD_LOCATION
+BLAHPD_CONFIG_LOCATION=<%=@blah_config_file%>
+export BLAHPD_CONFIG_LOCATION
+RTEPUBLISHER_PATH=<%=@gridft_pub_dir%>
+export RTEPUBLISHER_PATH
 <%@ce_env.each do | key, value | -%>
 <% if key == "PATH" or key == "MANPATH" or key == "LD_LIBRARY_PATH" -%>
-export <%=key%>="<%=value%>":${<%=key%>}
+<%=key%>="<%=value%>":${<%=key%>}
+export <%=key%
 <% else -%>
-export <%=key%>="<%=value%>"
+<%=key%>="<%=value%>"
+export <%=key%
 <% end -%>
 <%end-%>
 
