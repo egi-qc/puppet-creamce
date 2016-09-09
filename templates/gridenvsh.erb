@@ -40,10 +40,10 @@ export RTEPUBLISHER_PATH
 <%@ce_env.each do | key, value | -%>
 <% if key == "PATH" or key == "MANPATH" or key == "LD_LIBRARY_PATH" -%>
 <%=key%>="<%=value%>":${<%=key%>}
-export <%=key%
+export <%=key%>
 <% else -%>
 <%=key%>="<%=value%>"
-export <%=key%
+export <%=key%>
 <% end -%>
 <%end-%>
 
