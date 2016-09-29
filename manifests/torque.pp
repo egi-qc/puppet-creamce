@@ -105,6 +105,10 @@ class creamce::torque inherits creamce::params {
   
   if $torque_config_client and $istorqueinstalled == "false" {
   
+    package { "munge":
+      ensure  => present,
+    }
+
     file { "/etc/torque/server_name":
       ensure  => present,
       owner   => "root",
@@ -122,7 +126,7 @@ class creamce::torque inherits creamce::params {
 
       service { [ "munge", "trqauthd" ]:
         ensure   => running,
-        require  => File["/etc/torque/server_name"],
+        require  => [ File["/etc/torque/server_name"], Package["munge"] ],
       }
   
       file { "/etc/munge/munge.key":
