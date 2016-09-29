@@ -31,7 +31,6 @@ class creamce::creamdb inherits creamce::params {
     owner    => "root",
     group    => "root",
     mode     => 0644,
-    loglevel => err,
   }
 
   #
