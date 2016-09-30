@@ -116,127 +116,98 @@ CECapabilities = (<%=@ce_capability.join(",")-%>)
 #
 #
 #
-<%
-@subclusters.each do | res_id, res_info |
-    ce_cpu_model=res_info["ce_cpu_model"]
-    ce_cpu_speed=res_info["ce_cpu_speed"]
-    ce_cpu_vendor=res_info["ce_cpu_vendor"]
-    ce_inboundip=res_info["ce_inboundip"]
-    ce_physcpu=res_info["ce_physcpu"]
-    ce_logcpu=res_info["ce_logcpu"]
-    ce_minphysmem=res_info["ce_minphysmem"]
-    ce_minvirtmem=res_info["ce_minvirtmem"]
-    ce_os=res_info["ce_os"]
-    ce_os_name=res_info["ce_os_name"]
-    ce_os_family=res_info["ce_os_family"].downcase
-    ce_os_arch=res_info["ce_os_arch"].downcase
-    ce_os_release=res_info["ce_os_release"]
-    ce_os_version=res_info["ce_os_version"]
-    ce_otherdescr=res_info["ce_otherdescr"]
-    ce_outboundip=res_info["ce_outboundip"]
-    ce_benchmarks=res_info["ce_benchmarks"]
-    ce_smpsize=res_info["ce_smpsize"]
-    ce_runtimeenv=res_info["ce_runtimeenv"]
-    ce_cores=res_info["ce_cores"]
-    if (ce_os_arch == "x86_64")
-        ce_platform_type="amd64"
-    else
-        ce_platform_type=ce_os_arch
-    end
-    subcluster_tmpdir=res_info["subcluster_tmpdir"]
-    subcluster_wntmdir=res_info["subcluster_wntmdir"]
--%>
+<% @cluster_list.each do | cdata | -%>
 # ArchitecturePlatformType is the Platform Type of the WNs of the 
 # specified EE
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_OS_ARCH
-ExecutionEnvironment_<%=res_id-%>_ArchitecturePlatformType = <%=ce_platform_type%>
+ExecutionEnvironment_<%=cdata["id"]-%>_ArchitecturePlatformType = <%=cdata["platform_type"]%>
 #
 # 
 # PhysicalCPUs is the total number of real CPUs/physical chips, including 
 # the nodes that are temporary down or offline 
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_PHYSCPU
-ExecutionEnvironment_<%=res_id-%>_PhysicalCPUs = <%=ce_physcpu%>
+ExecutionEnvironment_<%=cdata["id"]-%>_PhysicalCPUs = <%=cdata["physcpu"]%>
 #
 #
 # LogicalCPUs is the total number of cores/hyperthreaded CPUs, including the 
 # nodes that are temporary down or offline
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_LOGCPU
-ExecutionEnvironment_<%=res_id-%>_LogicalCPUs = <%=ce_logcpu%>
+ExecutionEnvironment_<%=cdata["id"]-%>_LogicalCPUs = <%=cdata["logcpu"]%>
 #
 #
 # SmpSize is the number of Logical CPUs (cores) of the WN
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_SMPSIZE 
-ExecutionEnvironment_<%=res_id-%>_SmpSize = <%=ce_smpsize%>
+ExecutionEnvironment_<%=cdata["id"]-%>_SmpSize = <%=cdata["smpsize"]%>
 #
 # 
 # ProcessorVendor is the name of the processor vendor for the Worker Nodes
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_CPU_VENDOR
-ExecutionEnvironment_<%=res_id-%>_ProcessorVendor = <%=ce_cpu_vendor%>
+ExecutionEnvironment_<%=cdata["id"]-%>_ProcessorVendor = <%=cdata["cpu_vendor"]%>
 #
 #
 # ProcessorModel is the name of the processor model as defined by the vendor 
 # for the Worker Nodes
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_CPU_MODEL
-ExecutionEnvironment_<%=res_id-%>_ProcessorModel = <%=ce_cpu_model%>
+ExecutionEnvironment_<%=cdata["id"]-%>_ProcessorModel = <%=cdata["cpu_model"]%>
 #
 #
 # ProcessorClockSpeed is the processor clock speed expressed in MHz for the 
 # Worker Nodes 
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_CPU_SPEED
-ExecutionEnvironment_<%=res_id-%>_ProcessorClockSpeed = <%=ce_cpu_speed%>
+ExecutionEnvironment_<%=cdata["id"]-%>_ProcessorClockSpeed = <%=cdata["cpu_speed"]%>
 #
 #
 # MainMemoryRAMSize is the total physical memory of a WN expressed in MegaBytes
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_MINPHYSMEM 
-ExecutionEnvironment_<%=res_id-%>_MainMemoryRAMSize = <%=ce_minphysmem%>
+ExecutionEnvironment_<%=cdata["id"]-%>_MainMemoryRAMSize = <%=cdata["minphysmem"]%>
 #
 #
 # MainMemoryVirtualSize is the total virtual memory of a WN expressed in 
 # MegaBytes.
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_MINVIRTMEM
-ExecutionEnvironment_<%=res_id-%>_MainMemoryVirtualSize = <%=ce_minvirtmem%>
+ExecutionEnvironment_<%=cdata["id"]-%>_MainMemoryVirtualSize = <%=cdata["minvirtmem"]%>
 #
 # 
 # OperatingSystemFamily should be filled with the OS family (e.g. linux)
 # It must be set for all the Execution Environments
-ExecutionEnvironment_<%=res_id-%>_OperatingSystemFamily = <%=ce_os_family%>
+ExecutionEnvironment_<%=cdata["id"]-%>_OperatingSystemFamily = <%=cdata["os_family"]%>
 #
 # 
 # OperatingSystemName is the name of the operating system used on the Worker 
 # Nodes 
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_OS
-ExecutionEnvironment_<%=res_id-%>_OperatingSystemName = <%=ce_os_name%>
+ExecutionEnvironment_<%=cdata["id"]-%>_OperatingSystemName = <%=cdata["os_name"]%>
 #
 # 
 # OperatingSystemRelease is the release of the operating system used on the 
 # Worker Nodes
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_OS_RELEASE
-ExecutionEnvironment_<%=res_id-%>_OperatingSystemRelease = <%=ce_os_release%>
+ExecutionEnvironment_<%=cdata["id"]-%>_OperatingSystemRelease = <%=cdata["os_release"]%>
 # 
 #
 # NetworkAdapterInboundIP must be set to either FALSE or TRUE to express the 
 # permission for inbound connectivity for the WNs
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_INBOUNDIP
-ExecutionEnvironment_<%=res_id-%>_NetworkAdapterInboundIP = <%=ce_inboundip%>
+ExecutionEnvironment_<%=cdata["id"]-%>_NetworkAdapterInboundIP = <%=cdata["inboundip"]%>
 #
 #
 # NetworkAdapterOutboundIP must be set to either FALSE or TRUE to express 
 # the permission for outbound connectivity for the WNs
 # It must be set for all the Execution Environments
 # It should be filled with the content of yaim variable CE_OUTBOUNDIP
-ExecutionEnvironment_<%=res_id-%>_NetworkAdapterOutboundIP = <%=ce_outboundip%>
+ExecutionEnvironment_<%=cdata["id"]-%>_NetworkAdapterOutboundIP = <%=cdata["outboundip"]%>
 #
 #
 # Benchmarks is the list of benchmarks
@@ -244,7 +215,7 @@ ExecutionEnvironment_<%=res_id-%>_NetworkAdapterOutboundIP = <%=ce_outboundip%>
 # Format of Benchmarki: (Type Value)
 <%
 benchstr = nil
-ce_benchmarks.each do | benchname, benchvalue |
+cdata["benchmarks"].each do | benchname, benchvalue |
   if benchstr == nil
     benchstr = "((#{benchname} #{benchvalue})"
   else
@@ -257,12 +228,12 @@ else
   benchstr << ")"
 end
 -%>
-ExecutionEnvironment_<%=res_id-%>_Benchmarks = test_<%=benchstr%>
+ExecutionEnvironment_<%=cdata["id"]-%>_Benchmarks = test_<%=benchstr%>
 #
 #
 # Cores is the number of cores per CPU of the Worker Nodes
 # It must be set for all the Execution Environments
-ExecutionEnvironment_<%=res_id-%>_Cores = <%=ce_cores%>
+ExecutionEnvironment_<%=cdata["id"]-%>_Cores = <%=cdata["cores"]%>
 <%end-%>
 
 

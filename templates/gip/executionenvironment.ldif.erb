@@ -1,92 +1,67 @@
 <%
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
 
-@subclusters.each do | res_id, res_info |
-    ce_physcpu=res_info["ce_physcpu"]
-    ce_logcpu=res_info["ce_logcpu"]
-    ce_smpsize=res_info["ce_smpsize"]
-    ce_runtimeenv=res_info["ce_runtimeenv"]
-    ce_cpu_model=res_info["ce_cpu_model"] 
-    ce_cpu_speed=res_info["ce_cpu_speed"] 
-    ce_cpu_vendor=res_info["ce_cpu_vendor"]
-    ce_cpu_version=res_info["ce_cpu_version"]
-    ce_inboundip=res_info["ce_inboundip"]
-    ce_outboundip=res_info["ce_outboundip"]
-    ce_physcpu=res_info["ce_physcpu"] 
-    ce_logcpu=res_info["ce_logcpu"] 
-    ce_cores=res_info["ce_cores"]
-    ce_physcpu_perhost=res_info["ce_physcpu_perhost"]
-    ce_logcpu_perhost=res_info["ce_logcpu_perhost"]
-    ce_minphysmem=res_info["ce_minphysmem"]
-    ce_minvirtmem=res_info["ce_minvirtmem"]
-    ce_os=res_info["ce_os"]
-    ce_os_family=res_info["ce_os_family"].downcase
-    ce_os_arch=res_info["ce_os_arch"]
-    ce_os_release=res_info["ce_os_release"]
-    ce_os_name=res_info["ce_os_name"]
-    ce_os_version=res_info["ce_os_version"]
-    ce_otherdescr=res_info["ce_otherdescr"]
-    if (ce_os_arch == "x86_64")
-        ce_platform_type="amd64"
-    else
-        ce_platform_type=ce_os_arch
-    end
-    if (ce_smpsize > 0) 
-        instances = ce_logcpu/ce_smpsize
-    else 
-        instances = 0
-    end
-    if (ce_logcpu_perhost == ce_physcpu_perhost)
-        cpuType = 'single'
-    else
-        cpuType = 'multi'
-    end              
-    if (ce_physcpu_perhost > 0)
-        if ce_smpsize == (ce_logcpu_perhost/ce_physcpu_perhost)
-            coreType = 'single'
-        else
-            coreType = 'multi'
-        end
-    else 
-        coreType = 'single'
-    end
-
-    subcluster_tmpdir=res_info["subcluster_tmpdir"]
-    subcluster_wntmdir=res_info["subcluster_wntmdir"]
+@cluster_list.each do | cdata |
 
 -%>
-dn: GLUE2ResourceID=<%=res_id-%>,GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
+dn: GLUE2ResourceID=<%=cdata["id"]-%>,GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
 objectClass: GLUE2Resource
 objectClass: GLUE2ExecutionEnvironment
 GLUE2EntityCreationTime: <%=now%>
-GLUE2EntityName: <%=res_id%>
+GLUE2EntityName: <%=cdata["id"]%>
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-executionenvironment-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
 GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
-GLUE2EntityOtherInfo: SmpSize=<%=ce_smpsize%>
-GLUE2EntityOtherInfo: Cores=<%=ce_cores%>
-GLUE2ResourceID: <%=res_id%>
+GLUE2EntityOtherInfo: SmpSize=<%=cdata["smpsize"]%>
+GLUE2EntityOtherInfo: Cores=<%=cdata["cores"]%>
+<% unless cdata["otherdescr"] == "" -%>
+GLUE2EntityOtherInfo: <%=cdata["otherdescr"]%>
+<% end -%>
+GLUE2ResourceID: <%=cdata["id"]%>
 GLUE2ResourceManagerForeignKey: <%=@computing_service_id-%>_Manager
-GLUE2ExecutionEnvironmentPlatform: <%=ce_platform_type%>
-GLUE2ExecutionEnvironmentTotalInstances: <%=instances%>
-GLUE2ExecutionEnvironmentPhysicalCPUs: <%=ce_physcpu_perhost%>
-GLUE2ExecutionEnvironmentLogicalCPUs: <%=ce_logcpu_perhost%>
-GLUE2ExecutionEnvironmentCPUMultiplicity: <%=cpuType-%>cpu-<%=coreType%>core
-GLUE2ExecutionEnvironmentCPUVendor: <%=ce_cpu_vendor%>
-GLUE2ExecutionEnvironmentCPUModel: <%=ce_cpu_model%>
-GLUE2ExecutionEnvironmentCPUClockSpeed: <%=ce_cpu_speed%>
-GLUE2ExecutionEnvironmentCPUVersion: <%=ce_cpu_version%>
-GLUE2ExecutionEnvironmentMainMemorySize: <%=ce_minphysmem%>
-GLUE2ExecutionEnvironmentVirtualMemorySize: <%=ce_minvirtmem%>
-GLUE2ExecutionEnvironmentOSFamily: <%=ce_os_family%>
-GLUE2ExecutionEnvironmentOSName: <%=ce_os_name%>
-GLUE2ExecutionEnvironmentOSVersion: <%=ce_os_release%>
-GLUE2ExecutionEnvironmentConnectivityIn: <%=ce_inboundip.to_s.upcase%>
-GLUE2ExecutionEnvironmentConnectivityOut: <%=ce_outboundip.to_s.upcase%>
-GLUE2ExecutionEnvironmentComputingManagerForeignKey: <%=@computing_service_id-%>_Manager
+GLUE2ExecutionEnvironmentPlatform: <%=cdata["platform_type"]%>
+GLUE2ExecutionEnvironmentTotalInstances: <%=cdata["instances"]%>
+GLUE2ExecutionEnvironmentPhysicalCPUs: <%=cdata["physcpu_perhost"]%>
+GLUE2ExecutionEnvironmentLogicalCPUs: <%=cdata["logcpu_perhost"]%>
+GLUE2ExecutionEnvironmentCPUMultiplicity: <%=cdata["multeplicity"]%>
+GLUE2ExecutionEnvironmentCPUVendor: <%=cdata["cpu_vendor"]%>
+GLUE2ExecutionEnvironmentCPUModel: <%=cdata["cpu_model"]%>
+GLUE2ExecutionEnvironmentCPUClockSpeed: <%=cdata["cpu_speed"]%>
+GLUE2ExecutionEnvironmentCPUVersion: <%=cdata["cpu_version"]%>
+GLUE2ExecutionEnvironmentMainMemorySize: <%=cdata["minphysmem"]%>
+GLUE2ExecutionEnvironmentVirtualMemorySize: <%=cdata["minvirtmem"]%>
+GLUE2ExecutionEnvironmentOSFamily: <%=cdata["os_family"]%>
+GLUE2ExecutionEnvironmentOSName: <%=cdata["os_name"]%>
+GLUE2ExecutionEnvironmentOSVersion: <%=cdata["os_release"]%>
+GLUE2ExecutionEnvironmentConnectivityIn: <%=cdata["inboundip"].to_s.upcase%>
+GLUE2ExecutionEnvironmentConnectivityOut: <%=cdata["outboundip"].to_s.upcase%>
 GLUE2ExecutionEnvironmentCPUTimeScalingFactor: 1
 GLUE2ExecutionEnvironmentWallTimeScalingFactor: 1
+GLUE2ExecutionEnvironmentComputingManagerForeignKey: <%=@computing_service_id-%>_Manager
+<% cdata["accelerators"].each do | acc_id, acc_data | -%>
+GLUE2ExecutionEnvironmentAcceleratorEnvironmentForeignKey: <%=acc_id%>
+<% end -%>
 
+<% cdata["accelerators"].each do | acc_id, acc_data |
+     if acc_data.has_key?("type") -%>
+dn: GLUE2AcceleratorEnvironmentID=<%=acc_id-%>,GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2AcceleratorEnvironment
+GLUE2EntityCreationTime: <%=now%>
+GLUE2EntityName: <%=acc_id%>
+GLUE2AcceleratorEnvironmentID: <%=acc_id%>
+GLUE2AcceleratorEnvironmentType: <%=acc_data["type"]%>
+GLUE2AcceleratorEnvironmentPhysicalAccelerators: <%=acc_data["phys_acc"]%>
+GLUE2AcceleratorEnvironmentLogicalAccelerators: <%=acc_data["log_acc"]%>
+GLUE2AcceleratorEnvironmentVendor: <%=acc_data["vendor"]%>
+GLUE2AcceleratorEnvironmentModel: <%=acc_data["model"]%>
+GLUE2AcceleratorEnvironmentVersion: <%=acc_data["version"]%>
+GLUE2AcceleratorEnvironmentClockSpeed: <%=acc_data["clock_speed"]%>
+GLUE2AcceleratorEnvironmentMemory: <%=acc_data["memory"]%>
+GLUE2AcceleratorEnvironmentExecutionEnvironmentForeignKey: <%=cdata["id"]%>
+
+<%   end
+   end -%>
 <% end -%>
 

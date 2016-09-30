@@ -1,12 +1,10 @@
 <%
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
 
-@subclusters.each do | res_id, res_info |
-  ce_benchmarks=res_info["ce_benchmarks"]
-  
-  ce_benchmarks.each do | benchmark, value |
+@cluster_list.each do | cdata |
+  cdata["benchmarks"].each do | benchmark, value |
 -%>
-dn: GLUE2BenchmarkID=<%=res_id-%>_<%=benchmark-%>,GLUE2ResourceID=<%=res_id-%>,GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
+dn: GLUE2BenchmarkID=<%=cdata["id"]-%>_<%=benchmark-%>,GLUE2ResourceID=<%=cdata["id"]-%>,GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
 objectClass: GLUE2Entity
 objectClass: GLUE2Benchmark
 GLUE2EntityCreationTime: <%=now%>
@@ -14,10 +12,10 @@ GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-benchmark-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
 GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
 Glue2EntityName: Benchmark <%=benchmark%>
-GLUE2BenchmarkID: <%=res_id-%>_<%=benchmark%>
+GLUE2BenchmarkID: <%=cdata["id"]-%>_<%=benchmark%>
 GLUE2BenchmarkType: <%=benchmark%>
 GLUE2BenchmarkValue: <%=value%>
-GLUE2BenchmarkExecutionEnvironmentForeignKey: <%=res_id%>
+GLUE2BenchmarkExecutionEnvironmentForeignKey: <%=cdata["id"]%>
 GLUE2BenchmarkComputingManagerForeignKey: <%=@computing_service_id-%>_Manager
 
 <%end-%>

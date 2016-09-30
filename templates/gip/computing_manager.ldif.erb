@@ -1,12 +1,13 @@
 <%
 now=Time.now.utc.strftime("%FT%T%Z").gsub(/GMT/,'Z').gsub(/UTC/,'Z')
+
 ce_physcpu=0
 ce_logcpu=0
 ce_si00=0
-@subclusters.each do | res_id, res_info |
-    ce_physcpu += res_info["ce_physcpu"].to_i
-    ce_logcpu += res_info["ce_logcpu"].to_i
-    curr_si00 = res_info["ce_benchmarks"].fetch('specint2000', nil)
+@cluster_list.each do | cdata |
+    ce_physcpu += cdata["physcpu"].to_i
+    ce_logcpu += cdata["logcpu"].to_i
+    curr_si00 = cdata["benchmarks"]["specint2000"]
     if curr_si00 != nil and curr_si00 > ce_si00
       ce_si00 = curr_si00
     end
@@ -20,6 +21,17 @@ GLUE2EntityCreationTime: <%=now%>
 GLUE2EntityName: Computing Manager on <%=@ce_host%>
 GLUE2ComputingManagerTotalPhysicalCPUs: <%=ce_physcpu%>
 GLUE2ComputingManagerTotalLogicalCPUs: <%=ce_logcpu%>
+<% if @glue_2_1 -%>
+GLUE2ComputingManagerTotalPhysicalAccelerators: GPU:0
+GLUE2ComputingManagerTotalPhysicalAccelerators: MIC:0
+GLUE2ComputingManagerTotalPhysicalAccelerators: FPGA:0
+GLUE2ComputingManagerTotalAcceleratorSlots: GPU:0
+GLUE2ComputingManagerTotalAcceleratorSlots: MIC:0
+GLUE2ComputingManagerTotalAcceleratorSlots: FPGA:0
+GLUE2ComputingManagerUsedAcceleratorSlots: GPU:0
+GLUE2ComputingManagerUsedAcceleratorSlots: MIC:0
+GLUE2ComputingManagerUsedAcceleratorSlots: FPGA:0
+<% end -%>
 GLUE2EntityOtherInfo: InfoProviderName=glite-ce-glue2-manager-static
 GLUE2EntityOtherInfo: InfoProviderVersion=1.1
 GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>

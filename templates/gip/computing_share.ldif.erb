@@ -31,6 +31,17 @@ GLUE2ComputingShareMaxRunningJobs: 999999999
 GLUE2ComputingShareMaxTotalJobs: 999999999
 GLUE2ComputingShareMaxWaitingJobs: 999999999
 GLUE2ComputingShareMaxSlotsPerJob: 444444
+<% if @glue_2_1 -%>
+GLUE2ComputingShareMaxAcceleratorSlotsPerJob: GPU:0
+GLUE2ComputingShareMaxAcceleratorSlotsPerJob: MIC:0
+GLUE2ComputingShareMaxAcceleratorSlotsPerJob: FPGA:0
+GLUE2ComputingShareFreeAcceleratorSlots: GPU:0
+GLUE2ComputingShareFreeAcceleratorSlots: MIC:0
+GLUE2ComputingShareFreeAcceleratorSlots: FPGA:0
+GLUE2ComputingShareUsedAcceleratorSlots: GPU:0
+GLUE2ComputingShareUsedAcceleratorSlots: MIC:0
+GLUE2ComputingShareUsedAcceleratorSlots: FPGA:0
+<% end -%>
 GLUE2ComputingShareRunningJobs: 0
 GLUE2ComputingShareTotalJobs: 0
 GLUE2ComputingShareFreeSlots: 0

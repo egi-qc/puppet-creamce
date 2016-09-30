@@ -5,6 +5,8 @@ class creamce::gip inherits creamce::params {
   include bdii
 
   $queue_vo_map = build_queue_vo_map($grid_queues, $voenv)
+  
+  $cluster_list = get_clusters_list($subclusters, $glue_2_1)
 
   package { ["glite-info-provider-service", "glite-ce-cream-utils", "dynsched-generic", "glue-schema"]:
     ensure   => present,
