@@ -32,7 +32,6 @@ puppet module to install and configure a cream CE (EMI3)
 * **creamce::blp::retry_count** (_integer_): TODO, default 100
 * **creamce::lease::time** (_integer_): TODO, default 36000
 * **creamce::lease::rate** (_integer_): TODO, default 30
-* **creamce::smp_size** (_integer_): TODO, default 8
 * **creamce::purge::aborted** (_integer_): TODO, default 10
 * **creamce::purge::cancel** (_integer_): TODO, default 10
 * **creamce::purge::done** (_integer_): TODO, default 10
@@ -178,7 +177,7 @@ creamce::hardware_table :
         ce_minvirtmem : 4096,
         ce_os_family : "RedHat",
         ce_os_arch : "x86_64",
-        ce_os_release : "7.0.1406}",
+        ce_os_release : "7.0.1406",
         ce_os_version : "7",
         ce_os_name : "CentOS",
         ce_outboundip : true,

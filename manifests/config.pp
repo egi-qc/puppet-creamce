@@ -63,6 +63,8 @@ class creamce::config inherits creamce::params {
   # ##################################################################################################
   # CREAM setup
   # ##################################################################################################
+  
+  $cluster_list = get_clusters_list($subclusters, $glue_2_1)
 
   file { "${cream_db_sandbox_path}":
     ensure => directory,

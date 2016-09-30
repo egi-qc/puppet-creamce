@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!-- BUILD BY PUPPET -->
+<%
+    def_smp_size = 1000000
+    @cluster_list.each do | cdata |
+      if cdata["smpsize"] > 0 and cdata["smpsize"] < def_smp_size
+        def_smp_size = cdata["smpsize"]
+      end
+    end
+-%>
 <!-- DO NOT EDIT -->
 
 <service id="CREAM service (core2)">
@@ -53,7 +61,7 @@
       <parameter name="CREAM_JOB_SENSOR_PORT" value="49154" />
       <parameter name="MAX_LEASE_TIME" value="<%=@cream_lease_time%>" />
       <parameter name="LEASE_EXECUTION_RATE" value="<%=@cream_lease_rate%>" /> <!-- minutes -->
-      <parameter name="HOST_SMP_SIZE" value="<%=@cream_smp_size%>" />
+      <parameter name="HOST_SMP_SIZE" value="<%=def_smp_size%>" />
       <parameter name="JOB_PURGE_RATE" value="<%=@cream_job_purge_rate%>" /> <!-- minutes -->
       <parameter name="JOB_PURGE_POLICY" value="ABORTED <%=@cream_purge_aborted%> days; CANCELLED <%=@cream_purge_cancel%> days; DONE-OK <%=@cream_purge_done%> days; DONE-FAILED <%=@cream_purge_failed%> days; REGISTERED <%=@cream_purge_register%> days;" />
   </commandexecutor>

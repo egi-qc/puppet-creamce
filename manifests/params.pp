@@ -49,7 +49,6 @@ class creamce::params {
   $cream_blp_retry_count     = hiera("creamce::blp::retry_count", 100)
   $cream_lease_time          = hiera("creamce::lease::time", 36000)
   $cream_lease_rate          = hiera("creamce::lease::rate", 30)
-  $cream_smp_size            = hiera("creamce::smp_size", 8)
   $cream_purge_aborted       = hiera("creamce::purge::aborted", 10)
   $cream_purge_cancel        = hiera("creamce::purge::cancel", 10)
   $cream_purge_done          = hiera("creamce::purge::done", 10)
