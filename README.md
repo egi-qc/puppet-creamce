@@ -6,26 +6,11 @@ puppet module to install and configure a cream CE (EMI3)
 ## YAML configuration Parameters
 
 ### CREAM service
-* **creamce::host** (_string_): TODO, default the host name
-* **creamce::port** (_integer_): TODO, default 8443
-* **creamce::quality_level** (_string_): TODO, default "production"
-* **creamce::environment** (_hash_): TODO, default empty hash
-* **creamce::mysql::access_by_domain** (_boolean_): TODO, default false
-* **creamce::mysql::override_options** (_hash_): TODO, default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" }}`"
-* **creamce::mysql::root_password** (_string_): TODO, **mandatory**
-* **creamce::mysql::max_active** (_integer_): TODO, default 200
-* **creamce::mysql::min_idle** (_integer_): TODO, default 30
-* **creamce::mysql::max_wait** (_integer_): TODO, default 10000
-* **creamce::creamdb::name** (_string_): TODO, default "creamdb"
-* **creamce::creamdb::user** (_string_): TODO, default "cream"
-* **creamce::creamdb::password** (_string_): TODO, **mandatory**
-* **creamce::creamdb::host** (_string_): TODO, default the host name
-* **creamce::creamdb::port** (_integer_): TODO, default 3306
-* **creamce::creamdb::domain** (_string_): TODO, default the local domain name
-* **creamce::creamdb::minpriv_user** (_string_): TODO, default "minprivuser"
-* **creamce::creamdb::minpriv_password** (_string_): TODO, **mandatory**
-* **creamce::delegationdb::name** (_string_): TODO, default "delegationcreamdb"
-* **creamce::sandbox_path** (_string_): TODO, default "/var/cream_sandbox"
+* **creamce::host** (_string_): The fully qualified Computing Element host name, default the host name
+* **creamce::port** (_integer_): The tomcat listen port, default 8443
+* **creamce::quality_level** (_string_): The service level of the Computing Element, default "production"
+* **creamce::environment** (_hash_): The environment variables passed to the CE, default empty hash
+* **creamce::sandbox_path** (_string_): The absolute path for job sandboxes, default "/var/cream_sandbox"
 * **creamce::enable_limiter** (_boolean_): TODO, default true
 * **creamce::limit::load1** (_integer_): TODO, default 400
 * **creamce::limit::load5** (_integer_): TODO, default 400
@@ -71,6 +56,21 @@ puppet module to install and configure a cream CE (EMI3)
 * **creamce::site::name** (_string_): TODO, default the host name
 * **creamce::site::email** (_string_): TODO, default undefined
 * **creamce::batch_system** (_string_): TODO, **mandatory**
+
+### CREAM Database
+* **creamce::mysql::root_password** (_string_): root password for the database administrator, **mandatory**
+* **creamce::mysql::max_active** (_integer_): TODO, default 200
+* **creamce::mysql::min_idle** (_integer_): TODO, default 30
+* **creamce::mysql::max_wait** (_integer_): TODO, default 10000
+* **creamce::mysql::override_options** (_hash_): TODO, default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" }}`"
+* **creamce::creamdb::name** (_string_): The database name for the CREAM service, default "creamdb"
+* **creamce::creamdb::user** (_string_): The database user name with user acting as main operator, default "cream"
+* **creamce::creamdb::password** (_string_): The database user password for the main operator, **mandatory**
+* **creamce::creamdb::host** (_string_): The fully qualified host name for any CE databases, default the host name
+* **creamce::creamdb::port** (_integer_): The mysql listen port for any CE databases, default 3306
+* **creamce::creamdb::minpriv_user** (_string_): The database user name with user acting as monitor agent, default "minprivuser"
+* **creamce::creamdb::minpriv_password** (_string_): The database user password for the monitor agent, **mandatory**
+* **creamce::delegationdb::name** (_string_): The database name for the Delegation Service, default "delegationcreamdb"
 
 ### BLAH
 * **blah::config_file** (_string_): TODO, default "/etc/blah.config"
@@ -176,11 +176,11 @@ creamce::hardware_table :
         ce_logcpu : 2,
         ce_minphysmem : 2048,
         ce_minvirtmem : 4096,
-        ce_os_family : "%{::osfamily}",
-        ce_os_arch : "%{::architecture}",
-        ce_os_release : "%{::operatingsystemrelease}",
-        ce_os_version : "%{::operatingsystemmajrelease}",
-        ce_os_name : "%{::operatingsystem}",
+        ce_os_family : "RedHat",
+        ce_os_arch : "x86_64",
+        ce_os_release : "7.0.1406}",
+        ce_os_version : "7",
+        ce_os_name : "CentOS",
         ce_outboundip : true,
         ce_inboundip : false,
         ce_runtimeenv : [ SI00MeanPerCPU_870, SF00MeanPerCPU_790, MPICH, MPI_HOME_NOTSHARED ],
