@@ -1,13 +1,11 @@
 <%
-name_map=Hash.new
 voswdir=Hash.new
 voappdir=Hash.new
 defaultse=Hash.new
-@voenv.each do | voshortname, value |
-  name_map[value['voname']]=voshortname
-  voswdir[value['voname']]=value['vo_sw_dir']
-  voappdir[value['voname']]=value['vo_app_dir']
-  defaultse[value['voname']]=value['vo_default_se']
+@voenv.each do | vo_name, value |
+  voswdir[vo_name]=value['vo_sw_dir']
+  voappdir[vo_name]=value['vo_app_dir']
+  defaultse[vo_name]=value['vo_default_se']
 end-%>
 
 

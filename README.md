@@ -114,7 +114,6 @@ creamce::queues :
 
 creamce::vo_table :
     dteam : { 
-        voname : dteam, 
         vo_sw_dir : /afs/dteam, 
         vo_app_dir : /var/lib/vo/dteam, 
         vo_default_se : storage.pd.infn.it,
