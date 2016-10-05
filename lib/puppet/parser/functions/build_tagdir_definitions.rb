@@ -23,7 +23,8 @@ module Puppet::Parser::Functions
       
         vodata['users'].each do | user_prefix, udata |
           if udata['groups'][0] == admin_group
-            admin_user = "#{user_prefix}0000"
+            name_pattern = udata.fetch('name_pattern', '%<prefix>s%03<index>d')
+            admin_user = sprintf(name_pattern % { :prefix => user_prefix, :index => 0 })
           end
         end
         

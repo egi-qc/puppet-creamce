@@ -188,7 +188,7 @@ class creamce::params {
   $argusservice            = hiera("creamce::argus::service", undef)
   $argusport               = hiera("creamce::argus::port", 8154)
   $argus_timeout           = hiera("creamce::argus::timeout", 30)
-  $cream_pepc_resourceid   = hiera('creamce::resourceid',"http://${ce_host}:${ce_port}/cream")
+  $cream_pepc_resourceid   = hiera('creamce::resourceid',"https://${ce_host}:${ce_port}/cream")
   $admin_list              = hiera('creamce::admin::list', [])
   $cream_admin_list_file   = hiera('creamce::admin::list_file', '/etc/grid-security/admin-list')
   $voenv                   = hiera('creamce::vo_table', {})

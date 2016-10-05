@@ -149,15 +149,18 @@ creamce::vo_table :
         users : {
             dteamusr : {
                 first_uid : 6000,
+                name_pattern : "%<prefix>s%03<index>d",
                 groups : [ dteam ]
             },
             dteamsgmusr : {
                 first_uid : 6100,
+                name_pattern : "%<prefix>s%02<index>d",
                 pool_size : 5,
                 groups : [ dteamsgm, dteam ]
             },
             dteamprodusr : {
                 first_uid : 6200,
+                name_pattern : "%<prefix>s%02<index>d",
                 pool_size : 5,
                 groups : [ dteamprod, dteam ]
             }
@@ -174,6 +177,7 @@ creamce::hardware_table :
         ce_logcpu : 2,
         ce_minphysmem : 2048,
         ce_minvirtmem : 4096,
+        ce_os : "Linux",
         ce_os_family : "RedHat",
         ce_os_arch : "x86_64",
         ce_os_release : "7.0.1406",
