@@ -119,7 +119,7 @@ class creamce::params {
   
   $torque_config_client      = hiera("torque::config::client", true)
   $torque_config_ssh         = hiera("torque::config::ssh", true)
-  $torque_config_pool        = hiera("torque::config::pool", false)
+  $torque_config_pool        = hiera("torque::config::pool", true)
   $torque_server             = hiera("torque::host", "${::fqdn}")
   $torque_log_dir            = hiera("torque::log_dir", "/var/lib/torque/")
   $torque_multiple_staging   = hiera("torque::multiple_staging", false)
