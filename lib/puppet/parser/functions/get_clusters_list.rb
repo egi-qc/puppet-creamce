@@ -11,13 +11,13 @@ module Puppet::Parser::Functions
       
       cdata["id"] = res_id
       
-      cdata["physcpu"] = res_info.fetch("ce_physcpu", nil)
-      if cdata["physcpu"] == nil
+      cdata["physcpu_perhost"] = res_info.fetch("ce_physcpu", nil)
+      if cdata["physcpu_perhost"] == nil
         raise "Wrong or missing cluster parameter: ce_physcpu"
       end
       
-      cdata["logcpu"] = res_info.fetch("ce_logcpu", nil)
-      if cdata["logcpu"] == nil
+      cdata["logcpu_perhost"] = res_info.fetch("ce_logcpu", nil)
+      if cdata["logcpu_perhost"] == nil
         raise "Wrong or missing cluster parameter: ce_logcpu"
       end
       
@@ -105,8 +105,8 @@ module Puppet::Parser::Functions
 
       cdata["instances"] = cdata["wn_list"].length
       cdata["smpsize"] = cdata["logcpu"]/cdata["instances"]
-      cdata["physcpu_perhost"] = cdata["physcpu"]/cdata["instances"]
-      cdata["logcpu_perhost"] = cdata["logcpu"]/cdata["instances"]
+      cdata["physcpu"] = cdata["physcpu_perhost"] * cdata["instances"]
+      cdata["logcpu"] = cdata["logcpu_perhost"] * cdata["instances"]
       cdata["cores"] = cdata["logcpu"]/cdata["physcpu"]
 
       if cdata["otherdescr"] == ""
