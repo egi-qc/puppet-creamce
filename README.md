@@ -154,9 +154,31 @@ associated Storage Service (this is typically an NFS mount point)
   * **export_dir** (_string_): The remote path in the Storage Service which is associated to the local path in the Computing
 Service (this is typically an NFS exported directory).
 
+### CREAM security
+* **creamce::host_certificate** (_string_): TODO, default /etc/grid-security/hostcert.pem
+* **creamce::host_private_key** (_string_): TODO, default /etc/grid-security/hostkey.pem
+* **creamce::cacert_dir** (_string_): TODO, default /etc/grid-security/certificates
+* **creamce::voms_dir** (_string_): TODO, default /etc/grid-security/vomsdir
+* **creamce::gridmap_dir** (_string_): TODO, default /etc/grid-security/gridmapdir
+* **creamce::gridmap_file** (_string_): TODO, default /etc/grid-security/grid-mapfile
+* **creamce::gridmap_extras** (_list_): TODO, default empty list
+* **creamce::gridmap_cron_sched** (_string_): TODO, default "5 * * * *"
+* **creamce::groupmap_file** (_string_): TODO, default /etc/grid-security/groupmapfile')
+* **creamce::crl_update_time** (_integer_): TODO, default 3600
+* **creamce::ban_list_file** (_string_): TODO, default /etc/lcas/ban_users.db')
+* **creamce::use_argus** (_boolean_): True if Argus authorization framework must be used, false if gJAF must be used, default true
+* **creamce::argus::service"** (_string_): TODO, **mandatory** if **creamce::user_argus** is set to true
+* **creamce::argus::port** (_integer_): TODO, default 8154
+* **creamce::argus::timeout** (_integer_): TODO, default 30
+* **creamce::resourceid** (_string_): TODO, default "https://{ce_host}:{ce_port}/cream"
+* **creamce::admin::list** (_list_): TODO, default empty list
+* **creamce::admin::list_file** (_string_): TODO, default /etc/grid-security/admin-list
+* **creamce::vo_table** (_hash_): see the section "VO table" for further details, default empty hash
 
+#### VO table
+TODO
 
-Example of mininal configuration:
+### Example of mininal configuration
 ```
 ---
 creamce::mysql::root_password :            mysqlp@$$w0rd
@@ -191,38 +213,18 @@ creamce::vo_table :
                       }
         ],
         groups : {
-            dteam : {
-                fqan : [ "/dteam" ],
-                gid : 9000
-            },
-            dteamsgm : {
-                fqan : [ "/dteam/sgm/ROLE=developer" ],
-                gid : 9001,
-                pub_admin : true
-            },
-            dteamprod : {
-                fqan : [ "/dteam/prod/ROLE=developer" ],
-                gid : 9002
-            }
+            dteam : { fqan : [ "/dteam" ], gid : 9000 },
+            
+            dteamsgm : { fqan : [ "/dteam/sgm/ROLE=developer" ], gid : 9001, pub_admin : true },
+            
+            dteamprod : { fqan : [ "/dteam/prod/ROLE=developer" ], gid : 9002 }
         },
         users : {
-            dteamusr : {
-                first_uid : 6000,
-                name_pattern : "%<prefix>s%03<index>d",
-                groups : [ dteam ]
-            },
-            dteamsgmusr : {
-                first_uid : 6100,
-                name_pattern : "%<prefix>s%02<index>d",
-                pool_size : 5,
-                groups : [ dteamsgm, dteam ]
-            },
-            dteamprodusr : {
-                first_uid : 6200,
-                name_pattern : "%<prefix>s%02<index>d",
-                pool_size : 5,
-                groups : [ dteamprod, dteam ]
-            }
+            dteamusr : { first_uid : 6000, groups : [ dteam ], name_pattern : "%<prefix>s%03<index>d" },
+            
+            dteamsgmusr : { first_uid : 6100, groups : [ dteamsgm, dteam ], pool_size : 5, name_pattern : "%<prefix>s%02<index>d" },
+            
+            dteamprodusr : { first_uid : 6200, groups : [ dteamprod, dteam ], pool_size : 5, name_pattern : "%<prefix>s%02<index>d" }
         }
     }
 
