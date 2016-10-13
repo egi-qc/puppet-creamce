@@ -55,16 +55,16 @@ module Puppet::Parser::Functions
       
       cdata["minvirtmem"] = res_info.fetch("ce_minvirtmem", cdata["minphysmem"])
       
-      cdata["os"] = res_info.fetch("ce_os", nil)
-      if cdata["os"] == nil
-        raise "Wrong or missing cluster parameter: ce_os"
-      end
-      
       cdata["os_family"] = res_info.fetch("ce_os_family", nil)
       if cdata["os_family"] == nil
         raise "Wrong or missing cluster parameter: ce_os_family"
       else
         cdata["os_family"]= cdata["os_family"].downcase
+      end
+      
+      cdata["os_name"] = res_info.fetch("ce_os_name", nil)
+      if cdata["os_name"] == nil
+        raise "Wrong or missing cluster parameter: ce_os_name"
       end
       
       cdata["os_arch"] = res_info.fetch("ce_os_arch", nil)
@@ -81,15 +81,7 @@ module Puppet::Parser::Functions
         raise "Wrong or missing cluster parameter: ce_os_release"
       end
       
-      cdata["os_name"] = res_info.fetch("ce_os_name", nil)
-      if cdata["os_name"] == nil
-        raise "Wrong or missing cluster parameter: ce_os_name"
-      end
-      
-      cdata["os_version"] = res_info.fetch("ce_os_version", nil)
-      if cdata["os_version"] == nil
-        raise "Wrong or missing cluster parameter: ce_os_version"
-      end
+      cdata["os_version"] = "#{cdata['os_release']}.dummy".split(".")[0]
       
       cdata["otherdescr"] = res_info.fetch("ce_otherdescr", "")
       cdata["tmpdir"] = res_info.fetch("subcluster_tmpdir", "")

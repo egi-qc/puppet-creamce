@@ -93,6 +93,55 @@ puppet module to install and configure a cream CE (EMI3)
 * **blah::bupdater::logrotate::interval** (_integer_): TODO, default 50
 * **blah::bupdater::logrotate::size** (_string_): TODO, default "10M"
 
+### CREAM information system
+* **bdii::params::user** (_string_): TODO, default "ldap"
+* **bdii::params::group** (_string_): TODO, default "ldap"
+* **bdii::params::port** (_integer_): TODO, default 2170
+* **creamce::hardware_table** (_hash_): see the section "Hardware table" for further details, default empty hash
+* **creamce::info::gip_path** (_string_): TODO, default "/var/lib/bdii/gip"
+* **creamce::info::capability** (_list_): the list of capability for a CREAM site; it's a list of string, in general with format "name=value", default empty list
+* **creamce::se_table** (_hash_): see the section "Storage element table" for further details, default empty hash
+* **creamce::queues** (_hash_): see the section "Queues table" for further details, default empty hash
+* **creamce::workarea::shared** (_boolean_): TODO, default false
+* **creamce::workarea::guaranteed** (_boolean_): TODO, default false
+* **creamce::workarea::total** (_integer_): TODO, default 0
+* **creamce::workarea::free** (_integer_): TODO, default 0
+* **creamce::workarea::lifetime** (_integer_): TODO, default 0
+* **creamce::workarea::mslot_total** (_integer_): TODO, default 0
+* **creamce::workarea::mslot_free** (_integer_): TODO, default 0
+* **creamce::workarea::mslot_lifetime** (_integer_): TODO, default 0
+
+#### Hardware table
+The hardware table is a hash with the following structure:
+* the key of an entry in the table is the ID assigned to the homogeneous sub-cluster of machines (see GLUE2 execution environment).
+* the value of an entry in the table is a hash containing the definitions for the homogeneous sub-cluster, the supported keys are:
+  * **ce_cpu_model** (_string_): The name of the physical CPU model, as defined by the vendor, for example "XEON", **mandatory**
+  * **ce_cpu_speed** (_integer_): The nominal clock speed of the physical CPU, expressed  in MHz, **mandatory**
+  * **ce_cpu_vendor** (_string_): The name of the physical CPU vendor, for example "Intel", **mandatory**
+  * **ce_cpu_version** (_string_): The specific version of the Physical CPU model as defined by the vendor, **mandatory**
+  * **ce_physcpu** (_integer_): The number of physical CPUs (sockets) in a work node of the sub-cluster, **mandatory**
+  * **ce_logcpu** (_integer_): The number of logical CPUs (cores) in a worker node of the sub-cluster, **mandatory**
+  * **ce_minphysmem** (_integer_): The total amount of physical RAM in a worker node of the sub-cluster, expressed in MB, **mandatory**
+  * **ce_minvirtmem** (_integer_): The total amount of virtual memory (RAM and swap space) in a worker node of the sub-cluster, expressed in MB
+  * **ce_os_family** (_string_): The general family of the Operating System installed in a worker node ("linux", "macosx", "solaris", "windows"), **mandatory**
+  * **ce_os_name** (_string_): The specific name Operating System installed in a worker node, for example "RedHat", **mandatory**
+  * **ce_os_arch** (_string_): The platform type of worker node, for example "x86_64", **mandatory**
+  * **ce_os_release** (_string_): The version of the Operating System installed in a worker node, as defined by the vendor, for example "7.0.1406", **mandatory**
+  * **ce_outboundip** (_boolean_): True if a worker node has out-bound connectivity, false otherwise, default true
+  * **ce_inboundip** (_boolean_): True if a worker node has in-bound connectivity, false otherwise default false
+  * **ce_runtimeenv** (_list_): The list of tags associated to the software packages installed in the worker node, default empty list
+  * **ce_benchmarks** (_hash_): The hash table containing the values of the standard benchmarks("specfp2000", "specint2000", "hep-spec06");
+each key of the table corresponds to the benchmark name, default empty hash
+  * **subcluster_tmpdir** (_string_): The path of a temporary directory shared across worker nodes (see GLUE 1.3)
+  * **subcluster_wntmdir** (_string_): The path of a temporary directory local to each worker node (see GLUE 1.3)
+  * **nodes** (_list_): The list of the name of the worker nodes of the sub-cluster, **mandatory**
+
+#### Queues table
+
+#### Storage element table
+
+
+
 Example of mininal configuration:
 ```
 ---
@@ -177,12 +226,11 @@ creamce::hardware_table :
         ce_logcpu : 2,
         ce_minphysmem : 2048,
         ce_minvirtmem : 4096,
-        ce_os : "Linux",
-        ce_os_family : "RedHat",
+        ce_os_family : "linux",
+        ce_os_name : "CentOS",
         ce_os_arch : "x86_64",
         ce_os_release : "7.0.1406",
         ce_os_version : "7",
-        ce_os_name : "CentOS",
         ce_outboundip : true,
         ce_inboundip : false,
         ce_runtimeenv : [ SI00MeanPerCPU_870, SF00MeanPerCPU_790, MPICH, MPI_HOME_NOTSHARED ],
