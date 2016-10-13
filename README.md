@@ -130,15 +130,29 @@ The hardware table is a hash with the following structure:
   * **ce_outboundip** (_boolean_): True if a worker node has out-bound connectivity, false otherwise, default true
   * **ce_inboundip** (_boolean_): True if a worker node has in-bound connectivity, false otherwise default false
   * **ce_runtimeenv** (_list_): The list of tags associated to the software packages installed in the worker node, default empty list
-  * **ce_benchmarks** (_hash_): The hash table containing the values of the standard benchmarks("specfp2000", "specint2000", "hep-spec06");
+  * **ce_benchmarks** (_hash_): The hash table containing the values of the standard benchmarks ("specfp2000", "specint2000", "hep-spec06");
 each key of the table corresponds to the benchmark name, default empty hash
   * **subcluster_tmpdir** (_string_): The path of a temporary directory shared across worker nodes (see GLUE 1.3)
   * **subcluster_wntmdir** (_string_): The path of a temporary directory local to each worker node (see GLUE 1.3)
   * **nodes** (_list_): The list of the name of the worker nodes of the sub-cluster, **mandatory**
 
 #### Queues table
+The queues table is a hash with the following structure:
+* the key of an entry in the table is the name of the batch system queue/partition
+* the value of an entry in the table is a hash table containing the definitions for the related queue/partition
+* the supported keys for definitions above are:
+  * **groups** (_list_): The list of local groups which are allowed to operate the queue/partition, each group MUST BE defined in the VO table
 
 #### Storage element table
+The storage element table is a hash with the following structure:
+* the key of an entry in the table is the name of the storage element host
+* the value of an entry in the table is a hash table containing the definitions for the related storage element
+* the supported keys for definitions above are:
+  * **type** (_string_): The name of the application which is installed in the storage element ("Storm", "DCache", etc.)
+  * **mount_dir** (_string_): The local path within the Computing Service which makes it possible to access files in the
+associated Storage Service (this is typically an NFS mount point)
+  * **export_dir** (_string_): The remote path in the Storage Service which is associated to the local path in the Computing
+Service (this is typically an NFS exported directory).
 
 
 
@@ -154,12 +168,8 @@ creamce::use_argus :                       false
 creamce::default_pool_size :               10
 
 creamce::queues :
-    long :  { 
-        groups : [ dteam, dteamprod ]
-    }
-    short : {
-        groups : [ dteamsgm ]
-    }
+    long :  { groups : [ dteam, dteamprod ] }
+    short : { groups : [ dteamsgm ] }
 
 creamce::vo_table :
     dteam : { 
@@ -233,14 +243,10 @@ creamce::hardware_table :
         ce_os_version : "7",
         ce_outboundip : true,
         ce_inboundip : false,
-        ce_runtimeenv : [ SI00MeanPerCPU_870, SF00MeanPerCPU_790, MPICH, MPI_HOME_NOTSHARED ],
+        ce_runtimeenv : [ LCG-2 LCG-2_1_0 LCG-2_1_1 LCG-2_2_0 ],
         subcluster_tmpdir : /var/tmp/subcluster001,
         subcluster_wntmdir : /var/glite/subcluster001,
-        ce_benchmarks : {
-            specfp2000 : 420,
-            specint2000 : 380,
-            hep-spec06 : 780
-        },
+        ce_benchmarks : { specfp2000 : 420, specint2000 : 380, hep-spec06 : 780 },
         nodes : [ "node-01.test.pd.infn.it" ]
     }
 
