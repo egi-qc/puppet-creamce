@@ -181,13 +181,20 @@ TODO
 ### Example of mininal configuration
 ```
 ---
-creamce::mysql::root_password :            mysqlp@$$w0rd
-creamce::creamdb::password :               creamp@$$w0rd
-creamce::creamdb::minpriv_password :       minp@$$w0rd
-apel::db::pass :                           apelp@$$w0rd
-creamce::batch_system :                    pbs
-creamce::use_argus :                       false
-creamce::default_pool_size :               10
+creamce::mysql::root_password :      mysqlp@$$w0rd
+creamce::creamdb::password :         creamp@$$w0rd
+creamce::creamdb::minpriv_password : minp@$$w0rd
+apel::db::pass :                     apelp@$$w0rd
+creamce::batch_system :              pbs
+creamce::use_argus :                 false
+creamce::default_pool_size :         10
+creamce::info::capability :          [ "CloudSupport=false", "Multinode=true" ]
+
+creamce::repo_urls :                 [ "http://igi-01.pd.infn.it/mrepo/grid-dev/rpms/repos/centos7/emi-all.repo" ]
+
+gridftp::params::certificate :       "/etc/grid-security/hostcert.pem"
+gridftp::params::key :               "/etc/grid-security/hostkey.pem"
+gridftp::params::port :              2811
 
 creamce::queues :
     long :  { groups : [ dteam, dteamprod ] }
@@ -242,10 +249,9 @@ creamce::hardware_table :
         ce_os_name : "CentOS",
         ce_os_arch : "x86_64",
         ce_os_release : "7.0.1406",
-        ce_os_version : "7",
         ce_outboundip : true,
         ce_inboundip : false,
-        ce_runtimeenv : [ LCG-2 LCG-2_1_0 LCG-2_1_1 LCG-2_2_0 ],
+        ce_runtimeenv : [ "LCG-2", "LCG-2_1_0", "LCG-2_1_1", "LCG-2_2_0" ],
         subcluster_tmpdir : /var/tmp/subcluster001,
         subcluster_wntmdir : /var/glite/subcluster001,
         ce_benchmarks : { specfp2000 : 420, specint2000 : 380, hep-spec06 : 780 },
@@ -256,13 +262,6 @@ creamce::se_table :
     storage.pd.infn.it : { mount_dir : "/data/mount", export_dir : "/storage/export", type : Storm }
     cloud.pd.infn.it : { mount_dir : "/data/mount", export_dir : "/storage/export",  type : Dcache }
 
-creamce::info::capability : [ "CloudSupport=false", "Multinode=true" ]
-
-creamce::repo_urls : [ "http://igi-01.pd.infn.it/mrepo/grid-dev/rpms/repos/centos7/emi-all.repo" ]
-
-gridftp::params::certificate : "/etc/grid-security/hostcert.pem"
-gridftp::params::key : "/etc/grid-security/hostkey.pem"
-gridftp::params::port : 2811
 
 ```
 
