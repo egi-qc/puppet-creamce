@@ -13,6 +13,10 @@
     {"name": "CERNOps-bdii", "version": ">= 0.1.0"},
     {"name": "lcgdm-gridftp", "version": ">= 0.2.2"},
     {"name": "puppetlabs-mysql", "version": ">= 3.9.0"}
-  ]
+  ],
+  "operatingsystem_support": [
+     {"operatingsystem": "CentOS", "operatingsystemrelease": [ "7.0.1406" ]},
+  ],
+  "tags": [ "cream", "creamce", "emi", "umd" ]
 }
 
