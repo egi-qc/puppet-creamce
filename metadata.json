@@ -1,6 +1,6 @@
 {
-  "name": "puppet-creamce",
-  "version": "0.1.0",
+  "name": "infnpd-creamce",
+  "version": "0.0.1",
   "author": "blah-cream@lists.infn.it",
   "summary": "This modules provides classes and definitions required to manage and properly configure an EMI creamce service.",
   "license": "Apache 2.0",
