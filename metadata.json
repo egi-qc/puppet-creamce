@@ -15,8 +15,8 @@
     {"name": "puppetlabs-mysql", "version": ">= 3.9.0"}
   ],
   "operatingsystem_support": [
-     {"operatingsystem": "CentOS", "operatingsystemrelease": [ "7.0.1406" ]},
+     {"operatingsystem": "CentOS", "operatingsystemrelease": [ "7.0.1406" ]}
   ],
-  "tags": [ "cream", "creamce", "emi", "umd" ]
+  "tags": [ "cream", "creamce", "emi", "umd", "grid" ]
 }
 
