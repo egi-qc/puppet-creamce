@@ -96,10 +96,10 @@ module Puppet::Parser::Functions
       end
 
       cdata["instances"] = cdata["wn_list"].length
-      cdata["smpsize"] = cdata["logcpu"]/cdata["instances"]
       cdata["physcpu"] = cdata["physcpu_perhost"] * cdata["instances"]
       cdata["logcpu"] = cdata["logcpu_perhost"] * cdata["instances"]
       cdata["cores"] = cdata["logcpu"]/cdata["physcpu"]
+      cdata["smpsize"] = cdata["logcpu"]/cdata["instances"]
 
       if cdata["otherdescr"] == ""
         cdata["full_otherdescr"] = "Cores=#{cdata['cores']}"
