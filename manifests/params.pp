@@ -135,6 +135,8 @@ class creamce::params {
 
   $slurm_config_ssh          = hiera("slurm::config_ssh", true)
   $slurm_sched_opts          = hiera("slurm::sched_opts", { "cycle_time" => "0" })
+  
+  $condor_sched_opts         = hiera("condor::sched_opts", { "cycle_time" => "0" })
 
   $shosts_equiv_extras       = hiera("shosts_equiv_extras", [])
 

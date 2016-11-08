@@ -1,0 +1,25 @@
+# Built by puppet, DO NOT EDIT
+
+[Main]
+outputformat: both
+bdii-configfile: /etc/bdii/bdii.conf
+<% if @glue_2_1 -%>
+enable_glue_2_1: true
+<% end -%>
+vomap :
+<% @vo_group_table.each do | group , voname | -%>
+  <%=group-%>:<%=voname%>
+<% end -%>
+
+[LRMS]
+lrms_backend_cmd: /usr/libexec/lrmsinfo-condor
+
+[Scheduler]
+<% @condor_sched_opts.each do | optname, optvalue | -%>
+<%=optname-%>: <%=optvalue%>
+<% end -%>
+
+[WSInterface]
+status-probe : "/usr/libexec/glite-ce-check-submission-state /etc/glite-ce-dbtool/creamdb_min_access.conf"
+
+
