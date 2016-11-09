@@ -3,6 +3,8 @@ class creamce::condor inherits creamce::params {
   include creamce::blah
   require creamce::gip
   
+  $vo_group_table = build_vo_group_table($voenv)
+  
   # ##################################################################################################
   # configure blah for Condor
   # ##################################################################################################
