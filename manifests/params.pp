@@ -127,16 +127,21 @@ class creamce::params {
   $torque_use_maui           = hiera("torque::use_maui", false)
   $torque_sched_opts         = hiera("torque::sched_opts", { "cycle_time" => "0" })
   $torque_ssh_cron_sched     = hiera("torque::ssh_cron_sched", "05 1,7,13,19 * * *")
+  $torque_caching_filter     = hiera("torque::command_caching_filter", "")
   $munge_key_path            = hiera("munge::key_path", "")
 
   $lsf_primary_master        = hiera("lsf::primary_master", undef)
   $lsf_secondary_master      = hiera("lsf::secondary_master", undef)
+  $lsf_caching_filter        = hiera("lsf::command_caching_filter", "")
   $lsf_conf_afs_path         = hiera("lsf::conf_afs_path", undef)
 
   $slurm_config_ssh          = hiera("slurm::config_ssh", true)
   $slurm_sched_opts          = hiera("slurm::sched_opts", { "cycle_time" => "0" })
+  $slurm_caching_filter      = hiera("slurm::command_caching_filter", "")
   
   $condor_sched_opts         = hiera("condor::sched_opts", { "cycle_time" => "0" })
+  $condor_caching_filter     = hiera("condor::command_caching_filter", "")
+  $condor_user_history       = hiera("condor::use_history", false)
 
   $shosts_equiv_extras       = hiera("shosts_equiv_extras", [])
 

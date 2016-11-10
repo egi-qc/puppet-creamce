@@ -3,6 +3,9 @@
 [Main]
 outputformat: both
 bdii-configfile: /etc/bdii/bdii.conf
+<% if @glue_2_1 -%>
+enable_glue_2_1: true
+<% end -%>
 vomap :
 <% @vo_group_table.each do | group , voname | -%>
   <%=group-%>:<%=voname%>

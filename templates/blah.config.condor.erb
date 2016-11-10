@@ -1,31 +1,112 @@
 # WARNING: THIS FILE IS WRITTEN BY PUPPET
 #
 
-# Supported batch systems
+# #############################################################################
+# Blah common variables
+# #############################################################################
+
 supported_lrms=<%=@batch_system%>
+
+BLAHPD_ACCOUNTING_INFO_LOG=/var/log/cream/accounting/blahp.log
+
+blah_disable_wn_proxy_renewal=yes
+
+blah_delegate_renewed_proxies=no
+
+blah_max_threaded_cmds=500
+
+blah_graceful_kill_timeout=20
+
+blah_enable_glexec_from_condor=no
+
+blah_children_restart_interval=0
+
+blah_check_children_interval=<%=@blah_check_children%>
+
+blah_require_proxy_on_submit=no
+
+blah_disable_proxy_user_copy=yes
 
 blah_child_poll_timeout=<%=@blah_child_poll_timeout%>
 
-alldone_interval=<%=@blah_alldone_interval%>
-
-# Needed to implement the short term solution for proxy renewal (savannah task #8176) 
-blah_disable_wn_proxy_renewal=yes 
-
-# working on glexec -> sudo support 
-blah_disable_proxy_user_copy=yes
 blah_id_mapping_command_sudo="/usr/bin/sudo -H"
+
 blah_set_default_workdir_to_home=yes
 
-# DGAS logfile 
-BLAHPD_ACCOUNTING_INFO_LOG=/var/log/cream/accounting/blahp.log
+# #############################################################################
+# HTCondor common variables
+# #############################################################################
 
-<% if @use_blparser -%>
+condor_binpath=/usr/bin
 
-  # TODO configure with old blparser
+condor_confpath=/etc
 
-<% else -%>
+condor_spoolpath=
 
-  # TODO configure update
+condor_nochecksubmission=yes
+
+condor_nologaccess=
+
+condor_fallback=no
+
+
+# #############################################################################
+# BUpdater/BNotifier common variables
+# #############################################################################
+
+bupdater_pidfile=/var/blah/blah_bupdater.pid
+
+job_registry=/var/blah/user_blah_job_registry.bjr
+
+job_registry_use_mmap=yes
+
+async_notification_host=
+
+async_notification_port=<%=@bupdater_notify_port%>
+
+bupdater_debug_level=2
+
+bupdater_debug_logfile=/var/log/cream/glite-ce-bupdater.log
+
+purge_interval=<%=@bupdater_purge_interval%>
+
+finalstate_query_interval=30
+
+alldone_interval=<%=@blah_alldone_interval%>
+
+batch_command_caching_filter=
+
+bupdater_child_poll_timeout=
+
+job_registry_add_remote=
+
+bupdater_consistency_check_interval=
+
+bupdater_loop_interval=<%=@bupdater_loop_interval%>
+
+bnotifier_path=/usr/libexec/BNotifier
+
+bnotifier_pidfile=/var/blah/blah_bnotifier.pid
+
+bnotifier_debug_level=2
+
+bnotifier_debug_logfile=/var/log/cream/glite-ce-bnotifier.log
+
+# #############################################################################
+# BUpdater/BNotifier HTCondor variables
+# #############################################################################
+
+bupdater_path=/usr/libexec/BUpdaterCondor
+
+<% if @condor_caching_filter != "" -%>
+condor_batch_caching_enabled=yes
+
+batch_command_caching_filter=<%=@condor_caching_filter%>
 
 <% end -%>
+<% if@condor_user_history -%>
+bupdater_use_condor_history=yes
+<% end -%>
+
+
 
