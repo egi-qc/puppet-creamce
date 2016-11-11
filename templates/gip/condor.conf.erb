@@ -1,0 +1,38 @@
+# Built by puppet, DO NOT EDIT
+
+outputformat="both"
+
+glue1_ldif_file="<%=@gippath-%>/ldif/static-file-CE.ldif"
+glue2_static_file_computing_manager="<%=@gippath-%>/ldif/ComputingManager.ldif"
+glue2_static_file_computing_share="<%=@gippath-%>/ldif/ComputingShare.ldif"
+
+<% if @condor_deploy_mode == "queue_to_schedd" -%>
+deployment="queue_to_schedd"
+
+<% elsif @condor_deploy_mode == "queue_to_jobattribute" -%>
+deployment="queue_to_jobattribute"
+
+queue_attribute="<%=@condor_queue_attr-%>"
+
+queues="<%=@grid_queues.keys.join(" ")-%>"
+
+<% @grid_queues.each do | qname, qdata |
+     qdata.each do | key, value | -%>
+
+<% if key == "max_wall_clock_time" -%>
+<%=qname%>_MaxWallClockTime=<%=value%>
+<% elsif key == "max_cpu_time" -%>
+<%=qname%>_MaxCPUTime=<%=value%>
+<% elsif key == "glue_status" -%>
+<%=qname%>_GlueStatus=<%=value%>
+<% elsif key == "max_main_memory" -%>
+<%=qname%>_MaxMainMemory=<%=value%>
+<% elsif key == "max_virtual_memory" -%>
+<%=qname%>_MaxVirtualMemory=<%=value%>
+<% elsif key == "max_slots_per_job" -%>
+<%=qname%>_MaxSlotsPerJob=<%=value%>
+<% end -%>
+<%   end
+   end -%>
+<% end -%>
+

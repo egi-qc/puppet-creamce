@@ -142,6 +142,8 @@ class creamce::params {
   $condor_sched_opts         = hiera("condor::sched_opts", { "cycle_time" => "0" })
   $condor_caching_filter     = hiera("condor::command_caching_filter", "")
   $condor_user_history       = hiera("condor::use_history", false)
+  $condor_deploy_mode        = hiera("condor::deployment_mode", "queue_to_schedd")
+  $condor_queue_attr         = hiera("condor::queue_attribute", undef)
 
   $shosts_equiv_extras       = hiera("shosts_equiv_extras", [])
 
