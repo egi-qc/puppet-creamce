@@ -251,11 +251,25 @@ creamce::hardware_table :
         ce_os_release : "7.0.1406",
         ce_outboundip : true,
         ce_inboundip : false,
-        ce_runtimeenv : [ "LCG-2", "LCG-2_1_0", "LCG-2_1_1", "LCG-2_2_0" ],
+        ce_runtimeenv : [ "tomcat_6_0", "mysql_5_1" ],
         subcluster_tmpdir : /var/tmp/subcluster001,
         subcluster_wntmdir : /var/glite/subcluster001,
         ce_benchmarks : { specfp2000 : 420, specint2000 : 380, hep-spec06 : 780 },
         nodes : [ "node-01.test.pd.infn.it" ]
+    }
+
+creamce::software_table :
+    tomcat_6_0 : {
+        name : "tomcat",
+        version : "6.0.24",
+        license : "ASL 2.0",
+        description : "Tomcat is the servlet container" 
+    }
+    mysql_5_1 : {
+        name : "mysql",
+        version : "5.1.73",
+        license : "GPLv2 with exceptions",
+        description : "MySQL is a multi-user, multi-threaded SQL database server" 
     }
 
 creamce::se_table :

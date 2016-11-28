@@ -226,6 +226,7 @@ class creamce::params {
   $workarea_mslot_total    = hiera('creamce::workarea::mslot_total', 0)
   $workarea_mslot_free     = hiera('creamce::workarea::mslot_free', 0)
   $workarea_mslot_lifetime = hiera('creamce::workarea::mslot_lifetime', 0)
+  $applications            = hiera('creamce::software_table', {})
   
   #
   # Locallogger
