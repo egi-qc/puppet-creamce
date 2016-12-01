@@ -85,11 +85,17 @@ Glue2EntityName: <%=apptag%>
 GLUE2ApplicationEnvironmentID: <%=apptag%>
 GLUE2ApplicationEnvironmentAppName: <%=appdata["name"]%>
 GLUE2ApplicationEnvironmentAppVersion: <%=appdata["version"]%>
+GLUE2ApplicationEnvironmentComputingManagerForeignKey: <%=@computing_service_id-%>_Manager
 <% if appdata.has_key?("license") -%>
 GLUE2ApplicationEnvironmentLicense: <%=appdata["license"]%>
 <% end -%>
 <% if appdata.has_key?("description") -%>
 GLUE2ApplicationEnvironmentDescription: <%=appdata["description"]%>
+<% @cluster_list.each do | cdata | 
+     if cdata["runtimeenv"].index(apptag) != nil  -%>
+GLUE2ApplicationEnvironmentExecutionEnvironmentForeignKey: <%=cdata["id"]%>
+<%   end
+   end-%>
 
 <% end -%>
 <% end -%>
