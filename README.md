@@ -54,7 +54,7 @@ puppet module to install and configure a cream CE (EMI3)
 * **creamce::default_pool_size** (_integer_): TODO, default 100
 * **creamce::site::name** (_string_): TODO, default the host name
 * **creamce::site::email** (_string_): TODO, default undefined
-* **creamce::batch_system** (_string_): TODO, **mandatory**
+* **creamce::batch_system** (_string_): The installed batch system, **mandatory**, one of "pbs", "slurm", "condor", "lsf"
 
 ### CREAM Database
 * **creamce::mysql::root_password** (_string_): root password for the database administrator, **mandatory**
@@ -193,16 +193,33 @@ The VO table is a hash with the following structure:
 * the key of an entry in the table is the name or ID of the virtual organization
 * the value of an entry in the table is a hash table containing the definitions for the virtual organization,
 the supported keys for definitions are:
- * **servers** (_list_): The list of VOMS servers, each item in the list is a hash with the following keys:
-  * **server** (_string_):
-  * **port** (_integer_):
-  * **dn** (_string_):
-  * **ca_dn** (_string_):
- * **groups** (_hash_):
- * **users** (_hash_):
- * **vo_sw_dir** (_string_):
- * **vo_app_dir** (_string_):
- * **vo_default_se** (_string_):
+ * **servers** (_list_): The list of VOMS servers, **mandatory**, each item in the list is a hash with the following keys:
+  * **server** (_string_): The VOMS server FQDN, **mandatory**
+  * **port** (_integer_): The VOMS server port, **mandatory**
+  * **dn** (_string_): The distinguished name of the VOMS server, as declared in the VOMS service certificate, **mandatory**
+  * **ca_dn** (_string_): The distinguished name of the issuer of the VOMS service certificate, **mandatory**
+ * **groups** (_hash_): The list of local groups and associated FQANs, **mandatory**, each key of the hash is the group name,
+each value is a hash with the following keys:
+  * **gid** (_string_): The unix group id, **mandatory**
+  * **fqan** (_list_): The list of VOMS Fully Qualified Attribute Name, **mandatory**
+  * **pub_admin** (_boolean_): True if the group is the defined administrator group, default false,
+just one administrator group is supported
+ * **users** (_hash_): The description of the pool account, **mandatory**, each key of the hash is the pool account prefix,
+each value is a hash with the following keys:
+  * **first_uid** (_integer_): The initial number for the unix user id of the pool account, **mandatory**, the other ids are
+obtained incrementally (step 1)
+  * **name_pattern** (_list_): The pattern used to create the user name of the pool account, the variables used for the 
+substitutions are "prefix", the pool account prefix, and "index", the current user id; the expression is described in
+https://ruby-doc.org/core-2.2.0/Kernel.html#method-i-sprintf, default value is `%<prefix>s%03<index>d`
+  * **groups** (_list_): The list of group for the current account, **mandatory**, the first element of the list is
+the primary group, each element must be defined in **groups**
+  * **pool_size** (_integer_): The number of user in the current pool account, the default value is global definition
+contained into **creamce::default_pool_size**
+ * **vo_sw_dir** (_string_): Th base directory for installation of the software used by the current Virtual Organization
+ * **vo_app_dir** (_string_): The path of a shared directory available for application data for the current Virtual Organization,
+as describe by Info.ApplicationDir in GLUE 1.3. 
+ * **vo_default_se** (_string_): The default Storage Element associated with the current Virtual Organization.
+It must be one of the key of the storage element table
 
 
 
