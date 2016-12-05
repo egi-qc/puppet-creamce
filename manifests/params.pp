@@ -210,7 +210,7 @@ class creamce::params {
   $info_group              = hiera("bdii::params::group", "ldap")
   $info_port               = hiera('bdii::params::port', 2170)
   $subclusters             = hiera('creamce::hardware_table', {})
-  $clustermode             = hiera('creamce::cluster_mode', "false")
+  $clustermode             = hiera('creamce::cluster_mode', false)
   $glue_2_1                = hiera('creamce::info::glue21_draft', false)
   $gippath                 = hiera('creamce::info::gip_path', "/var/lib/bdii/gip")
   $info_type               = hiera('creamce::info::type', "resource")

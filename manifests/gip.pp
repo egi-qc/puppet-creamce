@@ -13,6 +13,29 @@ class creamce::gip inherits creamce::params {
     require  => Class[Bdii::Config],
   }
   
+  if $glue_2_1 {
+    file { "/etc/ldap/schema/GLUE2.1-draft.schema":
+      ensure  => file,
+      owner  => "root",
+      group  => "root",
+      mode   => 0744,
+      content => template("creamce/GLUE2.1-draft.schema.erb"),
+      require => Class[Bdii::Config],
+    }
+
+    exec { "replace_glue_schema_top":
+      command => "/usr/bin/sed -i 's/GLUE20.schema/GLUE2.1-draft.schema/g' /etc/bdii/bdii-top-slapd.conf",
+      require => File["/etc/ldap/schema/GLUE2.1-draft.schema"],
+      notify  => Class[Bdii::Service],
+    }
+
+    exec { "replace_glue_schema_resource":
+      command => "/usr/bin/sed -i 's/GLUE20.schema/GLUE2.1-draft.schema/g' /etc/bdii/bdii-slapd.conf",
+      require => File["/etc/ldap/schema/GLUE2.1-draft.schema"],
+      notify  => Class[Bdii::Service],
+    }
+  }
+  
   file { "/var/tmp/puppet-creamce":
     ensure => directory,
     owner  => "root",
@@ -180,7 +203,7 @@ class creamce::gip inherits creamce::params {
   
   
   
-  if ($clustermode == "true") {
+  if $clustermode {
   
     # ################################################################################################
     # ldif files
