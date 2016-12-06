@@ -118,7 +118,6 @@ class creamce::params {
   $bupdater_logrot_size      = hiera("blah::bupdater::logrotate::size", "10M")
   
   $torque_config_client      = hiera("torque::config::client", true)
-  $torque_config_ssh         = hiera("torque::config::ssh", true)
   $torque_config_pool        = hiera("torque::config::pool", true)
   $torque_server             = hiera("torque::host", "${::fqdn}")
   $torque_log_dir            = hiera("torque::log_dir", "/var/lib/torque/")
@@ -126,7 +125,6 @@ class creamce::params {
   $torque_tracejob_logs      = hiera("torque::tracejob_logs", 2)
   $torque_use_maui           = hiera("torque::use_maui", false)
   $torque_sched_opts         = hiera("torque::sched_opts", { "cycle_time" => "0" })
-  $torque_ssh_cron_sched     = hiera("torque::ssh_cron_sched", "05 1,7,13,19 * * *")
   $torque_caching_filter     = hiera("torque::command_caching_filter", "")
   $munge_key_path            = hiera("munge::key_path", "")
 
@@ -135,7 +133,7 @@ class creamce::params {
   $lsf_caching_filter        = hiera("lsf::command_caching_filter", "")
   $lsf_conf_afs_path         = hiera("lsf::conf_afs_path", undef)
 
-  $slurm_config_ssh          = hiera("slurm::config_ssh", true)
+  $slurm_master              = hiera("slurm::master_host", "${::fqdn}")
   $slurm_sched_opts          = hiera("slurm::sched_opts", { "cycle_time" => "0" })
   $slurm_caching_filter      = hiera("slurm::command_caching_filter", "")
   
@@ -145,8 +143,9 @@ class creamce::params {
   $condor_deploy_mode        = hiera("condor::deployment_mode", "queue_to_schedd")
   $condor_queue_attr         = hiera("condor::queue_attribute", undef)
 
-  $shosts_equiv_extras       = hiera("shosts_equiv_extras", [])
-
+  $cream_config_ssh          = hiera("creamce::config_ssh", false)
+  $shosts_equiv_extras       = hiera("creamce::shosts_equiv_extras", [])
+  $ssh_cron_sched            = hiera("creamce::ssh_cron_sched", "05 1,7,13,19 * * *")
 
 
   #

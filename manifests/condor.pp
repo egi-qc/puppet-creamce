@@ -62,4 +62,17 @@ class creamce::condor inherits creamce::params {
     require => File["/etc/lrms/condor.conf"],
     notify  => Class[Bdii::Service],
   }
+  
+  # ##################################################################################################
+  # Condor client
+  # ##################################################################################################
+  
+  if $cream_config_ssh {
+    
+      class { 'creamce::sshconfig':
+        lrms_host_script => "echo "
+      }
+
+  }
+
 }

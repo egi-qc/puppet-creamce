@@ -140,60 +140,16 @@ class creamce::torque inherits creamce::params {
       }
 
     }
-
-    if $torque_config_ssh {
-
-      exec { "cleanup_sshd_config":
-        command => "/bin/sed -i -e '/^\s*HostbasedAuthentication/d' -e '/^\s*IgnoreUserKnownHosts/d' -e '/^\s*IgnoreRhosts/d' /etc/ssh/sshd_config",
-      }
-
-      exec { "fillin_sshd_config":
-        command => "/bin/echo \"
-HostbasedAuthentication = yes
-IgnoreUserKnownHosts yes
-IgnoreRhosts yes\" >> /etc/ssh/sshd_config",
-        require => Exec["cleanup_sshd_config"],
-        notify  => Service["sshd"],
-      }
-
-
-      $se_host_list = join(keys($se_list), " ")
-      $lrms_host_list = "${torque_server} ${ce_host} ${se_host_list}"
-      $extra_host_list = join($shosts_equiv_extras, " ")
-      $lrms_host_script = "/usr/bin/pbsnodes -a -s ${torque_server}"
     
-      file { "/usr/sbin/puppet-lrms-shostsconfig":
-        ensure  => present,
-        owner   => "root",
-        group   => "root",
-        mode    => 0744,
-        content => template("creamce/puppet-lrms-shostsconfig.erb"),
-      }
-    
-      file { "/etc/cron.d/puppet-lrms-shostsconfig":
-        ensure  => present,
-        owner   => "root",
-        group   => "root",
-        mode    => 0644,
-        content => "${torque_ssh_cron_sched} root /usr/sbin/puppet-lrms-shostsconfig",
-        require => File["/usr/sbin/puppet-lrms-shostsconfig"],
-      }
+  }
 
-      exec { "/usr/sbin/puppet-lrms-shostsconfig":
-        require => [ File["/usr/sbin/puppet-lrms-shostsconfig"], Service[ "munge", "trqauthd" ] ],
-        notify  => Service["sshd"],
-      }
-      
-      service { "sshd":
-        ensure     => running,
-        enable     => true,
-        hasstatus  => true,
-        hasrestart => true,
-        alias      => "sshd",
-      }
+  if $cream_config_ssh {
 
+    class { 'creamce::sshconfig':
+      lrms_host_script => "/usr/bin/pbsnodes -a -s ${torque_server}",
+      lrms_master_node => $torque_server
     }
-    
+
   }
 
   define queue_member ($queue, $group, $dep_resources = undef) {
