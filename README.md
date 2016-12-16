@@ -227,7 +227,8 @@ It must be one of the key of the storage element table
 Install EPEL extension: `yum -y install epel-release`
 Install puppet: `yum -y install puppet`
 
-Check if the hostname and FQDN is correctly detected by puppet: `puppet module install 
+Check if the hostname and FQDN is correctly detected by puppet:
+```
 facter | grep hostname
 facter | grep fqdn
 ```
