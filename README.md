@@ -220,7 +220,43 @@ It must be one of the key of the storage element table
 
 
 
-### Example of mininal configuration
+## Example of stand-alone installation and configuration for CentOS 7
+
+### Puppet setup
+
+Install EPEL extension: `yum -y install epel-release`
+Install puppet: `yum -y install puppet`
+
+Check if the hostname and FQDN is correctly detected by puppet: `puppet module install 
+facter | grep hostname
+facter | grep fqdn
+```
+In the following examples the FQHN will be myhost.mydomain
+
+Install the CREAM CE module for puppet: `puppet module install infnpd-creamce`
+Apply the patch described in the tips&tricks section
+
+Create the required directories: `mkdir -p /etc/puppet/manifests /var/lib/hiera/node`
+Edit the file `/etc/puppet/manifests/site.pp` as:
+```
+node 'myhost.mydomain' {
+  require creamce
+}
+```
+Edit the file `/etc/hiera.yaml` as:
+```
+---
+:backends:
+  - yaml
+:hierarchy:
+  - "node/%{fqdn}"
+:yaml:
+  :datadir: /var/lib/hiera
+```
+
+Link the hiera configuration to puppet: `ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml`
+
+Edit the CREAM CE description file, an example of minimal configuration is:
 ```
 ---
 creamce::mysql::root_password :      mysqlp@$$w0rd
@@ -297,7 +333,7 @@ creamce::hardware_table :
         subcluster_tmpdir : /var/tmp/subcluster001,
         subcluster_wntmdir : /var/glite/subcluster001,
         ce_benchmarks : { specfp2000 : 420, specint2000 : 380, hep-spec06 : 780 },
-        nodes : [ "node-01.test.pd.infn.it" ]
+        nodes : [ "node-01.mydomain", "node-02.mydomain", "node-03.mydomain" ]
     }
 
 creamce::software_table :
@@ -317,10 +353,13 @@ creamce::software_table :
 creamce::se_table :
     storage.pd.infn.it : { mount_dir : "/data/mount", export_dir : "/storage/export", type : Storm }
     cloud.pd.infn.it : { mount_dir : "/data/mount", export_dir : "/storage/export",  type : Dcache }
-
-
 ```
 
+Create the directory for credential: `mkdir -p /etc/grid-security`
+Deploy the host key in `/etc/grid-security/hostkey.pem`
+Deploy the host certificate in `/etc/grid-security/hostcert.pem`
+
+Run puppet: `puppet apply --verbose /etc/puppet/manifests/site.pp`
 
 ## Tips, tricks and work-arounds
 
