@@ -168,13 +168,12 @@ associated Storage Service (this is typically an NFS mount point)
 Service (this is typically an NFS exported directory).
 
 ### CREAM security
-* **creamce::host_certificate** (_string_): TODO, default /etc/grid-security/hostcert.pem
-* **creamce::host_private_key** (_string_): TODO, default /etc/grid-security/hostkey.pem
-* **creamce::cacert_dir** (_string_): TODO, default /etc/grid-security/certificates
-* **creamce::voms_dir** (_string_): TODO, default /etc/grid-security/vomsdir
-* **creamce::gridmap_dir** (_string_): TODO, default /etc/grid-security/gridmapdir
-* **creamce::gridmap_file** (_string_): TODO, default /etc/grid-security/grid-mapfile
-* **creamce::gridmap_extras** (_list_): TODO, default empty list
+* **creamce::host_certificate** (_string_): The complete path of the installed host certificate, default /etc/grid-security/hostcert.pem
+* **creamce::host_private_key** (_string_): The complete path of the installed host key, default /etc/grid-security/hostkey.pem
+* **creamce::voms_dir** (_string_): The location for the deployment of VO description files (LSC), default /etc/grid-security/vomsdir
+* **creamce::gridmap_dir** (_string_): The location for the pool account files, default /etc/grid-security/gridmapdir
+* **creamce::gridmap_file** (_string_): The location of the pool account description file, default /etc/grid-security/grid-mapfile
+* **creamce::gridmap_extras** (_list_): The list of custom entry for the pool account description file, default empty list
 * **creamce::gridmap_cron_sched** (_string_): TODO, default "5 * * * *"
 * **creamce::groupmap_file** (_string_): TODO, default /etc/grid-security/groupmapfile')
 * **creamce::crl_update_time** (_integer_): TODO, default 3600
@@ -225,6 +224,7 @@ It must be one of the key of the storage element table
 ### Puppet setup
 
 Install EPEL extension: `yum -y install epel-release`
+
 Install puppet: `yum -y install puppet`
 
 Check if the hostname and FQDN is correctly detected by puppet:
@@ -235,15 +235,18 @@ facter | grep fqdn
 In the following examples the FQHN will be myhost.mydomain
 
 Install the CREAM CE module for puppet: `puppet module install infnpd-creamce`
+
 Apply the patch described in the tips&tricks section
 
 Create the required directories: `mkdir -p /etc/puppet/manifests /var/lib/hiera/node`
+
 Edit the file `/etc/puppet/manifests/site.pp` as:
 ```
 node 'myhost.mydomain' {
   require creamce
 }
 ```
+
 Edit the file `/etc/hiera.yaml` as:
 ```
 ---
@@ -357,7 +360,9 @@ creamce::se_table :
 ```
 
 Create the directory for credential: `mkdir -p /etc/grid-security`
+
 Deploy the host key in `/etc/grid-security/hostkey.pem`
+
 Deploy the host certificate in `/etc/grid-security/hostcert.pem`
 
 Run puppet: `puppet apply --verbose /etc/puppet/manifests/site.pp`
