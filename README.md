@@ -67,7 +67,8 @@ The sleep time between the first attempt and the second one is the “initial wa
 * **creamce::mysql::max_active** (_integer_): TODO, default 200
 * **creamce::mysql::min_idle** (_integer_): TODO, default 30
 * **creamce::mysql::max_wait** (_integer_): TODO, default 10000
-* **creamce::mysql::override_options** (_hash_): TODO, default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" }}`"
+* **creamce::mysql::override_options** (_hash_): see the override option defined in https://forge.puppet.com/puppetlabs/mysql,
+default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" }}`"
 * **creamce::creamdb::name** (_string_): The database name for the CREAM service, default "creamdb"
 * **creamce::creamdb::user** (_string_): The database user name with user acting as main operator, default "cream"
 * **creamce::creamdb::host** (_string_): The fully qualified host name for any CE databases, default the host name
@@ -76,10 +77,10 @@ The sleep time between the first attempt and the second one is the “initial wa
 * **creamce::delegationdb::name** (_string_): The database name for the Delegation Service, default "delegationcreamdb"
 
 ### BLAH
-* **blah::config_file** (_string_): TODO, default "/etc/blah.config"
+* **blah::config_file** (_string_): The path of the main BLAH configuration file, default "/etc/blah.config"
 * **blah::child_poll_timeout** (_integer_): TODO, default 200
 * **blah::alldone_interval** (_integer_): TODO, default 86400
-* **blah::use_blparser** (_boolean_): TODO, default false
+* **blah::use_blparser** (_boolean_): If true it enables the BLParser service otherwise BUpdater/BNotifier is used, default false
 * **blah::blp::host** (_string_): TODO, default undefined
 * **blah::blp::port** (_integer_): TODO, default 33333
 * **blah::blp::num** (_integer_): TODO, default 1
@@ -95,25 +96,32 @@ The sleep time between the first attempt and the second one is the “initial wa
 * **blah::bupdater::notify_port** (_integer_): TODO, default 56554
 * **blah::bupdater::purge_interval** (_integer_): TODO, default 2500000
 * **blah::bupdater::logrotate::interval** (_integer_): TODO, default 50
-* **blah::bupdater::logrotate::size** (_string_): TODO, default "10M"
+* **blah::bupdater::logrotate::size** (_string_): The size of a log file in MB, default "10M"
 
 ### CREAM information system
-* **bdii::params::user** (_string_): TODO, default "ldap"
-* **bdii::params::group** (_string_): TODO, default "ldap"
-* **bdii::params::port** (_integer_): TODO, default 2170
+* **bdii::params::user** (_string_): The local user running the BDII service, default "ldap"
+* **bdii::params::group** (_string_): The local group running the BDII service, default "ldap"
+* **bdii::params::port** (_integer_): The BDII service port, default 2170
 * **creamce::hardware_table** (_hash_): see the section "Hardware table" for further details, default empty hash
-* **creamce::info::gip_path** (_string_): TODO, default "/var/lib/bdii/gip"
-* **creamce::info::capability** (_list_): the list of capability for a CREAM site; it's a list of string, in general with format "name=value", default empty list
+* **creamce::info::capability** (_list_): The list of capability for a CREAM site; it's a list of string,
+in general with format "name=value", default empty list
 * **creamce::se_table** (_hash_): see the section "Storage element table" for further details, default empty hash
 * **creamce::queues** (_hash_): see the section "Queues table" for further details, default empty hash
-* **creamce::workarea::shared** (_boolean_): TODO, default false
-* **creamce::workarea::guaranteed** (_boolean_): TODO, default false
-* **creamce::workarea::total** (_integer_): TODO, default 0
-* **creamce::workarea::free** (_integer_): TODO, default 0
-* **creamce::workarea::lifetime** (_integer_): TODO, default 0
-* **creamce::workarea::mslot_total** (_integer_): TODO, default 0
-* **creamce::workarea::mslot_free** (_integer_): TODO, default 0
-* **creamce::workarea::mslot_lifetime** (_integer_): TODO, default 0
+* **creamce::workarea::shared** (_boolean_): True if the working area is shared across different Execution Environment instances,
+typically via an NFS mount; this attribute applies to single-slot jobs, default false
+* **creamce::workarea::guaranteed** (_boolean_): True if the job is guaranteed the full extent of the WorkingAreaTotal;
+this attribute applies to single-slot jobs, default false
+* **creamce::workarea::total** (_integer_): Total size in GB of the working area available to all single-slot jobs, default 0
+* **creamce::workarea::free** (_integer_): The amount of free space in GB currently available in the working area 
+to all single-slot jobs, default 0 GB
+* **creamce::workarea::lifetime** (_integer_): The minimum guaranteed lifetime in seconds of the files created by single-slot jobs 
+in the working area, default 0 seconds
+* **creamce::workarea::mslot_total** (_integer_): The total size in GB of the working area available to all the multi-slot Grid jobs
+shared across all the Execution Environments, default 0GB
+* **creamce::workarea::mslot_free** (_integer_): The amount of free space in GB currently available in the working area  to all multi-slot jobs
+shared across all the Execution Environments, default 0 GB
+* **creamce::workarea::mslot_lifetime** (_integer_): The minimum guaranteed lifetime in seconds of the files created by multi-slot jobs
+in the working area, default 0 seconds
 
 #### Hardware table
 The hardware table is a hash with the following structure:
@@ -222,7 +230,9 @@ as describe by Info.ApplicationDir in GLUE 1.3.
 * **vo_default_se** (_string_): The default Storage Element associated with the current Virtual Organization.
 It must be one of the key of the storage element table
 
+### GridFTP configuration
 
+For the configuration of the GridFTP service installed on the CREAM CE refer to https://forge.puppet.com/lcgdm/gridftp
 
 ## Example of stand-alone installation and configuration for CentOS 7
 
