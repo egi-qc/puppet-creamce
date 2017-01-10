@@ -1,74 +1,78 @@
 # puppet-creamce
 
-puppet module to install and configure a cream CE (EMI3)
+puppet module to install and configure a cream CE
 
 
 ## YAML configuration Parameters
 
 ### CREAM service
+* **creamce::batch_system** (_string_): The installed batch system, **mandatory**, one of "pbs", "slurm", "condor", "lsf"
 * **creamce::host** (_string_): The fully qualified Computing Element host name, default the host name
 * **creamce::port** (_integer_): The tomcat listen port, default 8443
 * **creamce::quality_level** (_string_): The service level of the Computing Element, default "production"
 * **creamce::environment** (_hash_): The environment variables passed to the CE, default empty hash
-* **creamce::sandbox_path** (_string_): The absolute path for job sandboxes, default "/var/cream_sandbox"
-* **creamce::enable_limiter** (_boolean_): TODO, default true
-* **creamce::limit::load1** (_integer_): TODO, default 400
-* **creamce::limit::load5** (_integer_): TODO, default 400
-* **creamce::limit::load15** (_integer_): TODO, default 200
-* **creamce::limit::memusage** (_integer_): TODO, default 95
-* **creamce::limit::swapusage** (_integer_): TODO, default 95
-* **creamce::limit::fdnum** (_integer_): TODO, default 5000
-* **creamce::limit::diskusage** (_integer_): TODO, default 95
-* **creamce::limit::ftpconn** (_integer_): TODO, default 500
-* **creamce::limit::fdtomcat** (_integer_): TODO, default 8000
-* **creamce::limit::activejobs** (_integer_): TODO, default -1
-* **creamce::limit::pendjobs** (_integer_): TODO, default -1
-* **creamce::queue_size** (_integer_): TODO, default 500
-* **creamce::workerpool_size** (_integer_): TODO, default 50
-* **creamce::blah_timeout** (_integer_): TODO, default 300
-* **creamce::listener_port** (_integer_): TODO, default 49152
-* **creamce::job_purge_rate** (_integer_): TODO, default 300
-* **creamce::blp::retry_delay** (_integer_): TODO, default 60000
-* **creamce::blp::retry_count** (_integer_): TODO, default 100
-* **creamce::lease::time** (_integer_): TODO, default 36000
-* **creamce::lease::rate** (_integer_): TODO, default 30
-* **creamce::purge::aborted** (_integer_): TODO, default 10
-* **creamce::purge::cancel** (_integer_): TODO, default 10
-* **creamce::purge::done** (_integer_): TODO, default 10
-* **creamce::purge::failed** (_integer_): TODO, default 10
-* **creamce::purge::register** (_integer_): TODO, default 2
-* **creamce::delegation::purge_rate** (_integer_): TODO, default 720
-* **creamce::jw::deleg_time_slot** (_integer_): TODO, default 3600
-* **creamce::jw::proxy_retry_wait** (_integer_): TODO, default 60
-* **creamce::jw::retry::count_isb** (_integer_): TODO, default 2
-* **creamce::jw::retry::wait_isb** (_integer_): TODO, default 60
-* **creamce::jw::retry::count_osb** (_integer_): TODO, default 2
-* **creamce::jw::retry::wait_osb** (_integer_): TODO, default 300
-* **creamce::gridenvfile::sh** (_string_): TODO, default "/etc/profile.d/grid-env.sh"
-* **creamce::gridenvfile::csh** (_string_): TODO, default "/etc/profile.d/grid-env.csh"
-* **creamce::cga::logfile** (_string_): TODO, default "/var/log/cleanup-grid-accounts.log"
-* **creamce::cga::cron_sched** (_string_): TODO, default "30 1 * * *"
-* **creamce::at_deny_extras** (_list_): TODO, default empty list
-* **creamce::cron_deny_extras** (_list_): TODO, default empty list
-* **creamce::sudo_logfile** (_string_): TODO, default syslog
-* **creamce::default_pool_size** (_integer_): TODO, default 100
-* **creamce::site::name** (_string_): TODO, default the host name
-* **creamce::site::email** (_string_): TODO, default undefined
-* **creamce::batch_system** (_string_): The installed batch system, **mandatory**, one of "pbs", "slurm", "condor", "lsf"
+* **creamce::sandbox_path** (_string_): The directory where the sandbox files are staged on the CREAM CE node, default "/var/cream_sandbox"
+* **creamce::enable_limiter** (_boolean_): In order to disable the limiter, it is needed to set this parameter value to false and restart the service, default true
+* **creamce::limit::load1** (_integer_): Limiter threshold for the load average (1 minute), default 40
+* **creamce::limit::load5** (_integer_): Limiter threshold for the load average (5 minute), default 40
+* **creamce::limit::load15** (_integer_): Limiter threshold for the load average (15 minute), default 20
+* **creamce::limit::memusage** (_integer_): Limiter threshold for the memory usage, default 95 (percentage)
+* **creamce::limit::swapusage** (_integer_): Limiter threshold for the swap usage, default 95 (percentage)
+* **creamce::limit::fdnum** (_integer_): Limiter threshold for the number of file descriptors, default 500
+* **creamce::limit::diskusage** (_integer_): Limiter threshold for the disk usage, default 95 (percentage)
+* **creamce::limit::ftpconn** (_integer_): Limiter threshold for the number of concurrent ftp connections, default 30
+* **creamce::limit::fdtomcat** (_integer_): Limiter threshold for the number of file descriptors, default 800
+* **creamce::limit::activejobs** (_integer_): Limiter threshold for the number of active jobs, default -1 (unlimited)
+* **creamce::limit::pendjobs** (_integer_): Limiter threshold for the number of pending jobs, default -1 (unlimited)
+* **creamce::blah_timeout** (_integer_): Represents the maximum time interval in seconds accepted by CREAM for the execution of commands by BLAH, default 300 seconds
+* **creamce::listener_port** (_integer_): The port used by CREAM to receive notifications about job status changes sent by the BLParser/JobWrapper, default 49152
+* **creamce::job_purge_rate** (_integer_): Specifies in minutes how often the job purger has to run, default 300 minutes.
+* **creamce::blp::retry_delay** (_integer_): The time interval in seconds between two attempts to contact the BLAH parser, default 60 seconds
+* **creamce::blp::retry_count** (_integer_): Represents the number of attempts to contact the BLAH parser (if it is not reachable) before giving up.
+If -1 is specified, CREAM will never give up , default 100
+* **creamce::lease::time** (_integer_): The maximum allowed lease time in second. 
+If a client specifies a lease time too big, this value is used instead, default 36000 seconds.
+* **creamce::lease::rate** (_integer_): Specifies in minutes how often the job purger has to run, default 30 minutes
+* **creamce::purge::aborted** (_integer_): Specifies in days how often the job purger deletes the aborted jobs, default 10 days
+* **creamce::purge::cancel** (_integer_): Specifies in days how often the job purger deletes the cancelled jobs, default 10 days
+* **creamce::purge::done** (_integer_): Specifies in days how often the job purger deletes the executed jobs, default 10 days
+* **creamce::purge::failed** (_integer_): Specifies in days how often the job purger deletes the failed jobs, default 10 days
+* **creamce::purge::register** (_integer_): Specifies in days how often the job purger deletes the registered jobs, default 2 days
+* **creamce::delegation::purge_rate** (_integer_): specifies how often the delegation purger has to run, default 10 minutes
+* **creamce::jw::proxy_retry_wait** (_integer_): The minimum time interval expressed in seconds, between the first attempt
+and the second one for retrieving the user delegation proxy, default 60
+* **creamce::jw::isb::retry_count** (_integer_): The maximum number of ISB file transfers that should be tried, default 2
+* **creamce::jw::isb::retry_wait** (_integer_):  If during a input sandbox file transfer occurs a failure, the JW retries the operation after a while.
+The sleep time between the first attempt and the second one is the “initial wait time”
+(i.e. the wait time between the first attempt and the second one) expressed in seconds. In every next attempt the sleep time is doubled. Default 60 seconds.
+* **creamce::jw::osb::retry_count** (_integer_): The maximum number of ISB file transfers that should be tried, default 2
+* **creamce::jw::osb::retry_wait** (_integer_): If during a output sandbox file transfer occurs a failure, the JW retries the operation after a while.
+The sleep time between the first attempt and the second one is the “initial wait time”
+(i.e. the wait time between the first attempt and the second one) expressed in seconds. In every next attempt the sleep time is doubled. Default 300 seconds.
+* **creamce::gridenvfile::sh** (_string_): The path of the environment definitions (standard shell), default "/etc/profile.d/grid-env.sh"
+* **creamce::gridenvfile::csh** (_string_): The path of the environment definitions (korn shell), default "/etc/profile.d/grid-env.csh"
+* **creamce::cga::logfile** (_string_): The path of the log file for grid account cleaner, default "/var/log/cleanup-grid-accounts.log"
+* **creamce::cga::cron_sched** (_string_): The time parameters for the grid account cleaner cron script, default "30 1 * * *"
+* **creamce::at_deny_extras** (_list_): Extra items to be inserted into the ban list for the command at, default empty list
+* **creamce::cron_deny_extras** (_list_): Extra items to be inserted into the ban list for cron, default empty list
+* **creamce::sudo_logfile** (_string_): The path of the log file for sudo, default empty string (log on syslog)
+* **creamce::default_pool_size** (_integer_): The default number of users in a pool account, used if **pool_size** is not define for a VO group, default 100
+* **creamce::site::name** (_string_): The human-readable name of your site., default the host name
+* **creamce::site::email** (_string_): The main email contact for the site. The syntax is a coma separated list of email addresses, default undefined
 
 ### CREAM Database
 * **creamce::mysql::root_password** (_string_): root password for the database administrator, **mandatory**
+* **creamce::creamdb::password** (_string_): The database user password for the main operator, **mandatory**
+* **creamce::creamdb::minpriv_password** (_string_): The database user password for the monitor agent, **mandatory**
 * **creamce::mysql::max_active** (_integer_): TODO, default 200
 * **creamce::mysql::min_idle** (_integer_): TODO, default 30
 * **creamce::mysql::max_wait** (_integer_): TODO, default 10000
 * **creamce::mysql::override_options** (_hash_): TODO, default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" }}`"
 * **creamce::creamdb::name** (_string_): The database name for the CREAM service, default "creamdb"
 * **creamce::creamdb::user** (_string_): The database user name with user acting as main operator, default "cream"
-* **creamce::creamdb::password** (_string_): The database user password for the main operator, **mandatory**
 * **creamce::creamdb::host** (_string_): The fully qualified host name for any CE databases, default the host name
 * **creamce::creamdb::port** (_integer_): The mysql listen port for any CE databases, default 3306
 * **creamce::creamdb::minpriv_user** (_string_): The database user name with user acting as monitor agent, default "minprivuser"
-* **creamce::creamdb::minpriv_password** (_string_): The database user password for the monitor agent, **mandatory**
 * **creamce::delegationdb::name** (_string_): The database name for the Delegation Service, default "delegationcreamdb"
 
 ### BLAH
@@ -174,21 +178,22 @@ Service (this is typically an NFS exported directory).
 * **creamce::gridmap_dir** (_string_): The location for the pool account files, default /etc/grid-security/gridmapdir
 * **creamce::gridmap_file** (_string_): The location of the pool account description file, default /etc/grid-security/grid-mapfile
 * **creamce::gridmap_extras** (_list_): The list of custom entry for the pool account description file, default empty list
-* **creamce::gridmap_cron_sched** (_string_): TODO, default "5 * * * *"
-* **creamce::groupmap_file** (_string_): TODO, default /etc/grid-security/groupmapfile')
-* **creamce::crl_update_time** (_integer_): TODO, default 3600
-* **creamce::ban_list_file** (_string_): TODO, default /etc/lcas/ban_users.db')
+* **creamce::gridmap_cron_sched** (_string_): The time parameters for the pool account cleaner, default "5 * * * *"
+* **creamce::groupmap_file** (_string_): The path of the groupmap file, default /etc/grid-security/groupmapfile
+* **creamce::crl_update_time** (_integer_): The CRL refresh time in seconds, default 3600 seconds
+* **creamce::ban_list_file** (_string_): The path of the ban list file, if gJAF/LCMAPS is used, default /etc/lcas/ban_users.db'
 * **creamce::use_argus** (_boolean_): True if Argus authorization framework must be used, false if gJAF must be used, default true
-* **creamce::argus::service"** (_string_): TODO, **mandatory** if **creamce::user_argus** is set to true
-* **creamce::argus::port** (_integer_): TODO, default 8154
-* **creamce::argus::timeout** (_integer_): TODO, default 30
-* **creamce::resourceid** (_string_): TODO, default "https://{ce_host}:{ce_port}/cream"
-* **creamce::admin::list** (_list_): TODO, default empty list
-* **creamce::admin::list_file** (_string_): TODO, default /etc/grid-security/admin-list
+* **creamce::argus::service"** (_string_): The argus PEPd service host name, **mandatory** if **creamce::user_argus** is set to true
+* **creamce::argus::port** (_integer_): The Argus PEPd service port, default 8154
+* **creamce::argus::timeout** (_integer_): The connection timeout in seconds for the connection to the Argus PEPd server, default 30 seconds
+* **creamce::argus::resourceid** (_string_): The ID of the CREAM service to be registered in Argus, default "https://{ce_host}:{ce_port}/cream"
+* **creamce::admin::list** (_list_): The list of service administators Distinguished Name, default empty list
+* **creamce::admin::list_file** (_string_): The path of the file containing the service administrators list, default /etc/grid-security/admin-list
 * **creamce::vo_table** (_hash_): see the section "VO table" for further details, default empty hash
 
 #### VO table
-The VO table is a hash, the key of an entry in the table is the name or ID of the virtual organization, the corresponding value is a hash table containing the definitions for the virtual organization,the supported keys for definitions are:
+The VO table is a hash, the key of an entry in the table is the name or ID of the virtual organization, 
+the corresponding value is a hash table containing the definitions for the virtual organization,the supported keys for definitions are:
 * **servers** (_list_): The list of VOMS servers, **mandatory**, each item in the list is a hash with the following keys:
   * **server** (_string_): The VOMS server FQDN, **mandatory**
   * **port** (_integer_): The VOMS server port, **mandatory**
