@@ -234,6 +234,32 @@ It must be one of the key of the storage element table
 
 For the configuration of the GridFTP service installed on the CREAM CE refer to https://forge.puppet.com/lcgdm/gridftp
 
+### CREAM on TORQUE
+
+The TORQUE cluster must be install before the deployment of CREAM, there's no support in the CREAM CE puppet module for the
+deployment of TORQUE. Nevertheless the module may be used to configure the TORQUE client on CREAM CE node if and only if 
+the node is different from the TORQUE server node. The YAML parameter which enables the TORQUE client configuration is
+**torque::config::client**, if it is set to **false** the configuration is disabled, the default value is **true**.
+The CREAM CE puppet module can create queues and pool accounts in TORQUE, the YAML parameter is **torque::config::pool**,
+if it is set to **false** the feature is disabled, the default value is **true**.
+
+#### TORQUE configuration parameters
+
+* **torque::host** (_string_): The TORQUE server host name, default the host name
+* **torque::multiple_staging** (_boolean_): The BLAH parameter for multiple staging, default false
+* **torque::tracejob_logs** (_integer_): The BLAH parameter for tracejob, default 2
+* **torque::use_maui** (_boolean_): If true the support for maui is enabled, default false
+* **munge::key_path** (_string_): The location of the munge key. If TORQUE client configuration is enabled the path is used
+to retrieve the manually installed key; **mandatory** if **torque::config::client** is set to true.
+
+### CREAM on HTCondor
+
+TODO
+
+### CREAM on SLURM
+
+TODO
+
 ## Example of stand-alone installation and configuration for CentOS 7
 
 ### Puppet setup
