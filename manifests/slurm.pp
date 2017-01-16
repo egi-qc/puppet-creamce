@@ -49,25 +49,20 @@ class creamce::slurm inherits creamce::params {
 
   }
 
-#  define slurm_user ($acct, $pool_user, $partitions) {
-#
-#    $partstr = join($partitions, ",")
-#
-#    exec { "${title}":
-#      command => "/usr/bin/sacctmgr -i create user name=${pool_user} account=${acct} partition=${partstr}",
-#      unless  => "/usr/bin/sacctmgr -p -n show user ${pool_user} | grep ${pool_user}",
-#      require => Slurm_account["acct_${acct}"],
-#    }
-#    
-#  }
+  define slurm_user ($pool_user, $accounts, $partitions, $dep_resources = undef) {
 
-  notify { "top_accounts_created":
-    message => "Created VO top accounts",
-  }
+    $partstr = join($partitions, ",")
+    $acctstr = join($accounts, ",")
 
-  notify { "sub_accounts_created":
-    message => "Created VO group accounts",
-    require => Notify["top_accounts_created"],
+    exec { "${title}":
+      command => "/usr/bin/sacctmgr -i create user name=${pool_user} account=${acctstr} partition=${partstr}",
+      unless  => "/usr/bin/sacctmgr -p -n show user ${pool_user} | grep ${pool_user}",
+    }
+    
+    if $dep_resources {
+      $dep_resources -> Exec["${title}"]
+    }
+    
   }
 
   define slurm_top_account ($acct, $dep_resources = undef, $sub_resources = undef) {
@@ -105,10 +100,37 @@ class creamce::slurm inherits creamce::params {
   }
   
   if $slurm_config_acct {
-    $top_slurm_accts = build_slurm_accts($voenv, "top", undef, Notify["top_accounts_created"])
-    create_resources(slurm_top_account, $top_slurm_accts)
-    $sub_slurm_accts = build_slurm_accts($voenv, "sub", Notify["top_accounts_created"], Notify["sub_accounts_created"])
-    create_resources(slurm_sub_account, $sub_slurm_accts)
+
+    if $slurm_use_std_acct {
+
+      # Barriers for account and user creation
+      notify { "top_accounts_created":
+        message => "Created VO top accounts",
+      }
+
+      notify { "sub_accounts_created":
+        message => "Created VO group accounts",
+        require => Notify["top_accounts_created"],
+      }
+
+      $top_slurm_accts = build_slurm_accts($voenv, "top", undef, Notify["top_accounts_created"])
+      create_resources(slurm_top_account, $top_slurm_accts)
+
+      $sub_slurm_accts = build_slurm_accts($voenv, "sub", 
+                                           Notify["top_accounts_created"], Notify["sub_accounts_created"])
+      create_resources(slurm_sub_account, $sub_slurm_accts)
+      
+      $slurm_acct_users = build_slurm_users($voenv, $grid_queues, $default_pool_size,
+                                            $slurm_use_std_acct, Notify["sub_accounts_created"])
+      create_resources(slurm_user, $slurm_acct_users)
+
+    } else {
+    
+      $slurm_acct_users = build_slurm_users($voenv, $grid_queues,
+                                            $default_pool_size, $slurm_use_std_acct, undef)
+      create_resources(slurm_user, $slurm_acct_users)
+
+    }
   }
 
 }

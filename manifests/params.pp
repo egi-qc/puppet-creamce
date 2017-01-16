@@ -137,6 +137,7 @@ class creamce::params {
   $slurm_sched_opts          = hiera("slurm::sched_opts", { "cycle_time" => "0" })
   $slurm_caching_filter      = hiera("slurm::command_caching_filter", "")
   $slurm_config_acct         = hiera("slurm::config_accounting", false)
+  $slurm_use_std_acct        = hiera("slurn::standard_accounts", false)
   
   $condor_sched_opts         = hiera("condor::sched_opts", { "cycle_time" => "0" })
   $condor_caching_filter     = hiera("condor::command_caching_filter", "")

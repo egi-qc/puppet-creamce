@@ -166,7 +166,6 @@ The queues table is a hash with the following structure:
 * the value of an entry in the table is a hash table containing the definitions for the related queue/partition,
 the supported keys for definitions are:
  * **groups** (_list_): The list of local groups which are allowed to operate the queue/partition, each group MUST BE defined in the VO table
- * TODO definitions for SLURM
 
 #### Storage element table
 The storage element table is a hash with the following structure:
@@ -224,6 +223,8 @@ https://ruby-doc.org/core-2.2.0/Kernel.html#method-i-sprintf, default value is `
 the primary group, each element must be defined in **groups**
   * **pool_size** (_integer_): The number of user in the current pool account, the default value is global definition
 contained into **creamce::default_pool_size**
+  * **accounts** (_list_): The list of SLURM accounts associated with this set of users (only for SLURM), **mandatory**
+is **slurm::config_accounting** is set to true
 * **vo_sw_dir** (_string_): Th base directory for installation of the software used by the current Virtual Organization
 * **vo_app_dir** (_string_): The path of a shared directory available for application data for the current Virtual Organization,
 as describe by Info.ApplicationDir in GLUE 1.3. 
@@ -258,7 +259,12 @@ TODO
 
 ### CREAM on SLURM
 
-TODO
+The SLURM cluster must be install before the deployment of CREAM, there's no support in the CREAM CE puppet module for the
+deployment of SLURM. The module provides an experimental feature for configuring SLURM users and accounts if the accounting 
+is enabled in SLURM. The YAML parameter which enables the experimental feature is **slurm::config_accounting**,
+the default value is false. If it is set to true each user of the pool account is replicated in the SLURM accounting system.
+The list of SLURM accounts associated to the new user is specified by the parameter **accounts** of the **users** definition
+of the VO table
 
 ## Example of stand-alone installation and configuration for CentOS 7
 
