@@ -51,6 +51,11 @@ class creamce::glexec inherits creamce::params {
     require => Package["glexec"]
   }
   
+  exec { "touch_banlist":
+    command => "/bin/touch ${cream_ban_list_file}",
+    require => Package["glexec"]
+  }
+  
   unless $glexec_log_file == "" {
 
     file {"/etc/logrotate.d/glexec":
