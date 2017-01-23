@@ -18,4 +18,11 @@ class creamce::certificate inherits creamce::params {
     require  => Class['fetchcrl::config'],
   }
   
+  exec { "initial_fetch_crl":
+    command => "fetch-crl -l ${cacert_dir} -o ${cacert_dir} || exit 0",
+    path    => "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin",
+    require => Class['fetchcrl::config'],
+    notify  => Class['fetchcrl::service'],
+  }
+  
 }
