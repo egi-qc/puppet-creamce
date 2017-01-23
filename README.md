@@ -257,7 +257,8 @@ to retrieve the manually installed key; **mandatory** if **torque::config::clien
 
 ### CREAM on HTCondor
 
-TODO
+The HTCondor cluster must be install before the deployment of CREAM, there's no support in the CREAM CE puppet module for the
+deployment of HTCondor.
 
 ### CREAM on SLURM
 
@@ -267,6 +268,28 @@ is enabled in SLURM. The YAML parameter which enables the experimental feature i
 the default value is false. If it is set to true each user of the pool account is replicated in the SLURM accounting system.
 The list of SLURM accounts associated to the new user is specified by the parameter **accounts** of the **users** definition
 of the VO table
+
+## Experimental features
+
+The features described in this section are subject to frequent changes and must be considered not yet completely stable.
+Use them at your own risk.
+
+### GPU support configuration
+
+The GPU support in the information system (BDII) can be enabled with the configuration parameter **creamce::info::glue21_draft**
+(_boolean_), the default value is false. The GPU resources must be described in the hardware table, inserting in the related 
+sub-cluster hashes the following parameter:
+* **accelerators** (_hash_): The hash table containing the definition for any accelerator device mounted in the sub-cluster.
+Each item in the table is key-value with the accelerator ID of the device as key and the value as another hash table with the
+following definition:
+  * **type** (_string_): The type of the device (GPU, MIC, FPGA), **mandatory**
+  * **log_acc** (_integer_): The number of logical accelerator unit in the sub-cluster, **mandatory**
+  * **phys_acc** (_integer_): The number of physical accelerator device (cards) in the subcluster, **mandatory**
+  * **vendor** (_string_): The vendor ID, **mandatory**
+  * **model** (_string_): The model of the device, **mandatory**
+  * **version** (_string_): The version of the device
+  * **clock_speed** (_integer_): The clock speed of the device in MHz, **mandatory**
+  * **memory** (_integer_): The amount of memory in the device in MByte, , **mandatory**
 
 ## Example of stand-alone installation and configuration for CentOS 7
 
@@ -387,6 +410,19 @@ creamce::hardware_table :
         subcluster_wntmdir : /var/glite/subcluster001,
         ce_benchmarks : { specfp2000 : 420, specint2000 : 380, hep-spec06 : 780 },
         nodes : [ "node-01.mydomain", "node-02.mydomain", "node-03.mydomain" ]
+        # Experimental support to GPUs
+        accelerators : {
+            acc_device_001 : {
+                type : GPU,
+                log_acc : 4,
+                phys_acc : 2,
+                vendor : NVidia,
+                model : "Tesla k80",
+                version : 4.0,
+                clock_speed : 3000,
+                memory : 4000 
+            }
+        }
     }
 
 creamce::software_table :
