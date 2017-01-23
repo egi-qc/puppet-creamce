@@ -189,6 +189,8 @@ Service (this is typically an NFS exported directory).
 * **creamce::groupmap_file** (_string_): The path of the groupmap file, default /etc/grid-security/groupmapfile
 * **creamce::crl_update_time** (_integer_): The CRL refresh time in seconds, default 3600 seconds
 * **creamce::ban_list_file** (_string_): The path of the ban list file, if gJAF/LCMAPS is used, default /etc/lcas/ban_users.db'
+* **creamce::ban_list** (_list_): The list of banned users, each item is a Distinguished Name in TODO format TODO. 
+If not defined the list is not managed by puppet.
 * **creamce::use_argus** (_boolean_): True if Argus authorization framework must be used, false if gJAF must be used, default true
 * **creamce::argus::service"** (_string_): The argus PEPd service host name, **mandatory** if **creamce::user_argus** is set to true
 * **creamce::argus::port** (_integer_): The Argus PEPd service port, default 8154

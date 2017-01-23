@@ -194,6 +194,7 @@ class creamce::params {
   $groupmap                = hiera('creamce::groupmap',undef)
   $crl_update_time         = hiera('creamce::crl_update_time',3600)
   $cream_ban_list_file     = hiera('creamce::ban_list_file', '/etc/lcas/ban_users.db')
+  $cream_ban_list          = hiera('creamce::ban_list', undef) 
   $use_argus               = hiera("creamce::use_argus", true)
   $argusservice            = hiera("creamce::argus::service", undef)
   $argusport               = hiera("creamce::argus::port", 8154)

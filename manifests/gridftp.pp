@@ -3,8 +3,6 @@ class creamce::gridftp inherits creamce::params {
   require creamce::yumrepos
   require creamce::certificate
   
-  $config_glexec = false
-    
   if $use_argus {
     $gridftp_auth_plugin = "argus-gsi-pep-callout"
   } else {
@@ -49,30 +47,6 @@ class creamce::gridftp inherits creamce::params {
     # workaround for lcas/lcmaps log level setup
     File <| title == '/etc/sysconfig/globus-gridftp-server' |> {
       content => template("creamce/gridftp-sysconfig.erb"),
-    }
-
-    file { "/etc/lcas/lcas.db":
-      ensure  => file,
-      owner   => "root",
-      group   => "root",
-      mode    => 0644,
-      content => template("creamce/lcas-glexec.db.erb"),
-    }
-
-    file { "/etc/lcas/ban_users.db":
-      ensure  => file,
-      owner   => "root",
-      group   => "root",
-      mode    => 0644,
-      content => "# Banned users\n",
-    }
-
-    file {"/etc/lcmaps/lcmaps.db":
-      ensure => present,
-      content => template("creamce/lcmaps-glexec.db.erb"),
-      owner => "root",
-      group => "root",
-      mode => 0640,
     }
 
     file { "/etc/grid-security/gsi-authz.conf":
