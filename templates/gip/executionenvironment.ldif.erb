@@ -43,7 +43,7 @@ GLUE2ExecutionEnvironmentComputingManagerForeignKey: <%=@computing_service_id-%>
 GLUE2ExecutionEnvironmentAcceleratorEnvironmentForeignKey: <%=acc_id%>
 <% end -%>
 <% cdata["runtimeenv"].each do | apptag | 
-     if @applications.has_key?(apptag)  -%>
+     if @glue_2_1 and @applications.has_key?(apptag)  -%>
 GLUE2ExecutionEnvironmentApplicationEnvironmentForeignKey: <%=apptag%>
 <%   end
    end-%>
