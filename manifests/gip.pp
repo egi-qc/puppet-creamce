@@ -91,7 +91,8 @@ class creamce::gip inherits creamce::params {
 
   }
   
-  $tagdir_defs = build_tagdir_definitions($voenv, $subclusters, $gridft_pub_dir, File[$cluster_paths])
+  $tagdir_defs = build_tagdir_definitions($voenv, $subclusters, $gridft_pub_dir, 
+                                          $username_offset, File[$cluster_paths])
   create_resources(tagspace, $tagdir_defs)
 
 

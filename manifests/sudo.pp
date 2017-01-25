@@ -2,7 +2,7 @@ class creamce::sudo inherits creamce::params {
 
   require creamce::poolaccount
   
-  $sudo_table = build_sudo_table($voenv, $default_pool_size)
+  $sudo_table = build_sudo_table($voenv, $default_pool_size, $username_offset)
   
   package { "sudo":
     ensure => present

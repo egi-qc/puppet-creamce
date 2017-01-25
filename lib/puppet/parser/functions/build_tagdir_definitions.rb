@@ -1,9 +1,10 @@
 module Puppet::Parser::Functions
-  newfunction(:build_tagdir_definitions, :type => :rvalue, :doc => "This function builds tagdir table structure") do |args|
+  newfunction(:build_tagdir_definitions, :type => :rvalue, :doc => "This function builds tagdir table structure") do | args |
     voenv = args[0]
     subclusters = args[1]
     tag_path = args[2]
-    req_obj_list = args[3]
+    name_offset = args[3].to_i()
+    req_obj_list = args[4]
     
     result = Hash.new
 
@@ -24,7 +25,7 @@ module Puppet::Parser::Functions
         vodata['users'].each do | user_prefix, udata |
           if udata['groups'][0] == admin_group
             name_pattern = udata.fetch('name_pattern', '%<prefix>s%03<index>d')
-            admin_user = sprintf(name_pattern % { :prefix => user_prefix, :index => 0 })
+            admin_user = sprintf(name_pattern % { :prefix => user_prefix, :index => name_offset })
           end
         end
         

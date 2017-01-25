@@ -120,14 +120,14 @@ class creamce::slurm inherits creamce::params {
                                            Notify["top_accounts_created"], Notify["sub_accounts_created"])
       create_resources(slurm_sub_account, $sub_slurm_accts)
       
-      $slurm_acct_users = build_slurm_users($voenv, $grid_queues, $default_pool_size,
-                                            $slurm_use_std_acct, Notify["sub_accounts_created"])
+      $slurm_acct_users = build_slurm_users($voenv, $grid_queues, $default_pool_size,$slurm_use_std_acct,
+                                            $username_offset, Notify["sub_accounts_created"])
       create_resources(slurm_user, $slurm_acct_users)
 
     } else {
     
       $slurm_acct_users = build_slurm_users($voenv, $grid_queues,
-                                            $default_pool_size, $slurm_use_std_acct, undef)
+                                            $default_pool_size, $slurm_use_std_acct, $username_offset, undef)
       create_resources(slurm_user, $slurm_acct_users)
 
     }

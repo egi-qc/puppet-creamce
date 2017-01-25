@@ -49,7 +49,7 @@ class creamce::poolaccount inherits creamce::params {
   $group_table = build_group_definitions($voenv)
   create_resources(group, $group_table)
   
-  $user_table = build_user_definitions($voenv, $gridmap_dir, $default_pool_size)
+  $user_table = build_user_definitions($voenv, $gridmap_dir, $default_pool_size, $username_offset)
   create_resources(pooluser, $user_table)
   
   file { "/etc/cleanup-grid-accounts.conf":
