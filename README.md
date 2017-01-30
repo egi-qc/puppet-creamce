@@ -64,9 +64,12 @@ The sleep time between the first attempt and the second one is the “initial wa
 * **creamce::mysql::root_password** (_string_): root password for the database administrator, **mandatory**
 * **creamce::creamdb::password** (_string_): The database user password for the main operator, **mandatory**
 * **creamce::creamdb::minpriv_password** (_string_): The database user password for the monitor agent, **mandatory**
-* **creamce::mysql::max_active** (_integer_): TODO, default 200
-* **creamce::mysql::min_idle** (_integer_): TODO, default 30
-* **creamce::mysql::max_wait** (_integer_): TODO, default 10000
+* **creamce::mysql::max_active** (_integer_): The maximum number of active database connections that can be allocated from this pool at the same time,
+or negative for no limit, default 200
+* **creamce::mysql::min_idle** (_integer_): The minimum number of connections that can remain idle in the pool, without extra ones being created,
+or zero to create none, default 30
+* **creamce::mysql::max_wait** (_integer_): The maximum number of milliseconds that the pool will wait for a connection to be returned
+before throwing an exception, or -1 to wait indefinitely, default 10000
 * **creamce::mysql::override_options** (_hash_): see the override option defined in https://forge.puppet.com/puppetlabs/mysql,
 default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" }}`"
 * **creamce::creamdb::name** (_string_): The database name for the CREAM service, default "creamdb"
@@ -78,24 +81,17 @@ default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" 
 
 ### BLAH
 * **blah::config_file** (_string_): The path of the main BLAH configuration file, default "/etc/blah.config"
-* **blah::child_poll_timeout** (_integer_): TODO, default 200
-* **blah::alldone_interval** (_integer_): TODO, default 86400
 * **blah::use_blparser** (_boolean_): If true it enables the BLParser service otherwise BUpdater/BNotifier is used, default false
-* **blah::blp::host** (_string_): TODO, default undefined
-* **blah::blp::port** (_integer_): TODO, default 33333
-* **blah::blp::num** (_integer_): TODO, default 1
-* **blah::blp::host1** (_string_): TODO, default undefined
-* **blah::blp::port1** (_integer_): TODO, default 33334
-* **blah::blp::host2** (_string_): TODO, default undefined
-* **blah::blp::port2** (_integer_): TODO, default 33335
-* **blah::blp::cream_port** (_integer_): TODO, default 56565
-* **blah::check_children** (_integer_): TODO, default 30
-* **blah::logrotate::interval** (_integer_): TODO, default 365
-* **blah::logrotate::size** (_string_): TODO, default "10M"
-* **blah::bupdater::loop_interval** (_integer_): TODO, default 30
-* **blah::bupdater::notify_port** (_integer_): TODO, default 56554
-* **blah::bupdater::purge_interval** (_integer_): TODO, default 2500000
-* **blah::bupdater::logrotate::interval** (_integer_): TODO, default 50
+* **blah::blp::host** (_string_): The host name for the primary BLParser, **mandatory** if BLParser is used, default undefined
+* **blah::blp::port** (_integer_): The service port for the primary BLParser, default 33333
+* **blah::blp::num** (_integer_): The number of BLParser enabled instances, default 1
+* **blah::blp::host1** (_string_): The host name for the secondary BLParser, default undefined
+* **blah::blp::port1** (_integer_): The service port for the secondary BLParser, default 33334
+* **blah::logrotate::interval** (_integer_): The interval in days for log rotation, default 365 days
+* **blah::logrotate::size** (_string_): The size of a log file in MB, default "10M"
+* **blah::bupdater::loop_interval** (_integer_): The interval in seconds between two BUpdater sessions, default 30 seconds.
+* **blah::bupdater::notify_port** (_integer_): The service port for the BNotifier, default 56554
+* **blah::bupdater::logrotate::interval** (_integer_): The interval in days for log rotation, default 50
 * **blah::bupdater::logrotate::size** (_string_): The size of a log file in MB, default "10M"
 
 ### CREAM information system
@@ -189,10 +185,10 @@ Service (this is typically an NFS exported directory).
 * **creamce::groupmap_file** (_string_): The path of the groupmap file, default /etc/grid-security/groupmapfile
 * **creamce::crl_update_time** (_integer_): The CRL refresh time in seconds, default 3600 seconds
 * **creamce::ban_list_file** (_string_): The path of the ban list file, if gJAF/LCMAPS is used, default /etc/lcas/ban_users.db'
-* **creamce::ban_list** (_list_): The list of banned users, each item is a Distinguished Name in TODO format TODO. 
+* **creamce::ban_list** (_list_): The list of banned users, each item is a Distinguished Name in old openssl format. 
 If not defined the list is not managed by puppet.
 * **creamce::use_argus** (_boolean_): True if Argus authorization framework must be used, false if gJAF must be used, default true
-* **creamce::argus::service"** (_string_): The argus PEPd service host name, **mandatory** if **creamce::user_argus** is set to true
+* **creamce::argus::service** (_string_): The argus PEPd service host name, **mandatory** if **creamce::user_argus** is set to true
 * **creamce::argus::port** (_integer_): The Argus PEPd service port, default 8154
 * **creamce::argus::timeout** (_integer_): The connection timeout in seconds for the connection to the Argus PEPd server, default 30 seconds
 * **creamce::argus::resourceid** (_string_): The ID of the CREAM service to be registered in Argus, default "https://{ce_host}:{ce_port}/cream"
