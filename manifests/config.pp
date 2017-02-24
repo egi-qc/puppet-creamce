@@ -39,7 +39,7 @@ class creamce::config inherits creamce::params {
     content => template("creamce/server.xml.erb"),
     owner   => "tomcat",
     group   => "tomcat",
-    mode    => 0664,
+    mode    => 0660,
     notify  => Service["$tomcat"],
   }
   
@@ -48,7 +48,7 @@ class creamce::config inherits creamce::params {
     content => template("creamce/tomcat.conf.erb"),
     owner   => "root",
     group   => "root",
-    mode    => 0664,
+    mode    => 0660,
     notify  => Service["$tomcat"],
   }
 

@@ -2,7 +2,10 @@
   Built by puppet
   Do not edit
 -->
-<Server port="8005" shutdown="SHUTDOWN">
+<%
+  shutdownPwd = rand(36**32).to_s(36)
+-%>
+<Server port="8005" shutdown="<%=shutdownPwd-%>">
   <Service name="Catalina">
 <% if @tomcat == "tomcat6" %>
     <Connector port="<%=@ce_port%>" SSLEnabled="true"
