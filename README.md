@@ -448,6 +448,14 @@ Deploy the host certificate in `/etc/grid-security/hostcert.pem`
 
 Run puppet: `puppet apply --verbose /etc/puppet/manifests/site.pp`
 
+## Managing the CREAM services
+
+The CREAM services (Tomcat, BLAH notifier and locallogger) can be managed via systemd with the target **glite-services.target**:
+```
+systemctl stop glite-services.target
+systemctl start glite-services.target
+```
+
 ## Tips, tricks and work-arounds
 
 * The puppet module for BDII contains a misleading definition;
