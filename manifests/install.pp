@@ -12,7 +12,6 @@ class creamce::install inherits creamce::params {
   }
   
   package { ["glite-ce-cream", 
-             "glite-ce-blahp",
              "canl-java-tomcat",
              "mysql-connector-java"]: 
     ensure   => present,
