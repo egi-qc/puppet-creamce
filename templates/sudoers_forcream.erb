@@ -22,18 +22,20 @@ Runas_Alias GLEXEC_<%=group-%> = \
 
 Runas_Alias GLEXEC_ACCOUNTS = \
 <%
+  all_groups = Array.new
   @sudo_table.each do | voname, groups |
-     g_names = groups.keys
-     last_group = g_names.pop
-     g_names.each do | group |
+    all_groups.concat(groups.keys)
+  end
+
+  last_group = all_groups.pop
+  all_groups.each do | group |
 -%>
     GLEXEC_<%=group%>, \
-<%   end-%>
+<% end-%>
 <%   if last_group -%>
     GLEXEC_<%=last_group%>
 
 <%   end-%>
-<% end-%>
 
 # Cmnd alias specification (for cream)
 
