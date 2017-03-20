@@ -42,7 +42,7 @@ class creamce::voms inherits creamce::params {
   }
   
   $vopaths = prefix(keys($voenv), "${voms_dir}/")
-  file { "$vopaths":
+  file { $vopaths:
     ensure  => directory,
     owner   => "root",
     group   => "root",
