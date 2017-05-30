@@ -156,7 +156,7 @@ class creamce::params {
   $slurm_sched_opts          = hiera("slurm::sched_opts", { "cycle_time" => "0" })
   $slurm_caching_filter      = hiera("slurm::command_caching_filter", "")
   $slurm_config_acct         = hiera("slurm::config_accounting", false)
-  $slurm_use_std_acct        = hiera("slurn::standard_accounts", false)
+  $slurm_use_std_acct        = hiera("slurm::standard_accounts", false)
   
   $condor_sched_opts         = hiera("condor::sched_opts", { "cycle_time" => "0" })
   $condor_caching_filter     = hiera("condor::command_caching_filter", "")
@@ -252,7 +252,7 @@ class creamce::params {
   #
   # Locallogger
   #
-  $use_loclog                 = hiera('creamce::use_locallogger', true)
+  $use_loclog                 = hiera('creamce::use_locallogger', false)
   $loclog_user                = hiera('locallogger::user', 'glite')
   $loclog_group               = hiera('locallogger::group', 'glite')
   $loclog_dir                 = hiera('locallogger::dir', '/var/lib/glite')
@@ -268,5 +268,6 @@ class creamce::params {
   # yum repositories
   #
   $cream_repo_urls            = hiera('creamce::repo_urls', [])
+  $cream_rpmkey_urls          = hiera('creamce::rpm_key_urls', [])
 
 }

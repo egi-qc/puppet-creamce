@@ -5,6 +5,13 @@ puppet module to install and configure a cream CE
 
 ## YAML configuration Parameters
 
+### CREAM software
+
+* **creamce::repo_urls** (_list_): The list of URL for downloading the CREAM softare repo-file, default empty list 
+(manual installation required)
+* **creamce::rpm_key_urls** (_list_): The list of URL for downloading the GnuPG public key file used to verify the packages, 
+default empty list (manual installation required)
+
 ### CREAM service
 * **creamce::batch_system** (_string_): The installed batch system, **mandatory**, one of "pbs", "slurm", "condor", "lsf"
 * **creamce::host** (_string_): The fully qualified Computing Element host name, default the host name
@@ -340,7 +347,7 @@ creamce::use_argus :                 false
 creamce::default_pool_size :         10
 creamce::info::capability :          [ "CloudSupport=false", "Multinode=true" ]
 
-creamce::repo_urls :                 [ "http://igi-01.pd.infn.it/mrepo/grid-dev/rpms/repos/centos7/emi-all.repo" ]
+creamce::repo_urls :                 [ "http://repository.example.com/rpms/repos/centos7/emi-all.repo" ]
 
 gridftp::params::certificate :       "/etc/grid-security/hostcert.pem"
 gridftp::params::key :               "/etc/grid-security/hostkey.pem"

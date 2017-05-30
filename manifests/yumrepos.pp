@@ -11,6 +11,19 @@ class creamce::yumrepos inherits creamce::params {
  
   }
 
+  define getrpmkeys ($key_url=$title) {
+    exec { "download_${key_url}":
+      command => "/usr/bin/rpm --import ${key_url}"
+    }
+  }
+
+  if size($cream_rpmkey_urls) > 0 {
+
+    getrpmkeys { $cream_rpmkey_urls:
+    }
+
+  }
+
   if size($cream_repo_urls) > 0 {
 
     getyumrepo { $cream_repo_urls:
