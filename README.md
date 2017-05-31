@@ -348,6 +348,7 @@ creamce::default_pool_size :         10
 creamce::info::capability :          [ "CloudSupport=false", "Multinode=true" ]
 
 creamce::repo_urls :                 [ "http://repository.example.com/rpms/repos/centos7/emi-all.repo" ]
+creamce::rpm_key_urls :              [ "http://repository.example.com/RPM-GPG-KEY-cream-dist" ]
 
 gridftp::params::certificate :       "/etc/grid-security/hostcert.pem"
 gridftp::params::key :               "/etc/grid-security/hostkey.pem"
