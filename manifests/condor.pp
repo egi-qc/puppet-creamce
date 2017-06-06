@@ -9,7 +9,17 @@ class creamce::condor inherits creamce::params {
   # configure blah for Condor
   # ##################################################################################################
   
-  file{"${blah_config_file}":
+  if $condorversion >= "080601" {
+    info "Applying patch for classads"
+    
+    package { "condor-classads-blah-patch":
+      ensure  => present,
+      before  => Package["glite-ce-cream"],
+    }
+
+  }
+  
+  file{ "${blah_config_file}":
     ensure  => present,
     owner   => "root",
     group   => "root",
@@ -23,6 +33,15 @@ class creamce::condor inherits creamce::params {
   
   package { "lcg-info-dynamic-scheduler-condor":
     ensure  => present,
+  }
+  
+  file { "${condor_conf_dir}/bdii_setup.config":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => 0644,
+    content => "QUEUE_SUPER_USERS = $(QUEUE_SUPER_USERS), ldap\n",
+    before  => File["/etc/lrms/scheduler.conf"],
   }
   
   file { "/etc/lrms/scheduler.conf":

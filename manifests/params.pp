@@ -163,6 +163,7 @@ class creamce::params {
   $condor_user_history       = hiera("condor::use_history", false)
   $condor_deploy_mode        = hiera("condor::deployment_mode", "queue_to_schedd")
   $condor_queue_attr         = hiera("condor::queue_attribute", undef)
+  $condor_conf_dir           = hiera("condor::config::dir", "/etc/condor/config.d")
 
   $cream_config_ssh          = hiera("creamce::config_ssh", false)
   $shosts_equiv_extras       = hiera("creamce::shosts_equiv_extras", [])
