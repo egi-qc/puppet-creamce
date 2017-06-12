@@ -57,11 +57,11 @@ class creamce::lsf inherits creamce::params {
   }
   
   # ##################################################################################################
-  # APEL parsers for LSF
+  # APEL parsers CERN extensions for LSF
   # ##################################################################################################
-  if $lsf_config_apel {
+  if $use_apel and $lsf_config_batchacct {
 
-    $required_pkgs = ["apel-parsers", "batchacct-common", "batchacct-cecol", "oracle-instantclient-tnsnames.ora"]
+    $required_pkgs = ["batchacct-common", "batchacct-cecol", "oracle-instantclient-tnsnames.ora"]
     
     package { $required_pkgs:
       ensure => present,
@@ -72,7 +72,7 @@ class creamce::lsf inherits creamce::params {
       owner   => "root",
       group   => "root",
       mode    => 0400,
-      content => "${apel_dbname}/${apel_dbpass}@${apel_dbserv}",
+      content => "${apel_dbname}/${apel_dbpass}@${apel_dbhost}",
       require => Package[$required_pkgs],
       notify  => Service['batchacct-cecold'],
     }

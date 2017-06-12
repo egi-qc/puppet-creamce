@@ -136,7 +136,7 @@ class creamce::params {
   $lsf_report_group          = hiera("lsf::reporting_group", "GID")
   $lsf_caching_filter        = hiera("lsf::command_caching_filter", "")
   $lsf_conf_afs_path         = hiera("lsf::conf_afs_path", undef)
-  $lsf_config_apel           = hiera("lsf::config::apel_parser", false)
+  $lsf_config_batchacct      = hiera("lsf::config::batchacct", false)
   $lsf_use_cache             = hiera("lsf::cache::enabled", true)
   $lsf_cache_path            = hiera("lsf::cache::path", "/var/cache/info-dynamic-lsf")
   $lsf_cache_default_t       = hiera("lsf::cache::time::default", 300)
@@ -262,9 +262,12 @@ class creamce::params {
   #
   # apel accounting secrets
   #
-  $apel_dbname                = hiera('apel::db::name','unset')
-  $apel_dbpass                = hiera('apel::db::pass')
-  $apel_dbserv                = hiera('apel::db::host','unset')
+  $use_apel                   = hiera('apel::use_apel', false)
+  $apel_dbname                = hiera('apel::db::name', 'apelclient')
+  $apel_dbuser                = hiera('apel::db::user', 'apel')
+  $apel_dbpass                = hiera('apel::db::pass', "")
+  $apel_dbhost                = hiera('apel::db::host', 'localhost')
+  $apel_dbport                = hiera('apel::db::port', 3306)
 
   #
   # yum repositories

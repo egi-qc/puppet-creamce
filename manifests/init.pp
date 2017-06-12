@@ -11,6 +11,8 @@ class creamce inherits creamce::params {
     include creamce::gridftp
     
     include creamce::gip
+    
+    include creamce::apel
 
     if $use_loclog {
       include creamce::locallogger

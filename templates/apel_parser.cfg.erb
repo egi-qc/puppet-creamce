@@ -1,0 +1,44 @@
+# Built by puppet, DO NOT EDIT
+
+[db]
+hostname = <%=@apel_dbhost%>
+port = <%=@apel_dbport%>
+name = <%=@apel_dbname%>
+username = <%=@apel_dbuser%>
+password = <%=@apel_dbpass%>
+
+[site_info]
+site_name = <%=@sitename%>
+<% if @batch_system == "lsf" -%>
+lrms_server = <%=@lsf_primary_master%>
+<% elsif @batch_system == "pbs" -%>
+lrms_server = <%=@torque_server%>
+<% elsif @batch_system == "slurm" -%>
+lrms_server = <%=@slurm_master%>
+<% else -%>
+lrms_server = <%=@ce_host%>
+<% end -%>
+
+[blah]
+enabled = true
+dir = /var/log/cream/accounting
+filename_prefix = blahp.log
+subdirs = false
+
+[batch]
+enabled = true
+reparse = false
+type = <%=@batch_system%>
+parallel = false
+dir = 
+filename_prefix =
+subdirs = false
+<% if @batch_system == "lsf" -%>
+scale_host_factor = false
+<% end -%>
+
+[logging]
+logfile = /var/log/apelparser.log
+level = INFO
+console = true
+
