@@ -15,14 +15,6 @@ class creamce::lsf inherits creamce::params {
     content  => template("creamce/blah.config.lsf.erb"),
   }
 
-  file { "/usr/libexec/lsf_local_submit_attributes.sh":
-        ensure => present,
-        owner => "root",
-        group => "root",
-        mode => 0755,
-        content => template("creamce/lsf_local_submit_attributes.sh.erb"),
-  }
-  
   # ##################################################################################################
   # LSF infoproviders
   # ##################################################################################################
@@ -31,6 +23,11 @@ class creamce::lsf inherits creamce::params {
     ensure  => present,
     require => Package["dynsched-generic"],
     notify  => Class[Bdii::Service],
+  }
+
+  package { "info-dynamic-scheduler-lsf-btools":
+    ensure  => present,
+    require => Package["info-dynamic-scheduler-lsf"],
   }
 
   file{ "/etc/lrms/lsf.conf":
@@ -75,7 +72,7 @@ class creamce::lsf inherits creamce::params {
       owner   => "root",
       group   => "root",
       mode    => 0400,
-      content => template("creamce/apelconf.erb"),
+      content => "${apel_dbname}/${apel_dbpass}@${apel_dbserv}",
       require => Package[$required_pkgs],
       notify  => Service['batchacct-cecold'],
     }

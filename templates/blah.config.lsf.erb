@@ -8,7 +8,7 @@ blah_child_poll_timeout=200
 
 alldone_interval=86400
 
-. /etc/profile.<%=@batch_system%>
+. <%=@lsf_profile_filepath%>
 
 # Needed to implement the short term solution for proxy renewal (savannah task #8176) 
 blah_disable_wn_proxy_renewal=yes 
@@ -22,12 +22,12 @@ blah_set_default_workdir_to_home=yes
 BLAHPD_ACCOUNTING_INFO_LOG=/var/log/cream/accounting/blahp.log
 
 # Path where lsf executables are located 
-lsf_binpath=/usr/bin/
+lsf_binpath=<%=@lsf_exec_path%>
 
 # Path where the lsf conf file is located
-lsf_confpath=/etc
+lsf_confpath=<%=@lsf_etc_path%>
 
-# Path where the lsf logs are located (for pbs $pbs_spoolpath/server_logs)
+# Path where the lsf logs are located
 lsf_spoolpath=
 
 # If it is set to yes blah does not check the jobid in the logfiles

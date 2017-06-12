@@ -3,8 +3,8 @@
 retcode=$?
 if [ $retcode = 1 ] || [ $retcode = 2 ] ; then
   # Submissions disabled. Publish Draining
-  . /etc/profile.lsf; /usr/libexec/info-dynamic-lsf /etc/lrms/lsf.conf | sed -e 's/GlueCEStateStatus: Production/GlueCEStateStatus: Draining/;s/GLUE2ComputingShareServingState: production/GLUE2ComputingShareServingState: draining/'
+  . <%=@lsf_profile_filepath-%>; /usr/libexec/info-dynamic-lsf /etc/lrms/lsf.conf | sed -e 's/GlueCEStateStatus: Production/GlueCEStateStatus: Draining/;s/GLUE2ComputingShareServingState: production/GLUE2ComputingShareServingState: draining/'
 else 
   # Submissions enabled. Use CREAM_CE_STATE (Production by default)
-  . /etc/profile.lsf; /usr/libexec/info-dynamic-lsf /etc/lrms/lsf.conf | sed -e 's/GlueCEStateStatus: Production/GlueCEStateStatus: Production/;s/GLUE2ComputingShareServingState: production/GLUE2ComputingShareServingState: production/'
+  . <%=@lsf_profile_filepath-%>; /usr/libexec/info-dynamic-lsf /etc/lrms/lsf.conf
 fi

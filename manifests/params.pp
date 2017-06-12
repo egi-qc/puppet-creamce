@@ -132,6 +132,7 @@ class creamce::params {
   $lsf_primary_master        = hiera("lsf::primary_master", undef)
   $lsf_secondary_master      = hiera("lsf::secondary_master", undef)
   $lsf_exec_path             = hiera("lsf::executable_path", "/usr/bin")
+  $lsf_etc_path              = hiera("lsf::config_path", "/etc")
   $lsf_report_group          = hiera("lsf::reporting_group", "GID")
   $lsf_caching_filter        = hiera("lsf::command_caching_filter", "")
   $lsf_conf_afs_path         = hiera("lsf::conf_afs_path", undef)
@@ -150,7 +151,7 @@ class creamce::params {
   $lsf_cache_bjobsinfo_t     = hiera("lsf::cache::time::bjobsinfo", 180)
   $lsf_cache_blimits_t       = hiera("lsf::cache::time::blimits", 10800)
   $lsf_cache_bhist_t         = hiera("lsf::cache::time::bhist", 300)
-  
+  $lsf_profile_filepath      = hiera("lsf::profile::file_path", "/etc/profile.lsf")
 
   $slurm_master              = hiera("slurm::master_host", "${::fqdn}")
   $slurm_sched_opts          = hiera("slurm::sched_opts", { "cycle_time" => "0" })

@@ -105,6 +105,7 @@ default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" 
 * **bdii::params::user** (_string_): The local user running the BDII service, default "ldap"
 * **bdii::params::group** (_string_): The local group running the BDII service, default "ldap"
 * **bdii::params::port** (_integer_): The BDII service port, default 2170
+* **creamce::use_locallogger** (_boolean_): True if the local logger service must be installed and configured, default is false
 * **creamce::hardware_table** (_hash_): see the section "Hardware table" for further details, default empty hash
 * **creamce::info::capability** (_list_): The list of capability for a CREAM site; it's a list of string,
 in general with format "name=value", default empty list
@@ -195,7 +196,7 @@ Service (this is typically an NFS exported directory).
 * **creamce::ban_list** (_list_): The list of banned users, each item is a Distinguished Name in old openssl format. 
 If not defined the list is not managed by puppet.
 * **creamce::use_argus** (_boolean_): True if Argus authorization framework must be used, false if gJAF must be used, default true
-* **creamce::argus::service** (_string_): The argus PEPd service host name, **mandatory** if **creamce::user_argus** is set to true
+* **creamce::argus::service** (_string_): The argus PEPd service host name, **mandatory** if **creamce::use_argus** is set to true
 * **creamce::argus::port** (_integer_): The Argus PEPd service port, default 8154
 * **creamce::argus::timeout** (_integer_): The connection timeout in seconds for the connection to the Argus PEPd server, default 30 seconds
 * **creamce::argus::resourceid** (_string_): The ID of the CREAM service to be registered in Argus, default "https://{ce_host}:{ce_port}/cream"
@@ -347,8 +348,11 @@ creamce::use_argus :                 false
 creamce::default_pool_size :         10
 creamce::info::capability :          [ "CloudSupport=false", "Multinode=true" ]
 
-creamce::repo_urls :                 [ "http://repository.example.com/rpms/repos/centos7/emi-all.repo" ]
-creamce::rpm_key_urls :              [ "http://repository.example.com/RPM-GPG-KEY-cream-dist" ]
+creamce::repo_urls :                 [ 
+                                       "http://repository.example.org/dist/CREAM/repos/centos7/cream.repo",
+                                       "http://repository.example.org/dist/CREAM/repos/centos7/security_extras.repo"
+                                     ]
+creamce::rpm_key_urls :              [ "http://repository.example.org/dist/RPM-GPG-KEY-cream-dist" ]
 
 gridftp::params::certificate :       "/etc/grid-security/hostcert.pem"
 gridftp::params::key :               "/etc/grid-security/hostkey.pem"
@@ -458,7 +462,7 @@ Run puppet: `puppet apply --verbose /etc/puppet/manifests/site.pp`
 
 ## Managing the CREAM services
 
-The CREAM services (Tomcat, BLAH notifier and locallogger) can be managed via systemd with the target **glite-services.target**:
+The CREAM services, Tomcat, BLAH notifier and locallogger (if required), can be managed via systemd with the target **glite-services.target**:
 ```
 systemctl stop glite-services.target
 systemctl start glite-services.target
