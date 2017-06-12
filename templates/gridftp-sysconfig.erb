@@ -6,8 +6,8 @@
 
 export GLOBUS_GSSAPI_FORCE_TLS=<%= @gridftp_force_tls %>
 
-<%if @globus_tcp_port_range.to_s!='' -%>export GLOBUS_TCP_PORT_RANGE="<%=globus_tcp_port_range%>"<% end -%>
-<%if @globus_udp_port_range.to_s!='' -%>export GLOBUS_UDP_PORT_RANGE="<%=globus_udp_port_range%>"<% end -%>
+<%if @globus_tcp_port_range.to_s!='' -%>export GLOBUS_TCP_PORT_RANGE="<%=@globus_tcp_port_range%>"<% end -%>
+<%if @globus_udp_port_range.to_s!='' -%>export GLOBUS_UDP_PORT_RANGE="<%=@globus_udp_port_range%>"<% end -%>
 
 export LCMAPS_LOG_LEVEL="<%=@lcmaps_log_level-%>"
 export LCMAPS_DEBUG_LEVEL="<%=@lcmaps_debug_level-%>"

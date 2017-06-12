@@ -1,17 +1,21 @@
+# Built by puppet, DO NOT EDIT
+
 [Main]
 static_ldif_file: /var/lib/bdii/gip/ldif/static-file-CE.ldif
 static_glue2_ldif_file_computingshare: /var/lib/bdii/gip/ldif/ComputingShare.ldif
 cream_prefix: cream_
-# No prefix definition for ES
 outputformat: both
 vomap :
-<%groupmap.each do |group |-%>
-<%="    "+group%>
-<%end-%>
-module_search_path : ../lrms:../ett
-[LRMS]
-<% if batch_system == 'lsf' -%>
-lrms_backend_cmd: /usr/libexec/lrmsinfo-lsf
+<% @vo_group_table.each do | group , voname | -%>
+  <%=group-%>:<%=voname%>
 <% end -%>
+
+[LRMS]
+lrms_backend_cmd: /usr/libexec/lrmsinfo-lsf
+
 [Scheduler]
-cycle_time : 0
+cycle_time: 0
+
+[WSInterface]
+status-probe: "/usr/libexec/glite-ce-check-submission-state /etc/glite-ce-dbtool/creamdb_min_access.conf"
+
