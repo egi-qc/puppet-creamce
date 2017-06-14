@@ -203,12 +203,13 @@ class creamce::params {
   #
   # Security
   #
-  $host_certificate        = hiera('creamce::host_certificate','/etc/grid-security/hostcert.pem')
-  $host_private_key        = hiera('creamce::host_private_key','/etc/grid-security/hostkey.pem')
-  $cacert_dir              = hiera('creamce::cacert_dir','/etc/grid-security/certificates')
-  $voms_dir                = hiera('creamce::voms_dir','/etc/grid-security/vomsdir')
-  $gridmap_dir             = hiera('creamce::gridmap_dir','/etc/grid-security/gridmapdir')
-  $gridmap_file            = hiera('creamce::gridmap_file','/etc/grid-security/grid-mapfile')
+  $pki_support             = hiera('creamce::pki_support', true)
+  $host_certificate        = hiera('creamce::host_certificate', '/etc/grid-security/hostcert.pem')
+  $host_private_key        = hiera('creamce::host_private_key', '/etc/grid-security/hostkey.pem')
+  $cacert_dir              = hiera('creamce::cacert_dir', '/etc/grid-security/certificates')
+  $voms_dir                = hiera('creamce::voms_dir', '/etc/grid-security/vomsdir')
+  $gridmap_dir             = hiera('creamce::gridmap_dir', '/etc/grid-security/gridmapdir')
+  $gridmap_file            = hiera('creamce::gridmap_file', '/etc/grid-security/grid-mapfile')
   $gridmap_extras          = hiera("creamce::gridmap_extras", [])
   $gridmap_cron_sched      = hiera("creamce::gridmap_cron_sched", "5 * * * *")
   $groupmap_file           = hiera('creamce::groupmap_file','/etc/grid-security/groupmapfile')
@@ -220,7 +221,7 @@ class creamce::params {
   $argusservice            = hiera("creamce::argus::service", undef)
   $argusport               = hiera("creamce::argus::port", 8154)
   $argus_timeout           = hiera("creamce::argus::timeout", 30)
-  $cream_pepc_resourceid   = hiera('creamce::argus::resourceid',"https://${ce_host}:${ce_port}/cream")
+  $cream_pepc_resourceid   = hiera('creamce::argus::resourceid', "https://${ce_host}:${ce_port}/cream")
   $admin_list              = hiera('creamce::admin::list', [])
   $cream_admin_list_file   = hiera('creamce::admin::list_file', '/etc/grid-security/admin-list')
   $voenv                   = hiera('creamce::vo_table', {})
