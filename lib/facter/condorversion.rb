@@ -1,10 +1,14 @@
 Facter.add('condorversion') do
+
+  confine :operatingsystem => "CentOS"
+
   setcode do
 
     result = "000000"
     if File.exists?("/usr/bin/condor_status")
 
-      cmdline = "/usr/bin/condor_status -collector -format \"%s\" CondorVersion 2>/dev/null | awk '{print $2}'"
+      #cmdline = "/usr/bin/condor_status -collector -format \"%s\" CondorVersion 2>/dev/null | awk '{print $2}'"
+      cmdline = "/usr/bin/rpm -q --qf '%{Version}' condor | grep -Eo '[0-9]+.[0-9]+.[0-9]+'"
       verStr = Facter::Util::Resolution.exec(cmdline)
 
       verTuple = verStr.split(".")
