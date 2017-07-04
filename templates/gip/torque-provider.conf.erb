@@ -18,7 +18,7 @@ lrms_backend_cmd: /usr/libexec/lrmsinfo-pbs -s <%=@torque_server%>
 <% @torque_sched_opts.each do | optname, optvalue | -%>
 <%=optname-%>: <%=optvalue%>
 <% end -%>
-<% if @torque_use_maui -%>
+<% if @usemaui == "true" -%>
 vo_max_jobs_cmd: /usr/libexec/vomaxjobs-maui -h <%=@torque_server%>
 <% end -%>
 

@@ -255,7 +255,6 @@ if it is set to **false** the feature is disabled, the default value is **true**
 * **torque::host** (_string_): The TORQUE server host name, default the host name
 * **torque::multiple_staging** (_boolean_): The BLAH parameter for multiple staging, default false
 * **torque::tracejob_logs** (_integer_): The BLAH parameter for tracejob, default 2
-* **torque::use_maui** (_boolean_): If true the support for maui is enabled, default false
 * **munge::key_path** (_string_): The location of the munge key. If TORQUE client configuration is enabled the path is used
 to retrieve the manually installed key; **mandatory** if **torque::config::client** is set to true.
 

@@ -5,16 +5,6 @@ class creamce::torque inherits creamce::params {
   
   $vo_group_table = build_vo_group_table($voenv)
   
-  if $torque_use_maui {
-    $required_pkgs = [ "torque-client", "maui-client" ]
-  } else {
-    $required_pkgs = [ "torque-client" ]
-  }
-
-  package { $required_pkgs:
-    ensure  => present,
-  }
-  
   # ##################################################################################################
   # BLAHP setup (TORQUE)
   # ##################################################################################################
@@ -73,7 +63,6 @@ class creamce::torque inherits creamce::params {
 
   package { "lcg-info-dynamic-scheduler-pbs":
     ensure  => present,
-    require => Package[$required_pkgs],
     notify  => Class[Bdii::Service],
   }
   
@@ -86,7 +75,7 @@ class creamce::torque inherits creamce::params {
     require => Package["lcg-info-dynamic-scheduler-pbs"],
   }
   
-  if $torque_use_maui {
+  if $usemaui == "true" {
   
     file { "/var/spool/maui/maui.cfg":
       ensure  => present,
@@ -94,8 +83,13 @@ class creamce::torque inherits creamce::params {
       group   => "root",
       mode    => 0644,
       content => template("creamce/maui.cfg.erb"),
-      require => Package["maui-client"],
     }
+    
+    info("Maui scheduler configured")
+    
+  } else {
+  
+    warning("Cannot detect Maui scheduler installation, please configure it manually")
     
   }
   
