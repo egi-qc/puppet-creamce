@@ -10,7 +10,6 @@
   "dependencies": [
     {"name": "puppetlabs-stdlib", "version_requirement": ">= 1.0.0"},
     {"name": "puppet-fetchcrl", "version": ">= 1.1.1"},
-    {"name": "CERNOps-bdii", "version": ">= 0.1.0"},
     {"name": "lcgdm-gridftp", "version": ">= 0.2.2"},
     {"name": "puppetlabs-mysql", "version": ">= 3.9.0"}
   ],
