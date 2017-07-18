@@ -1,7 +1,7 @@
 class creamce::lsf inherits creamce::params {
 
   include creamce::blah
-  require creamce::gip
+  include creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -24,7 +24,6 @@ class creamce::lsf inherits creamce::params {
   package { "info-dynamic-scheduler-lsf":
     ensure  => present,
     require => Package["dynsched-generic"],
-    notify  => Class[Bdii::Service],
   }
 
   package { "info-dynamic-scheduler-lsf-btools":
@@ -38,6 +37,7 @@ class creamce::lsf inherits creamce::params {
     group   => "root",
     mode    => 0644,
     content => template("creamce/lsf.conf.erb"),
+    notify  => Service["bdii"],
   }
 
   file { "$gippath/plugin/glite-info-dynamic-ce":
@@ -47,6 +47,7 @@ class creamce::lsf inherits creamce::params {
     mode    => 0755,
     content => template("creamce/gip/glite-info-dynamic-ce-lsf.erb"),
     require => Package["info-dynamic-scheduler-lsf"],
+    notify  => Service["bdii"],
   }
   
   file { "/etc/lrms/scheduler.conf":
@@ -56,6 +57,7 @@ class creamce::lsf inherits creamce::params {
     mode => 0755,
     content => template("creamce/gip/scheduler.conf.lsf.erb"),
     require => Package["info-dynamic-scheduler-lsf"],   
+    notify  => Service["bdii"],
   }
   
   # ##################################################################################################

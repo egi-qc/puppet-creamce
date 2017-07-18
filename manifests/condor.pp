@@ -1,7 +1,7 @@
 class creamce::condor inherits creamce::params {
 
   include creamce::blah
-  require creamce::gip
+  include creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -69,7 +69,7 @@ class creamce::condor inherits creamce::params {
     mode => 0755,
     content => template("creamce/gip/glite-info-dynamic-scheduler-wrapper.erb"),
     require => File["/etc/lrms/scheduler.conf"],
-    notify  => Class[Bdii::Service],
+    notify  => Service["bdii"],
   }
   
   file { "$gippath/plugin/glite-info-dynamic-ce":
@@ -79,7 +79,7 @@ class creamce::condor inherits creamce::params {
     mode => 0755,
     content => "#!/bin/sh\n/usr/libexec/glite-info-dynamic-condor /etc/lrms/condor.conf\n",
     require => File["/etc/lrms/condor.conf"],
-    notify  => Class[Bdii::Service],
+    notify  => Service["bdii"],
   }
   
   # ##################################################################################################

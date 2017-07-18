@@ -261,7 +261,7 @@ class creamce::gip inherits creamce::params {
     owner   => "${info_user}",
     group   => "${info_group}",
     mode    => 0755,
-    require => Package["dynsched-generic"],
+    require => Package["bdii", "dynsched-generic"],
   }
   
   if $clustermode {

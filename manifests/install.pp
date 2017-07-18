@@ -11,7 +11,8 @@ class creamce::install inherits creamce::params {
     require => Package["tomcat-native"],
   }
   
-  package { ["glite-ce-cream", 
+  package { ["glite-ce-cream",
+             "BLAH",
              "canl-java-tomcat",
              "mysql-connector-java"]: 
     ensure   => present,

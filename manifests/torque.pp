@@ -1,7 +1,7 @@
 class creamce::torque inherits creamce::params {
 
   include creamce::blah
-  require creamce::gip
+  include creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -39,6 +39,7 @@ class creamce::torque inherits creamce::params {
     
     service { "glite-ce-blah-parser":
       ensure    => running,
+      require   => Package["BLAH"],
       subscribe => File["/etc/blparser.conf"],
     }
 
@@ -48,6 +49,7 @@ class creamce::torque inherits creamce::params {
 
     service { "glite-ce-blah-parser":
       ensure    => running,
+      require   => Package["BLAH"],
       subscribe => File["${blah_config_file}"],
     }
 
@@ -63,7 +65,6 @@ class creamce::torque inherits creamce::params {
 
   package { "lcg-info-dynamic-scheduler-pbs":
     ensure  => present,
-    notify  => Class[Bdii::Service],
   }
   
   file { "/etc/lrms/scheduler.conf":
@@ -73,6 +74,7 @@ class creamce::torque inherits creamce::params {
     mode    => 0644,
     content => template("creamce/gip/torque-provider.conf.erb"),
     require => Package["lcg-info-dynamic-scheduler-pbs"],
+    notify  => Service["bdii"],
   }
   
   if $usemaui == "true" {

@@ -1,7 +1,7 @@
 class creamce::slurm inherits creamce::params {
 
   include creamce::blah
-  require creamce::gip
+  include creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -24,7 +24,6 @@ class creamce::slurm inherits creamce::params {
   package{"info-dynamic-scheduler-slurm":
     ensure  => present,
     require => Package["dynsched-generic"],
-    notify  => Class[Bdii::Service],
   }
 
   file { "/etc/lrms/scheduler.conf":
@@ -34,6 +33,7 @@ class creamce::slurm inherits creamce::params {
     mode    => 0644,
     content => template("creamce/gip/slurm-provider.conf.erb"),
     require => Package["info-dynamic-scheduler-slurm"],
+    notify  => Service["bdii"],
   }
 
   # ##################################################################################################
