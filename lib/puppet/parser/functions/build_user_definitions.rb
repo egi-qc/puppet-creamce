@@ -15,6 +15,20 @@ module Puppet::Parser::Functions
         use_shell = udata.fetch('shell', '/bin/bash')
         name_pattern = udata.fetch('name_pattern', '%<prefix>s%03<index>d')
         
+        utable = udata.fetch('users_table', Hash.new)
+        if utable.size > 0
+          utable.each do | u_name, u_id |
+            result[u_name] = {
+              'uid'        => u_id,
+              'groups'     => udata['groups'],
+              'gridmapdir' => "#{gridmapdir}",
+              'homedir'    => "#{home_dir}",
+              'shell'      => "#{use_shell}"
+            }
+          end
+          next
+        end
+
         if pool_size > 0
         
           (0...pool_size).each do | idx |
