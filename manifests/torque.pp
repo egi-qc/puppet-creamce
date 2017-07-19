@@ -152,7 +152,7 @@ class creamce::torque inherits creamce::params {
       
     exec { "${title}":
       command => "/usr/bin/qmgr -c \"set queue ${queue} acl_groups += ${group}\"",
-      unless  => "/usr/bin/qmgr -c \"list queue ${queue} acl_groups\" | awk '/acl_groups/,EOF {print $NF}'| grep -qwi ${group}",
+      unless  => "/usr/bin/qmgr -c \"list queue ${queue} acl_groups\" | awk '/acl_groups/,EOF {print \$NF}'| grep -qwi ${group}",
     }
       
     if $dep_resources {

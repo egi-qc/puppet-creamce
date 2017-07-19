@@ -1,6 +1,6 @@
 class creamce inherits creamce::params {
   
-  if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease >= 7 {
+  if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease in [ "7" ] {
   
     include creamce::config
 
