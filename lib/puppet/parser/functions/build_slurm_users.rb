@@ -6,7 +6,6 @@ module Puppet::Parser::Functions
     def_pool_size = args[2].to_i()
     use_std_accts = args[3]
     name_offset = args[4].to_i()
-    deps = args[5]
     
     result = Hash.new
     
@@ -47,7 +46,6 @@ module Puppet::Parser::Functions
               "pool_user"     => u_name,
               "accounts"      => accounts,
               "partitions"    => partSet.to_a(),
-              "dep_resources" => deps
             }
           end
           next
@@ -62,7 +60,6 @@ module Puppet::Parser::Functions
               "pool_user"     => nameStr,
               "accounts"      => accounts,
               "partitions"    => partSet.to_a(),
-              "dep_resources" => deps
             ]
           
           end
@@ -72,7 +69,6 @@ module Puppet::Parser::Functions
               "pool_user"     => user_prefix,
               "accounts"      => accounts,
               "partitions"    => partSet.to_a(),
-              "dep_resources" => deps
           ]
         end
       end
