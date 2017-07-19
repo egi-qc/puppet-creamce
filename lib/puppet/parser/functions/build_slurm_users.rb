@@ -40,6 +40,19 @@ module Puppet::Parser::Functions
           partSet.merge(partTable[grpname])
         end
         
+        utable = udata.fetch('users_table', Hash.new)
+        if utable.size > 0
+          utable.each do | u_name, u_id |
+            result["acctusr_#{u_name}"] = {
+              "pool_user"     => u_name,
+              "accounts"      => accounts,
+              "partitions"    => partSet.to_a(),
+              "dep_resources" => deps
+            }
+          end
+          next
+        end
+
         if pool_size > 0
         
           (0...pool_size).each do | idx |
