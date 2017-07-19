@@ -467,8 +467,4 @@ systemctl stop glite-services.target
 systemctl start glite-services.target
 ```
 
-## Tips, tricks and work-arounds
-
-* The puppet module for BDII contains a misleading definition;
-the line ```include bdii::firewall``` in the file /etc/puppet/modules/bdii/manifests/init.pp must be removed
 
