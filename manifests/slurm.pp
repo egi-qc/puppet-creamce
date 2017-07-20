@@ -2,6 +2,7 @@ class creamce::slurm inherits creamce::params {
 
   include creamce::blah
   include creamce::gip
+  include creamce::poolaccount
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -93,6 +94,7 @@ class creamce::slurm inherits creamce::params {
       $sub_slurm_accts = build_slurm_accts($voenv, "sub")
       create_resources(slurm_sub_account, $sub_slurm_accts)
       
+      Creamce::Poolaccount::Pooluser <| |> -> Slurm_top_account <| |>
       Slurm_top_account <| |> -> Slurm_sub_account <| |>
       Slurm_sub_account <| |> -> Slurm_user <| |>
 
