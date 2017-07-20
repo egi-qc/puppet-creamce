@@ -165,8 +165,7 @@ class creamce::torque inherits creamce::params {
     
     if $torque_config_client and $istorqueinstalled == "false" {
 
-      $queue_group_keys = keys($queue_group_table)
-      Service["munge", "trqauthd"] -> Queue_member[$queue_group_keys]
+      Service["munge", "trqauthd"] -> Queue_member <| |>
 
     }
     

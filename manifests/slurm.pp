@@ -93,12 +93,8 @@ class creamce::slurm inherits creamce::params {
       $sub_slurm_accts = build_slurm_accts($voenv, "sub")
       create_resources(slurm_sub_account, $sub_slurm_accts)
       
-      $top_slurm_keys = keys($top_slurm_accts)
-      $sub_slurm_keys = keys($sub_slurm_accts)
-      $usr_slurm_keys = keys($slurm_acct_users)
-      
-      Slurm_top_account[$top_slurm_keys] -> Slurm_sub_account[$sub_slurm_keys]
-      Slurm_sub_account[$sub_slurm_keys] -> Slurm_user[$usr_slurm_keys]
+      Slurm_top_account <| |> -> Slurm_sub_account <| |>
+      Slurm_sub_account <| |> -> Slurm_user <| |>
 
     }
 
