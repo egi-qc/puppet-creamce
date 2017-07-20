@@ -20,7 +20,7 @@ class creamce::config inherits creamce::params {
     ensure   => file,
     owner    => "tomcat",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     source   => [$host_certificate],
     notify   => Service[$tomcat]
   }
@@ -29,7 +29,7 @@ class creamce::config inherits creamce::params {
     ensure   => file,
     owner    => "tomcat",
     group    => "root",
-    mode     => 0400,
+    mode     => '0400',
     source   => [$host_private_key],
     notify   => Service[$tomcat]
   }
@@ -39,7 +39,7 @@ class creamce::config inherits creamce::params {
     content => template("creamce/server.xml.erb"),
     owner   => "tomcat",
     group   => "tomcat",
-    mode    => 0660,
+    mode    => '0660',
     notify  => Service["$tomcat"],
   }
   
@@ -48,7 +48,7 @@ class creamce::config inherits creamce::params {
     content => template("creamce/tomcat.conf.erb"),
     owner   => "root",
     group   => "root",
-    mode    => 0660,
+    mode    => '0660',
     notify  => Service["$tomcat"],
   }
 
@@ -70,7 +70,7 @@ class creamce::config inherits creamce::params {
     ensure => directory,
     owner  => "tomcat",
     group  => "tomcat",
-    mode   => 0775,
+    mode   => '0775',
   }
   
   $sb_definitions = build_sb_definitions($voenv, $cream_db_sandbox_path, File["$cream_db_sandbox_path"])
@@ -80,7 +80,7 @@ class creamce::config inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/edg.erb"),
   }
  
@@ -88,7 +88,7 @@ class creamce::config inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0400,
+    mode    => '0400',
     content => template("creamce/cream.erb"),
     notify  => Service["$tomcat"],
   }
@@ -98,16 +98,16 @@ class creamce::config inherits creamce::params {
     content => template("creamce/cream-config.xml.erb"),
     owner   => "tomcat",
     group   => "tomcat",
-    mode    => 0640,
+    mode    => '0640',
     notify  => Service["$tomcat"],
   }
 
   file {"/etc/glite-ce-cream-utils/glite_cream_load_monitor.conf":
-    ensure => present,
+    ensure  => present,
     content => template("creamce/glite_cream_load_monitor.conf.erb"),
-    owner => "tomcat",
-    group => "root",
-    mode => 0640,
+    owner   => "tomcat",
+    group   => "root",
+    mode    => '0640',
     notify  => Service["$tomcat"],
   }
 
@@ -115,7 +115,7 @@ class creamce::config inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/adminlist.erb"),
     notify  => Service["$tomcat"],
   }  

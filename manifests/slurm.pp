@@ -13,7 +13,7 @@ class creamce::slurm inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/blah.config.slurm.erb"),
   }
 
@@ -30,7 +30,7 @@ class creamce::slurm inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/gip/slurm-provider.conf.erb"),
     require => Package["info-dynamic-scheduler-slurm"],
     notify  => Service["bdii"],

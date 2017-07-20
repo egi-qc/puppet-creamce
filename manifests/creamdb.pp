@@ -30,7 +30,7 @@ class creamce::creamdb inherits creamce::params {
     content  => template("creamce/creamdb_min_access.conf.erb"),
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
   }
 
   #
@@ -41,7 +41,7 @@ class creamce::creamdb inherits creamce::params {
     content  => template("creamce/populate_creamdb_mysql.sql.erb"),
     owner    => "root",
     group    => "root",
-    mode     => 0600,
+    mode     => '0600',
     require  => Class['mysql::server'],
   }
   
@@ -50,7 +50,7 @@ class creamce::creamdb inherits creamce::params {
     content  => template("creamce/populate_delegationcreamdb.sql.erb"),
     owner    => "root",
     group    => "root",
-    mode     => 0600,
+    mode     => '0600',
     require  => Class['mysql::server'],
   }
 

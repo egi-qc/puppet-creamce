@@ -4,14 +4,14 @@ class creamce::voms inherits creamce::params {
     ensure  => directory,
     owner   => "root",
     group   => "root",
-    mode    => 0755,
+    mode    => '0755',
   }
   
   file { "${voms_dir}":
     ensure  => directory,
     owner   => "root",
     group   => "root",
-    mode    => 0755,
+    mode    => '0755',
   }
   
   define vofiles ($server, $port, $dn, $ca_dn, $gtversion, $voname, $vodir) {
@@ -21,7 +21,7 @@ class creamce::voms inherits creamce::params {
       ensure  => file,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => "${lscfile_content}",
       require => File["${vodir}/${voname}"],
     }
@@ -34,7 +34,7 @@ class creamce::voms inherits creamce::params {
       ensure  => file,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => "${vomsfile_content}",
       require => File["/etc/vomses"],
     }    
@@ -46,7 +46,7 @@ class creamce::voms inherits creamce::params {
     ensure  => directory,
     owner   => "root",
     group   => "root",
-    mode    => 0755,
+    mode    => '0755',
     require => File["${voms_dir}"],
   }
   

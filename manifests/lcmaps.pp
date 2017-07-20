@@ -29,10 +29,10 @@ class creamce::lcmaps inherits creamce::params {
   define lcas_db_file($lcas_filename, $config_glexec) {
 
     file { "${lcas_filename}":
-      ensure => file,
-      owner => "root",
-      group => "root",
-      mode => 0644,
+      ensure  => file,
+      owner   => "root",
+      group   => "root",
+      mode    => '0644',
       content => template("creamce/lcas-glexec.db.erb"),
       require => Package[ "lcas-plugins-basic", "lcas-plugins-voms", "lcas-plugins-check-executable" ],
     }
@@ -54,10 +54,10 @@ class creamce::lcmaps inherits creamce::params {
   define lcmaps_db_file($lcmaps_filename, $config_glexec) {
 
     file { "${lcmaps_filename}":
-      ensure => file,
-      owner => "root",
-      group => "root",
-      mode => 0640,
+      ensure  => file,
+      owner   => "root",
+      group   => "root",
+      mode    => '0640',
       content => template("creamce/lcmaps-glexec.db.erb"),
       require => Package[ "lcmaps-plugins-basic", "lcmaps-plugins-voms", "lcmaps-plugins-verify-proxy" ],
     }
@@ -82,7 +82,7 @@ class creamce::lcmaps inherits creamce::params {
       ensure  => file,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => template("creamce/ban_users.db.erb"),
     }
 

@@ -10,7 +10,7 @@ class creamce::apel inherits creamce::params {
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0600,
+      mode    => '0600',
       content => template("creamce/apel_parser.cfg.erb"),
       require => Package["apel-parsers"],
     }

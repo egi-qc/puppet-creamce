@@ -8,16 +8,16 @@ class creamce::blah inherits creamce::params {
 
   file {"/var/log/cream/accounting":
     ensure => directory,
-    owner => "root",
-    group => "tomcat",
-    mode => 0730,
+    owner  => "root",
+    group  => "tomcat",
+    mode   => '0730',
   }
 
   file {"/var/blah":
     ensure => directory,
-    owner => "tomcat",
-    group => "tomcat",
-    mode => 0771,
+    owner  => "tomcat",
+    group  => "tomcat",
+    mode   => '0771',
   }
 
   $file_to_rotate = "/var/log/cream/accounting/blahp.log"
@@ -26,7 +26,7 @@ class creamce::blah inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/blahp-logrotate.erb"),
   }
   
@@ -37,7 +37,7 @@ class creamce::blah inherits creamce::params {
       content => template("creamce/bnotifier-logrotate.erb"),
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
     }
 
     file {"/etc/logrotate.d/bupdater-logrotate":
@@ -45,7 +45,7 @@ class creamce::blah inherits creamce::params {
       content => template("creamce/bupdater-logrotate.erb"),
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
     }
   
   }

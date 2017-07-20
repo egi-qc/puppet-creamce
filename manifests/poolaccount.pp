@@ -19,7 +19,7 @@ class creamce::poolaccount inherits creamce::params {
       ensure     => file,
       owner      => "root",
       group      => "root",
-      mode       => 0644,
+      mode       => '0644',
       content    => "",
       require    => [ File["${gridmapdir}"], User["${title}"] ]
     }
@@ -42,7 +42,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => directory,
     owner    => "root",
     group    => "edguser",
-    mode     => 0770,
+    mode     => '0770',
     require  => Group["edguser"],
   }
   
@@ -56,7 +56,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => file,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     require  => Package["cleanup-grid-accounts"],
     content  => template("creamce/cleanup-grid-accounts.conf.erb")
   }
@@ -65,7 +65,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => file,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     content  => "${cga_cron_sched} root /usr/sbin/cleanup-grid-accounts.sh -v -F >> ${cga_logfile} 2>&1\n",
     require  => Package["cleanup-grid-accounts"],
   }
@@ -82,7 +82,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => file,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     content  => "${cga_logrotate}",
     require  => File["/etc/cron.d/cleanup-grid-accounts"],
   }
@@ -91,7 +91,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => file,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     content  => template("creamce/cron_deny.erb")
   }
   
@@ -99,7 +99,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => file,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     content  => template("creamce/at_deny.erb")
   }
   
@@ -112,7 +112,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => file,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     content  => "${gridmap_cron_sched} root /usr/sbin/lcg-expiregridmapdir.pl -e 240 -v >> /var/log/lcg-expiregridmapdir.log 2>&1\n",
     require  => Package["lcg-expiregridmapdir"],
   }
@@ -123,7 +123,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => file,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     content  => template("creamce/groupmapfile.erb"),
   }
   
@@ -133,7 +133,7 @@ class creamce::poolaccount inherits creamce::params {
     ensure   => file,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     content  => template("creamce/gridmapfile.erb"),
   }
 

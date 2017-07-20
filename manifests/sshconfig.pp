@@ -28,7 +28,7 @@ IgnoreRhosts yes\" >> /etc/ssh/sshd_config",
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0744,
+    mode    => '0744',
     content => template("creamce/puppet-lrms-shostsconfig.erb"),
   }
 
@@ -41,7 +41,7 @@ IgnoreRhosts yes\" >> /etc/ssh/sshd_config",
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => "${ssh_cron_sched} root /usr/sbin/puppet-lrms-shostsconfig",
     require => File["/usr/sbin/puppet-lrms-shostsconfig"],
   }

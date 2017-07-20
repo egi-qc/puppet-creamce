@@ -12,7 +12,7 @@ class creamce::sudo inherits creamce::params {
     ensure  => file,
     owner   => "root",
     group   => "root",
-    mode    => 0440,
+    mode    => '0440',
     content => template("creamce/sudoers_forcream.erb"),
     require => Package["sudo"],
   }
@@ -23,7 +23,7 @@ class creamce::sudo inherits creamce::params {
       ensure  => file,
       owner   => "root",
       group   => "root",
-      mode    => 0640,      
+      mode    => '0640',      
     }
   
   }

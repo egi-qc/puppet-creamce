@@ -25,50 +25,50 @@ class creamce::gip inherits creamce::params {
     content => template('creamce/bdiiconf.erb'),
     owner   => 'root',
     group   => 'root',
-    mode    => 0644,
+    mode    => '0644',
     require => Package["bdii"],
     notify  => Service["bdii"],
   }
 
   file { "/etc/bdii/gip":
-    ensure => "directory",
-    owner  => "root",
-    group  => "root",
-    mode   => 0755,
+    ensure  => "directory",
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
     require => Package["bdii"],
     notify  => Service["bdii"],
   }
 
   file { "/var/lib/bdii/db":
-    ensure => "directory",
-    owner  => "ldap",
-    group  => "ldap",
-    mode   => 0755,
+    ensure  => "directory",
+    owner   => "ldap",
+    group   => "ldap",
+    mode    => '0755',
     require => Package["bdii"],
     notify  => Service["bdii"],
   }
 
   file {"/etc/sysconfig/bdii":
     content => template('creamce/bdiisysconf.erb'),
-    owner => 'root',
-    group => 'root',
-    mode => 0644,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     require => Package["bdii"],
     notify  => Service["bdii"],
   }
 
   file_line{ 'slapd_threads':
-    path => "${slapdconf}",
-    match => "^\s*threads",
-    line => "threads          ${slapdthreads}",
+    path    => "${slapdconf}",
+    match   => "^\s*threads",
+    line    => "threads          ${slapdthreads}",
     require => Package["bdii"],
     notify  => Service["bdii"],
   }
 
   file_line{ 'slapd_loglevel':
-    path => "${slapdconf}",
-    match => "^\s*loglevel",
-    line  => "loglevel       ${slapdloglevel}",
+    path    => "${slapdconf}",
+    match   => "^\s*loglevel",
+    line    => "loglevel       ${slapdloglevel}",
     require => Package["bdii"],
     notify  => Service["bdii"],
   }
@@ -81,9 +81,9 @@ class creamce::gip inherits creamce::params {
   if $glue_2_1 {
     file { "/etc/ldap/schema/GLUE2.1-draft.schema":
       ensure  => file,
-      owner  => "root",
-      group  => "root",
-      mode   => 0744,
+      owner   => "root",
+      group   => "root",
+      mode    => '0744',
       content => template("creamce/GLUE2.1-draft.schema.erb"),
       require => Package["glue-schema"],
     }
@@ -105,14 +105,14 @@ class creamce::gip inherits creamce::params {
     ensure => directory,
     owner  => "root",
     group  => "root",
-    mode   => 0644,
+    mode   => '0644',
   }
   
   file { "/var/tmp/puppet-creamce/replace_infos.sh":
     ensure  => file,
-    owner  => "root",
-    group  => "root",
-    mode   => 0744,
+    owner   => "root",
+    group   => "root",
+    mode    => '0744',
     content => template("creamce/replace_infos.sh.erb"),
     require => File["/var/tmp/puppet-creamce"],
   }
@@ -125,7 +125,7 @@ class creamce::gip inherits creamce::params {
     ensure => directory,
     owner  => "root",
     group  => "root",
-    mode   => 0755,
+    mode   => '0755',
   }
   
   $cluster_paths = prefix(keys($subclusters), "${gridft_pub_dir}/")
@@ -133,7 +133,7 @@ class creamce::gip inherits creamce::params {
     ensure => directory,
     owner  => "root",
     group  => "root",
-    mode   => 0755,
+    mode   => '0755',
   }
   
   define tagspace ($pub_dir, $sub_cluster, $a_owner, $a_group, $req_list) {
@@ -142,7 +142,7 @@ class creamce::gip inherits creamce::params {
       ensure  => directory,
       owner   => "${a_owner}",
       group   => "${a_group}",
-      mode    => 0755,
+      mode    => '0755',
       require => $req_list,
     }
 
@@ -150,7 +150,7 @@ class creamce::gip inherits creamce::params {
       ensure  => file,
       owner   => "${a_owner}",
       group   => "${a_group}",
-      mode    => 0644,
+      mode    => '0644',
       require => File["${pub_dir}/${sub_cluster}/${title}"],
     }
 
@@ -169,7 +169,7 @@ class creamce::gip inherits creamce::params {
     ensure  => file,
     owner   => "root",
     group   => "root",
-    mode    => 0755,
+    mode    => '0755',
     content => template("creamce/gip/glite-ce-glue2.conf.erb"),
     require => Package["glite-ce-cream-utils"],
     notify  => Exec["replace_ce_glue2_facts"],
@@ -183,7 +183,7 @@ class creamce::gip inherits creamce::params {
     ensure  => file,
     owner   => "${info_user}",
     group   => "${info_group}",
-    mode    => 0755,
+    mode    => '0755',
     content => template("creamce/gip/glite-info-cream-glue2.erb"),
     require => File["/etc/glite-ce-glue2/glite-ce-glue2.conf"],
     notify  => Service["bdii"],
@@ -197,7 +197,7 @@ class creamce::gip inherits creamce::params {
     ensure  => file,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/glite-info-service-cream.conf.erb"),
     require => Package["glite-info-provider-service"],
   }
@@ -206,7 +206,7 @@ class creamce::gip inherits creamce::params {
     ensure  => file,
     owner   => "${info_user}",
     group   => "${info_group}",
-    mode    => 0755,
+    mode    => '0755',
     content => template("creamce/gip/glite-info-provider-service-cream-wrapper.erb"),
     require => File["/etc/glite/info/service/glite-info-service-cream.conf"],
     notify  => Service["bdii"],
@@ -220,7 +220,7 @@ class creamce::gip inherits creamce::params {
     ensure  => file,
     owner   => "${info_user}",
     group   => "${info_group}",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/gip/static-file-CE.ldif.erb"),
     require => Package["bdii"],
     notify  => Exec["replace_static_CE_facts"],
@@ -233,7 +233,7 @@ class creamce::gip inherits creamce::params {
   
   file { "$gippath/ldif/ComputingEndpoint.ldif":
     ensure  => file,
-    mode    => 0644,
+    mode    => '0644',
     owner   => "${info_user}",
     group   => "${info_group}",
     content => template("creamce/gip/computingendpoint.ldif.erb"),
@@ -248,7 +248,7 @@ class creamce::gip inherits creamce::params {
   
   file { "$gippath/ldif/ComputingService.ldif":
     ensure  => file,
-    mode    => 0644,
+    mode    => '0644',
     owner   => "${info_user}",
     group   => "${info_group}",
     content => template("creamce/gip/computing_service.ldif.erb"),
@@ -260,7 +260,7 @@ class creamce::gip inherits creamce::params {
     ensure  => directory,
     owner   => "${info_user}",
     group   => "${info_group}",
-    mode    => 0755,
+    mode    => '0755',
     require => Package["bdii", "dynsched-generic"],
   }
   
@@ -291,7 +291,7 @@ class creamce::gip inherits creamce::params {
       ensure  => file,
       owner   => "${info_user}",
       group   => "${info_group}",
-      mode    => 0755,
+      mode    => '0755',
       content => template("creamce/gip/glite-info-dynamic-software-wrapper.erb"),
       require => [ Package["glite-ce-cream-utils"], File["$gippath/ldif/static-file-Cluster.ldif"] ],
       notify  => Service["bdii"],
@@ -305,7 +305,7 @@ class creamce::gip inherits creamce::params {
       ensure  => file,
       owner   => "${info_user}",
       group   => "${info_group}",
-      mode    => 0755,
+      mode    => '0755',
       content => template("creamce/gip/glite-info-glue2-applicationenvironment-wrapper.erb"),
       require => [ Package["glite-ce-cream-utils"], File["$gippath/ldif/static-file-Cluster.ldif", "/etc/glite-ce-glue2/glite-ce-glue2.conf"] ],
       notify  => Service["bdii"],
@@ -315,7 +315,7 @@ class creamce::gip inherits creamce::params {
       ensure  => file,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => template("creamce/glite-info-glue2-rtepublisher.conf.erb"),
       require => Package["glite-info-provider-service"],
     }
@@ -324,7 +324,7 @@ class creamce::gip inherits creamce::params {
       ensure  => file,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => template("creamce/glite-info-service-rtepublisher.conf.erb"),
       require => Package["glite-info-provider-service"],
     }
@@ -333,7 +333,7 @@ class creamce::gip inherits creamce::params {
       ensure  => file,
       owner   => "${info_user}",
       group   => "${info_group}",
-      mode    => 0755,
+      mode    => '0755',
       content => template("creamce/gip/glite-info-provider-service-rtepublisher-wrapper.erb"),
       require => File["/etc/glite/info/service/glite-info-glue2-rtepublisher.conf", "/etc/glite/info/service/glite-info-service-rtepublisher.conf"],
       notify  => Service["bdii"],
@@ -344,7 +344,7 @@ class creamce::gip inherits creamce::params {
     # ################################################################################################
     file { "$gippath/ldif/ComputingManager.ldif":
       ensure  => file,
-      mode    => 0644,
+      mode    => '0644',
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/computing_manager.ldif.erb"),
@@ -354,7 +354,7 @@ class creamce::gip inherits creamce::params {
 
     file { "$gippath/ldif/ComputingShare.ldif":
       ensure  => file,
-      mode    => 0644,
+      mode    => '0644',
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/computing_share.ldif.erb"),
@@ -364,7 +364,7 @@ class creamce::gip inherits creamce::params {
 
     file { "$gippath/ldif/ExecutionEnvironment.ldif":
       ensure  => file,
-      mode    => 0644,
+      mode    => '0644',
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/executionenvironment.ldif.erb"),
@@ -374,7 +374,7 @@ class creamce::gip inherits creamce::params {
 
     file { "$gippath/ldif/Benchmark.ldif":
       ensure  => file,
-      mode    => 0644,
+      mode    => '0644',
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/benchmark.ldif.erb"),
@@ -384,7 +384,7 @@ class creamce::gip inherits creamce::params {
 
     file { "$gippath/ldif/ToStorageService.ldif":
       ensure  => file,
-      mode    => 0644,
+      mode    => '0644',
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/tostorageservice.ldif.erb"),
@@ -396,7 +396,7 @@ class creamce::gip inherits creamce::params {
       ensure  => file,
       owner   => "${info_user}",
       group   => "${info_group}",
-      mode    => 0644,
+      mode    => '0644',
       content => template("creamce/gip/static-file-CESEBind.ldif.erb"),
       require => Package["bdii"],
       notify  => Service["bdii"],
@@ -406,7 +406,7 @@ class creamce::gip inherits creamce::params {
       ensure  => file,
       owner   => "${info_user}",
       group   => "${info_group}",
-      mode    => 0644,
+      mode    => '0644',
       content => template("creamce/gip/static-file-Cluster.ldif.erb"),
       require => Package["bdii"],
       notify  => Service["bdii"],

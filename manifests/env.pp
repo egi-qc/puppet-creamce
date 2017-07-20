@@ -5,7 +5,7 @@ class creamce::env inherits creamce::params {
     content => template("creamce/gridenvsh.erb"),
     owner   => "root",
     group   => "root",
-    mode    => 0755,
+    mode    => '0755',
   }  
   
   file {"/etc/profile.d/grid-env.csh":
@@ -13,7 +13,7 @@ class creamce::env inherits creamce::params {
     content => template("creamce/gridenvcsh.erb"),
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
   }
 
 }

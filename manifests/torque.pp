@@ -13,7 +13,7 @@ class creamce::torque inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/blah.config.torque.erb"),
   }
   
@@ -23,7 +23,7 @@ class creamce::torque inherits creamce::params {
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => template("creamce/blparser.conf.torque.erb"),
     }
 
@@ -33,7 +33,7 @@ class creamce::torque inherits creamce::params {
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => template("creamce/blahp-logrotate.erb"),
     }
     
@@ -71,7 +71,7 @@ class creamce::torque inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/gip/torque-provider.conf.erb"),
     require => Package["lcg-info-dynamic-scheduler-pbs"],
     notify  => Service["bdii"],
@@ -83,7 +83,7 @@ class creamce::torque inherits creamce::params {
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => template("creamce/maui.cfg.erb"),
     }
     
@@ -109,7 +109,7 @@ class creamce::torque inherits creamce::params {
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => "${torque_server}",
       require => Package["torque-client"],
     }
@@ -129,7 +129,7 @@ class creamce::torque inherits creamce::params {
         ensure  => present,
         owner   => "munge",
         group   => "munge",
-        mode    => 0400,
+        mode    => '0400',
         source  => "${munge_key_path}",
         require => Package["munge"],
         notify  => Service["munge"],

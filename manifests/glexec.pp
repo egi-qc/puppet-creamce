@@ -10,24 +10,24 @@ class creamce::glexec inherits creamce::params {
     ensure  => file,
     owner   => "root",
     group   => "glexec",
-    mode    => 6555,
+    mode    => '6555',
     require => Package["glexec"]
   }
   
   file { "/var/log/glexec":
-    ensure => directory,
-    owner  => "root",
-    group  => "root",
-    mode   => 0755,
+    ensure  => directory,
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
     require => Package["glexec"]
   }
   
   file {"/etc/glexec.conf":
-    ensure => present,
+    ensure  => present,
     content => template("creamce/glexec.conf.erb"),
-    owner => "root",
-    group => "glexec",
-    mode => 0640,
+    owner   => "root",
+    group   => "glexec",
+    mode    => '0640',
     require => Package["glexec"]
   }
   
@@ -38,7 +38,7 @@ class creamce::glexec inherits creamce::params {
       content => template("creamce/glexec-logrotate.erb"),
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       require => Package["glexec"]
     }
 

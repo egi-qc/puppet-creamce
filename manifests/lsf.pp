@@ -13,7 +13,7 @@ class creamce::lsf inherits creamce::params {
     ensure   => present,
     owner    => "root",
     group    => "root",
-    mode     => 0644,
+    mode     => '0644',
     content  => template("creamce/blah.config.lsf.erb"),
   }
 
@@ -35,7 +35,7 @@ class creamce::lsf inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0644,
+    mode    => '0644',
     content => template("creamce/lsf.conf.erb"),
     notify  => Service["bdii"],
   }
@@ -44,17 +44,17 @@ class creamce::lsf inherits creamce::params {
     ensure  => present,
     owner   => "root",
     group   => "root",
-    mode    => 0755,
+    mode    => '0755',
     content => template("creamce/gip/glite-info-dynamic-ce-lsf.erb"),
     require => Package["info-dynamic-scheduler-lsf"],
     notify  => Service["bdii"],
   }
   
   file { "/etc/lrms/scheduler.conf":
-    ensure => present,
-    owner => "root",
-    group => "root",
-    mode => 0755,
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
     content => template("creamce/gip/scheduler.conf.lsf.erb"),
     require => Package["info-dynamic-scheduler-lsf"],   
     notify  => Service["bdii"],
@@ -75,7 +75,7 @@ class creamce::lsf inherits creamce::params {
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0400,
+      mode    => '0400',
       content => "${apel_dbname}/${apel_dbpass}@${apel_dbhost}",
       require => Package[$required_pkgs],
       notify  => Service['batchacct-cecold'],

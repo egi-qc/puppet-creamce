@@ -65,14 +65,14 @@ PartOf=glite-services.target
       ensure => directory,
       owner  => "root",
       group  => "root",
-      mode   => 0644,
+      mode   => '0644',
     }
     
     file { "/lib/systemd/system/glite-services.target":
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => "${glite_service_defs}",
     }  
     if $use_loclog {
@@ -85,7 +85,7 @@ PartOf=glite-services.target
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => "${glite_service_refs}",
     }
     File["${tomcat_systemddir}"] -> File["${tomcat_systemddir}/10-glite-services.conf"]
@@ -95,7 +95,7 @@ PartOf=glite-services.target
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => 0644,
+      mode    => '0644',
       content => "${glite_service_refs}",
     }
     File["${blah_systemddir}"] -> File["${blah_systemddir}/10-glite-services.conf"]
@@ -124,14 +124,14 @@ PartOf=glite-services.target
         ensure => directory,
         owner  => "root",
         group  => "root",
-        mode   => 0644,
+        mode   => '0644',
       }
 
       file { "/etc/systemd/system/glite-lb-logd.service.d/10-glite-services.conf":
         ensure  => present,
         owner   => "root",
         group   => "root",
-        mode    => 0644,
+        mode    => '0644',
         content => "${glite_service_refs}",
         require => [ File["/etc/systemd/system/glite-lb-logd.service.d"], Class[Creamce::Locallogger] ],
       }
@@ -140,7 +140,7 @@ PartOf=glite-services.target
         ensure  => present,
         owner   => "root",
         group   => "root",
-        mode    => 0644,
+        mode    => '0644',
         content => "${glite_service_refs}",
         require => [ File["/etc/systemd/system/glite-lb-interlogd.service.d"], Class[Creamce::Locallogger] ],
       }

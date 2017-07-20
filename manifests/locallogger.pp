@@ -21,7 +21,7 @@ class creamce::locallogger inherits creamce::params {
     ensure   => directory,
     owner    => "${loclog_user}",
     group    => "${loclog_group}",
-    mode     => 0755,
+    mode     => '0755',
     require  => User["${loclog_user}"],
   }
     
@@ -29,7 +29,7 @@ class creamce::locallogger inherits creamce::params {
     ensure  => file,
     owner   => "${loclog_user}",
     group   => "${loclog_group}",
-    mode    => 0644,
+    mode    => '0644',
     source  => [ "${host_certificate}" ],
     require => File["${loclog_dir}/.certs", "${host_certificate}"],
     notify  => Service["glite-lb-logd", "glite-lb-interlogd"]
@@ -39,7 +39,7 @@ class creamce::locallogger inherits creamce::params {
     ensure  => file,
     owner   => "${loclog_user}",
     group   => "${loclog_group}",
-    mode    => 0400,
+    mode    => '0400',
     source  => [ "${host_private_key}" ],
     require => File["${loclog_dir}/.certs", "${host_private_key}"],
     notify  => Service["glite-lb-logd", "glite-lb-interlogd"]
@@ -48,7 +48,7 @@ class creamce::locallogger inherits creamce::params {
   file {"/etc/cron.d/locallogger.cron":
     ensure    => present,
     content   => template("creamce/locallogger.cron.erb"),
-    mode      => 0644,
+    mode      => '0644',
     require   => [ File["${loclog_dir}/.certs/hostcert.pem"], Package["glite-lb-logger"] ],
   }
 

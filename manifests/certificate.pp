@@ -8,7 +8,7 @@ class creamce::certificate inherits creamce::params {
       ensure   => file,
       owner    => "root",
       group    => "root",
-      mode     => 0644,
+      mode     => '0644',
       require  => Class['fetchcrl::config'],
     }
 
@@ -16,7 +16,7 @@ class creamce::certificate inherits creamce::params {
       ensure   => file,
       owner    => "root",
       group    => "root",
-      mode     => 0400,
+      mode     => '0400',
       require  => Class['fetchcrl::config'],
     }
     
