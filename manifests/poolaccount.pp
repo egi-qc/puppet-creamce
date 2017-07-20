@@ -26,11 +26,7 @@ class creamce::poolaccount inherits creamce::params {
 
   }
   
-  package { "cleanup-grid-accounts":
-    ensure     => "present",
-  }
-  
-  package { "lcg-expiregridmapdir":
+  package { [ "cleanup-grid-accounts", "lcg-expiregridmapdir" ]:
     ensure => present
   }
   
@@ -51,6 +47,13 @@ class creamce::poolaccount inherits creamce::params {
   
   $user_table = build_user_definitions($voenv, $gridmap_dir, $default_pool_size, $username_offset)
   create_resources(pooluser, $user_table)
+
+  notify { "pool_checkpoint":
+    message => "Pool groups defined",
+  }
+
+  Group <| tag == 'creamce::poolgroup' |> -> Notify["pool_checkpoint"]
+  Notify["pool_checkpoint"] -> Pooluser <| |>
   
   file { "/etc/cleanup-grid-accounts.conf":
     ensure   => file,

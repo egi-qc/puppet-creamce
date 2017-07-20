@@ -13,6 +13,7 @@ module Puppet::Parser::Functions
           gid_table[gdata['gid']] = gdata['fqan']
         end
         result[group] = { 'ensure'   => "present",
+                          'tag'      => [ 'creamce::poolgroup' ],
                           'gid'      => gdata['gid']}
       end
     end
