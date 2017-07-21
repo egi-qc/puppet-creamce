@@ -23,7 +23,7 @@ class creamce::lsf inherits creamce::params {
 
   package { "info-dynamic-scheduler-lsf":
     ensure  => present,
-    require => Package["dynsched-generic"],
+    require => Package["bdii", "dynsched-generic"],
   }
 
   package { "info-dynamic-scheduler-lsf-btools":
