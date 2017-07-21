@@ -31,17 +31,14 @@ vomspoolaccount = "lcmaps_voms_poolaccount.mod"
 " -gridmapdir <%=@gridmap_dir%>"
 " -do_not_use_secondary_gids"
 
-proxycheck = "lcmaps_verify_proxy.mod"
-             "-certdir <%=@cacert_dir%>"
+good = "lcmaps_dummy_good.mod"
 
 # policies
 withvoms:
-proxycheck -> vomslocalgroup
 vomslocalgroup -> vomslocalaccount
 vomslocalaccount -> posix_enf | vomspoolaccount
 vomspoolaccount -> posix_enf
 
 standard:
-proxycheck -> localaccount
 localaccount -> posix_enf | poolaccount
 poolaccount -> posix_enf

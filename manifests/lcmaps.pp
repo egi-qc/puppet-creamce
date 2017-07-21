@@ -2,79 +2,52 @@ class creamce::lcmaps inherits creamce::params {
 
   require creamce::yumrepos
 
-  package { "lcmaps-plugins-basic":
-    ensure => present
-  }
-
-  package { "lcmaps-plugins-voms":
-    ensure => present
-  }
-
-  package { "lcmaps-plugins-verify-proxy":
-    ensure => present
-  }
-
-  package { "lcas-plugins-basic":
-    ensure => present
-  }
-
-  package { "lcas-plugins-voms":
-    ensure => present
-  }
-
-  package { "lcas-plugins-check-executable":
+  package { [
+              "lcmaps-plugins-basic",
+              "lcmaps-plugins-voms",
+              "lcmaps-plugins-verify-proxy",
+              "lcas-plugins-basic",
+              "lcas-plugins-voms",
+              "lcas-plugins-check-executable"
+            ]:
     ensure => present
   }
   
-  define lcas_db_file($lcas_filename, $config_glexec) {
-
-    file { "${lcas_filename}":
-      ensure  => file,
-      owner   => "root",
-      group   => "root",
-      mode    => '0644',
-      content => template("creamce/lcas-glexec.db.erb"),
-      require => Package[ "lcas-plugins-basic", "lcas-plugins-voms", "lcas-plugins-check-executable" ],
-    }
-
+  file { "/etc/lcas/lcas-glexec.db":
+    ensure  => file,
+    owner   => "root",
+    group   => "root",
+    mode    => '0644',
+    content => template("creamce/lcas-glexec.db.erb"),
+    require => Package[ "lcas-plugins-basic", "lcas-plugins-voms", "lcas-plugins-check-executable" ],
   }
   
-  $lcas_file_defs = {
-    'lcas_conf_for_cream' => {
-      'lcas_filename' => "/etc/lcas/lcas-glexec.db",
-      'config_glexec' => true,
-    },
-    'lcas_conf_for_gftp' => {
-      'lcas_filename' => "/etc/lcas/lcas.db",
-      'config_glexec' => false,
-    }
-  }
-  create_resources(lcas_db_file, $lcas_file_defs)
-
-  define lcmaps_db_file($lcmaps_filename, $config_glexec) {
-
-    file { "${lcmaps_filename}":
-      ensure  => file,
-      owner   => "root",
-      group   => "root",
-      mode    => '0640',
-      content => template("creamce/lcmaps-glexec.db.erb"),
-      require => Package[ "lcmaps-plugins-basic", "lcmaps-plugins-voms", "lcmaps-plugins-verify-proxy" ],
-    }
-
+  file { "/etc/lcmaps/lcmaps-glexec.db":
+    ensure  => file,
+    owner   => "root",
+    group   => "root",
+    mode    => '0640',
+    content => template("creamce/lcmaps-glexec.db.erb"),
+    require => Package[ "lcmaps-plugins-basic", "lcmaps-plugins-voms", "lcmaps-plugins-verify-proxy" ],
   }
 
-  $lcmaps_file_defs = {
-    'lcmaps_conf_for_cream' => {
-      'lcmaps_filename' => "/etc/lcmaps/lcmaps-glexec.db",
-      'config_glexec'   => true,
-    },
-    'lcmaps_conf_for_gftp' => {
-      'lcmaps_filename' => "/etc/lcmaps/lcmaps.db",
-      'config_glexec'   => false,
-    }
+  file { "/etc/lcas/lcas.db":
+    ensure  => file,
+    owner   => "root",
+    group   => "root",
+    mode    => '0644',
+    content => template("creamce/lcas.db.erb"),
+    require => Package[ "lcas-plugins-basic", "lcas-plugins-voms", "lcas-plugins-check-executable" ],
   }
-  create_resources(lcmaps_db_file,$lcmaps_file_defs)
+  
+  file { "/etc/lcmaps/lcmaps.db":
+    ensure  => file,
+    owner   => "root",
+    group   => "root",
+    mode    => '0640',
+    content => template("creamce/lcmaps.db.erb"),
+    require => Package[ "lcmaps-plugins-basic", "lcmaps-plugins-voms", "lcmaps-plugins-verify-proxy" ],
+  }
 
   if $cream_ban_list {
 
