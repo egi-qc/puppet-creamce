@@ -39,7 +39,7 @@
       <parameter name="CREAM_PURGE_PROXY_FROM_SANDBOX_BIN_PATH" value="/usr/bin/glite-ce-cream-purge-proxy" />
       <parameter name="GLEXEC_BIN_PATH" value="/usr/sbin/glexec" />
       <!-- The following parameter sets the BLAH jobId prefix (it MUST be 6 chars long, start with 'cr' and terminate by '_') -->
-      <parameter name="BLAH_JOBID_PREFIX" value="cream_" />
+      <parameter name="BLAH_JOBID_PREFIX" value="<%=@cream_job_prefix%>" />
       <!-- The following parameter sets the BLAH command timeout specified in seconds-->
       <parameter name="BLAH_COMMAND_TIMEOUT" value="<%=@cream_blah_timeout%>"/>
       <parameter name="LRMS_EVENT_LISTENER_PORT" value="<%=@cream_listener_port%>"/>

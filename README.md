@@ -33,7 +33,8 @@ default empty list (manual installation required)
 * **creamce::limit::pendjobs** (_integer_): Limiter threshold for the number of pending jobs, default -1 (unlimited)
 * **creamce::blah_timeout** (_integer_): Represents the maximum time interval in seconds accepted by CREAM for the execution of commands by BLAH, default 300 seconds
 * **creamce::listener_port** (_integer_): The port used by CREAM to receive notifications about job status changes sent by the BLParser/JobWrapper, default 49152
-* **creamce::job_purge_rate** (_integer_): Specifies in minutes how often the job purger has to run, default 300 minutes.
+* **creamce::job::purge_rate** (_integer_): Specifies in minutes how often the job purger has to run, default 300 minutes.
+* **creamce::job::prefix** (_string_): The prefix to be used for the BLAH job id, default "cream_" 
 * **creamce::blp::retry_delay** (_integer_): The time interval in seconds between two attempts to contact the BLAH parser, default 60 seconds
 * **creamce::blp::retry_count** (_integer_): Represents the number of attempts to contact the BLAH parser (if it is not reachable) before giving up.
 If -1 is specified, CREAM will never give up , default 100

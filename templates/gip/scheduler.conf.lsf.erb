@@ -3,7 +3,7 @@
 [Main]
 static_ldif_file: /var/lib/bdii/gip/ldif/static-file-CE.ldif
 static_glue2_ldif_file_computingshare: /var/lib/bdii/gip/ldif/ComputingShare.ldif
-cream_prefix: cream_
+cream_prefix: <%=@cream_job_prefix%>
 outputformat: both
 vomap :
 <% @vo_group_table.each do | group , voname | -%>
