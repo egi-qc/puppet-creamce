@@ -29,9 +29,13 @@ subdirs = false
 enabled = true
 reparse = false
 type = <%=@batch_system.upcase%>
+<% if @apel_parallel -%>
+parallel = true
+<% else -%>
 parallel = false
-dir = 
-filename_prefix =
+<% end -%>
+dir = <%=@apel_lrms_dir%>
+filename_prefix =<%=@apel_file_prefix%>
 subdirs = false
 <% if @batch_system == "lsf" -%>
 scale_host_factor = false

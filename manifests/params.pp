@@ -138,6 +138,7 @@ class creamce::params {
   $lsf_caching_filter        = hiera("lsf::command_caching_filter", "")
   $lsf_conf_afs_path         = hiera("lsf::conf_afs_path", undef)
   $lsf_config_batchacct      = hiera("lsf::config::batchacct", false)
+  $lsf_batch_caching         = hiera("lsf::batch::caching", false)
   $lsf_use_cache             = hiera("lsf::cache::enabled", true)
   $lsf_cache_path            = hiera("lsf::cache::path", "/var/cache/info-dynamic-lsf")
   $lsf_cache_default_t       = hiera("lsf::cache::time::default", 300)
@@ -153,6 +154,7 @@ class creamce::params {
   $lsf_cache_blimits_t       = hiera("lsf::cache::time::blimits", 10800)
   $lsf_cache_bhist_t         = hiera("lsf::cache::time::bhist", 300)
   $lsf_profile_filepath      = hiera("lsf::profile::file_path", "/etc/profile.lsf")
+  $lsf_btools_path           = hiera("lsf::btools::path", "")
 
   $slurm_master              = hiera("slurm::master_host", "${::fqdn}")
   $slurm_sched_opts          = hiera("slurm::sched_opts", { "cycle_time" => "0" })
@@ -275,6 +277,10 @@ class creamce::params {
   $apel_dbpass                = hiera('apel::db::pass', "")
   $apel_dbhost                = hiera('apel::db::host', 'localhost')
   $apel_dbport                = hiera('apel::db::port', 3306)
+  $apel_parallel              = hiera('apel::parallel', false)
+  $apel_lrms_dir              = hiera('apel::batch::dir", "")
+  $apel_file_prefix           = hiera('apel::prefix::filter", "")
+  $apel_cron_sched            = hiera('apel::cron::sched', "5 0 * * *")
 
   #
   # yum repositories

@@ -21,14 +21,9 @@ class creamce::lsf inherits creamce::params {
   # LSF infoproviders
   # ##################################################################################################
 
-  package { "info-dynamic-scheduler-lsf":
+  package { [ "info-dynamic-scheduler-lsf", "info-dynamic-scheduler-lsf-btools" ]:
     ensure  => present,
     require => Package["bdii", "dynsched-generic"],
-  }
-
-  package { "info-dynamic-scheduler-lsf-btools":
-    ensure  => present,
-    require => Package["info-dynamic-scheduler-lsf"],
   }
 
   file{ "/etc/lrms/lsf.conf":
@@ -37,6 +32,7 @@ class creamce::lsf inherits creamce::params {
     group   => "root",
     mode    => '0644',
     content => template("creamce/lsf.conf.erb"),
+    require => Package["info-dynamic-scheduler-lsf"],
     notify  => Service["bdii"],
   }
 

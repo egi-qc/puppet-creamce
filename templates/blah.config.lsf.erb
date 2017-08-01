@@ -1,108 +1,110 @@
-# WARNING: THIS FILE IS WRITTEN BY yaim! (function config_cream_blah)
+# WARNING: THIS FILE IS WRITTEN BY PUPPET
 #
-
-# Supported batch systems
-supported_lrms=<%=@batch_system%>
-
-blah_child_poll_timeout=200 
-
-alldone_interval=86400
 
 . <%=@lsf_profile_filepath%>
 
-# Needed to implement the short term solution for proxy renewal (savannah task #8176) 
-blah_disable_wn_proxy_renewal=yes 
+# #############################################################################
+# Blah common variables
+# #############################################################################
 
-# working on glexec -> sudo support 
-blah_disable_proxy_user_copy=yes
-blah_id_mapping_command_sudo="/usr/bin/sudo -H"
-blah_set_default_workdir_to_home=yes
+supported_lrms=<%=@batch_system%>
 
-# DGAS logfile 
 BLAHPD_ACCOUNTING_INFO_LOG=/var/log/cream/accounting/blahp.log
 
-# Path where lsf executables are located 
-lsf_binpath=<%=@lsf_exec_path%>
+blah_disable_wn_proxy_renewal=yes 
 
-# Path where the lsf conf file is located
-lsf_confpath=<%=@lsf_etc_path%>
-
-# Path where the lsf logs are located
-lsf_spoolpath=
-
-# If it is set to yes blah does not check the jobid in the logfiles
-lsf_nochecksubmission=yes
-
-# If it is set to yes blah does NOT use log files to get job status, 
-# but uses only standard LRMS query
-lsf_nologaccess=
-
-# If it is set to no blah scripts for lsf will not try to read 
-# locally from the logs if BLParser is not present
-lsf_fallback=no
-
-# Set to yes to use Blah Log Parser for lsf
-lsf_BLParser=yes
-# New parser section
-job_registry=/var/blah/user_blah_job_registry.bjr
-#
-async_notification_port=56554
-bupdater_loop_interval=600
-#
-# about 2 months of purge interval.
-purge_interval=2500000
-                                                                                                                                         
-#Updater location
-bupdater_path=/usr/libexec/BUpdaterLSF
-                                                                                                                                         
-#Notifier location
-bnotifier_path=/usr/libexec/BNotifier
-                                                                                                                                         
-#Updater pid file
-bupdater_pidfile=/var/blah/blah_bupdater.pid
-                                                                                                                                         
-#Notifier pid file
-bnotifier_pidfile=/var/blah/blah_bnotifier.pid
- 
-#Updater debug level
-bupdater_debug_level=2
-                                                                                                                                         
-#Updater debug log file
-bupdater_debug_logfile=/var/log/cream/glite-ce-bupdater.log
-                                                                                                                                         
-#Notifier debug level
-bnotifier_debug_level=2
-                                                                                                                                         
-#Notifier debug log file
-bnotifier_debug_logfile=/var/log/cream/glite-ce-bnotifier.log
-#
 blah_children_restart_interval=0
 
-#Enable sharing of job registry cache via mmap
+blah_check_children_interval=<%=@blah_check_children%>
+
+blah_disable_proxy_user_copy=yes
+
+blah_child_poll_timeout=<%=@blah_child_poll_timeout%> 
+
+blah_id_mapping_command_sudo="/usr/bin/sudo -H"
+
+blah_set_default_workdir_to_home=yes
+
+# #############################################################################
+# LSF common variables
+# #############################################################################
+
+lsf_binpath=<%=@lsf_exec_path%>
+
+lsf_confpath=<%=@lsf_etc_path%>
+
+lsf_spoolpath=
+
+lsf_nochecksubmission=yes
+
+lsf_nologaccess=
+
+lsf_fallback=no
+
+<% if @use_blparser -%>
+# Set to yes to use Blah Log Parser for lsf
+lsf_BLParser=yes
+<% else -%>
+lsf_BLParser=no
+<% end -%>
+
+# #############################################################################
+# BUpdater/BNotifier common variables
+# #############################################################################
+
+bupdater_pidfile=/var/blah/blah_bupdater.pid
+
+job_registry=/var/blah/user_blah_job_registry.bjr
+
 job_registry_use_mmap=yes
 
-#Enable check of execution of bupdater and bnotifier
-blah_check_children_interval=30
+async_notification_port=<%=@bupdater_notify_port%>
 
-# CERN add caching for LSF queries
-lsf_batch_caching_enabled=yes
+bupdater_debug_level=2
+
+bupdater_debug_logfile=/var/log/cream/glite-ce-bupdater.log
+
+purge_interval=<%=@bupdater_purge_interval%>
+
+alldone_interval=<%=@blah_alldone_interval%>
+
+bupdater_loop_interval=<%=@bupdater_loop_interval%>
+                                                                                                                                         
+bnotifier_path=/usr/libexec/BNotifier
+
+bnotifier_pidfile=/var/blah/blah_bnotifier.pid
+ 
+bnotifier_debug_level=2
+                                                                                                                                         
+bnotifier_debug_logfile=/var/log/cream/glite-ce-bnotifier.log
+
+# #############################################################################
+# BUpdater/BNotifier LSF variables
+# #############################################################################
+
+bupdater_path=/usr/libexec/BUpdaterLSF
+                                                                                                                                         
+lsf_batch_caching_enabled=<%=@lsf_batch_caching=>
+
 batch_command_caching_filter=/usr/libexec/runcmd
 
-# use btools to obsolete bhist calls
-bupdater_use_btools=yes
-bupdater_btools_path=/usr/bin
-
-#
-#use the long format for bjobs command (-l instead of -w) (yes|no) (default=yes)
 bupdater_bjobs_long_format=no
-#
-#use bhist to calculate suspended jobs timestamp
+
 bupdater_use_bhist_for_susp=no
+
 bupdater_use_bhist_for_killed=no
+
 bupdater_use_bhist_for_idle=no
 
 bhist_logs_to_read=1
+
 bhist_finalstate_interval=900
 
 bupdater_use_bhist_time_constraint=no
+
+<% if @lsf_btools_path != "" -%>
+bupdater_use_btools=yes
+
+bupdater_btools_path=<%=@lsf_btools_path%>
+<% end -%>
 
