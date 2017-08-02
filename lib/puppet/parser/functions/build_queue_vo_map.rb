@@ -11,18 +11,24 @@ module Puppet::Parser::Functions
       
       voenv.each do | voname, vodata |
       
-        result[queue][voname] = Array.new
-      
         qdata['groups'].each do | group |
       
           if vodata['groups'].has_key?(group)
           
+            unless result[queue].has_key?(voname)
+              result[queue][voname] = Array.new
+            end
+          
             vodata['groups'][group]['fqan'].each do | fqan |
                result[queue][voname].push(fqan)
             end
+
           end
+
         end
+
       end
+
     end
 
     return result
