@@ -22,5 +22,6 @@ class creamce::apel inherits creamce::params {
       mode    => '0640',
       content => "${apel_cron_sched} root /usr/bin/apelparser",
       require => File["/etc/apel/parser.cfg"],
+    }
   } 
 }

@@ -278,8 +278,8 @@ class creamce::params {
   $apel_dbhost                = hiera('apel::db::host', 'localhost')
   $apel_dbport                = hiera('apel::db::port', 3306)
   $apel_parallel              = hiera('apel::parallel', false)
-  $apel_lrms_dir              = hiera('apel::batch::dir", "")
-  $apel_file_prefix           = hiera('apel::prefix::filter", "")
+  $apel_lrms_dir              = hiera('apel::batch::dir', "")
+  $apel_file_prefix           = hiera('apel::prefix::filter', "")
   $apel_cron_sched            = hiera('apel::cron::sched', "5 0 * * *")
 
   #
