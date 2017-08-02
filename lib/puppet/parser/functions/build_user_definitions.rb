@@ -29,7 +29,7 @@ module Puppet::Parser::Functions
           next
         end
         
-        uidlist = udata.fetch('uid_list', Array.new)
+        uid_list = udata.fetch('uid_list', Array.new)
         if uid_list.size > 0
           (0...uid_list.size).each do | idx |
             nameStr = sprintf(name_pattern % { :prefix => user_prefix, :index => (idx + name_offset) })
