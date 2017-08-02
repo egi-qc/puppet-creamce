@@ -1,12 +1,18 @@
 <%
-voswdir=Hash.new
+primaryse=""
+@se_list.each do | se_name, se_data |
+  primaryse=se_name
+  if se_data.fetch('default', false)
+    break
+  end
+end
 voappdir=Hash.new
 defaultse=Hash.new
 @voenv.each do | vo_name, value |
-  voswdir[vo_name]=value['vo_sw_dir']
-  voappdir[vo_name]=value['vo_app_dir']
-  defaultse[vo_name]=value['vo_default_se']
-end-%>
+  voappdir[vo_name]=value.fetch('vo_app_dir', @vo_soft_dir)
+  defaultse[vo_name]=value.fetch('vo_default_se', primaryse)
+end
+-%>
 
 
 <%@queue_vo_map.each do | queue, vodata | -%>
@@ -32,7 +38,11 @@ GlueCEInfoLRMSVersion: not defined
 GlueCEInfoTotalCPUs: 0
 GlueCEInfoJobManager: <%=@batch_system%>
 GlueCEInfoContactString: https://<%=@ce_host-%>:<%=@ce_port-%>/ce-cream/services
+<% unless @vo_soft_dir == "" -%>
+GlueCEInfoApplicationDir: <%=@vo_soft_dir%>
+<% end -%>
 GlueCEInfoDataDir: unset
+GlueCEInfoDefaultSE: <%=primaryse%>
 GlueCEStateEstimatedResponseTime: 2146660842
 GlueCEStateFreeCPUs: 0
 GlueCEStateRunningJobs: 0
@@ -60,11 +70,9 @@ GlueSchemaVersionMinor: 3
 GlueCECapability:  <%=cap%>
 <%end-%>
 <% vodata.each do | owner, fqans | -%>
-GlueCEInfoApplicationDir: <%=voappdir[owner]%>
-GlueCEInfoDefaultSE: <%=defaultse[owner]%>
 GlueCEAccessControlBaseRule: VO:<%=owner%>
 <%# TODO GlueCEAccessControlBaseRule: VOMS:fqan -%>
-<%end%><%# end of vodata.each -%>
+<%end%><%# end of ACBR loop -%>
 
 <%vodata.each do | owner, fqans | -%>
 dn: GlueVOViewLocalID=<%=owner-%>,GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue-%>,mds-vo-name=resource,o=grid
@@ -83,8 +91,12 @@ GlueCEStateTotalJobs: 0
 GlueCEStateFreeJobSlots: 0
 GlueCEStateEstimatedResponseTime: 2146660842
 GlueCEStateWorstResponseTime: 2146660842
+<% unless defaultse[owner] == "" -%>
 GlueCEInfoDefaultSE: <%=defaultse[owner]%>
-GlueCEInfoApplicationDir: <%=voswdir[owner]%>
+<% end -%>
+<% unless voappdir[owner] == "" -%>
+GlueCEInfoApplicationDir: <%=voappdir[owner]%>
+<% end -%>
 GlueCEInfoDataDir: unset
 GlueChunkKey: GlueCEUniqueID=<%=@ce_host-%>:<%=@ce_port-%>/<%=@ce_type-%>-<%=@batch_system-%>-<%=queue%>
 GlueCEAccessControlBaseRule: VO:<%=owner%>

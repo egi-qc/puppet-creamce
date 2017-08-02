@@ -250,6 +250,7 @@ class creamce::params {
   $computing_service_id    = hiera('creamce::info::service_id', "${ce_host}_ComputingElement")
   $se_list                 = hiera('creamce::se_table', {})
   $grid_queues             = hiera('creamce::queues', {})
+  $vo_soft_dir             = hiera('creamce::vo_software_dir', "")
   $workarea_shared         = hiera('creamce::workarea::shared', false)
   $workarea_guaranteed     = hiera('creamce::workarea::guaranteed', false)
   $workarea_total          = hiera('creamce::workarea::total', 0)

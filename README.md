@@ -112,6 +112,7 @@ default "`{'mysqld' => {'bind-address' => '0.0.0.0', 'max_connections' => "450" 
 in general with format "name=value", default empty list
 * **creamce::se_table** (_hash_): see the section "Storage element table" for further details, default empty hash
 * **creamce::queues** (_hash_): see the section "Queues table" for further details, default empty hash
+* **creamce::vo_software_dir** (_string_): Th base directory for installation of the software used by Virtual Organizations
 * **creamce::workarea::shared** (_boolean_): True if the working area is shared across different Execution Environment instances,
 typically via an NFS mount; this attribute applies to single-slot jobs, default false
 * **creamce::workarea::guaranteed** (_boolean_): True if the job is guaranteed the full extent of the WorkingAreaTotal;
@@ -182,6 +183,8 @@ the supported keys for definitions are:
 associated Storage Service (this is typically an NFS mount point)
  * **export_dir** (_string_): The remote path in the Storage Service which is associated to the local path in the Computing
 Service (this is typically an NFS exported directory).
+ * **default** (_boolean_): True if the current storage element must be considered the primary SE, default false.
+Just one item in the storage element table can be marked as primary.
 
 ### CREAM security
 * **creamce::host_certificate** (_string_): The complete path of the installed host certificate, default /etc/grid-security/hostcert.pem
@@ -232,7 +235,6 @@ the primary group, each element must be defined in **groups**
 contained into **creamce::default_pool_size**
   * **accounts** (_list_): The list of SLURM accounts associated with this set of users (only for SLURM), **mandatory**
 is **slurm::config_accounting** is set to true
-* **vo_sw_dir** (_string_): Th base directory for installation of the software used by the current Virtual Organization
 * **vo_app_dir** (_string_): The path of a shared directory available for application data for the current Virtual Organization,
 as describe by Info.ApplicationDir in GLUE 1.3. 
 * **vo_default_se** (_string_): The default Storage Element associated with the current Virtual Organization.
@@ -364,8 +366,7 @@ creamce::queues :
 
 creamce::vo_table :
     dteam : { 
-        vo_sw_dir : /afs/dteam, 
-        vo_app_dir : /var/lib/vo/dteam, 
+        vo_app_dir : /afs/dteam, 
         vo_default_se : storage.pd.infn.it,
         servers : [
                       {
@@ -447,8 +448,10 @@ creamce::software_table :
         description : "MySQL is a multi-user, multi-threaded SQL database server" 
     }
 
+creamce::vo_software_dir : /afs
+
 creamce::se_table :
-    storage.pd.infn.it : { mount_dir : "/data/mount", export_dir : "/storage/export", type : Storm }
+    storage.pd.infn.it : { mount_dir : "/data/mount", export_dir : "/storage/export", type : Storm, default : true }
     cloud.pd.infn.it : { mount_dir : "/data/mount", export_dir : "/storage/export",  type : Dcache }
 ```
 
