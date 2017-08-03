@@ -1,0 +1,28 @@
+#!/bin/bash
+
+source /etc/glite-ce-cream/service.properties
+
+CERTSUBJ=`/usr/bin/openssl x509 -noout -subject -nameopt RFC2253 -in <%=@host_certificate-%> | sed -e 's/subject=\s//g'`
+CERTISS=`/usr/bin/openssl x509 -noout -issuer -nameopt RFC2253 -in <%=@host_certificate-%> | sed -e 's/issuer=\s//g'`
+
+printf "dn: GLUE2EndpointID=<%=@ce_host-%>_org.glite.ce.CREAM,GLUE2ServiceID=<%=@computing_service_id-%>,GLUE2GroupID=resource,o=glue
+objectClass: GLUE2Entity
+objectClass: GLUE2Endpoint
+objectClass: GLUE2ComputingEndpoint
+GLUE2EntityOtherInfo: HostDN=${CERTSUBJ}
+GLUE2EntityOtherInfo: InfoProviderHost=<%=@ce_host%>
+GLUE2EndpointIssuerCA: ${CERTISS}
+GLUE2EndpointImplementationVersion: ${implementation_version:-undefined}
+"
+
+for file in <%=@cacert_dir-%>/*.pem;  do
+    cadn=`/usr/bin/openssl x509 -noout -subject -nameopt RFC2253 -in $file | sed -e 's/subject=\s//g'` ;
+    echo "GLUE2EndpointTrustedCA: ${cadn}"
+done
+
+echo ""
+
+#
+# TODO change cream version in staticFileCE
+#
+

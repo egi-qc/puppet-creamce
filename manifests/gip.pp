@@ -26,8 +26,7 @@ class creamce::gip inherits creamce::params {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => Package["bdii"],
-    notify  => Service["bdii"],
+    tag     => ['bdiisetup'],
   }
 
   file { "/etc/bdii/gip":
@@ -35,8 +34,7 @@ class creamce::gip inherits creamce::params {
     owner   => "root",
     group   => "root",
     mode    => '0755',
-    require => Package["bdii"],
-    notify  => Service["bdii"],
+    tag     => ['bdiisetup'],
   }
 
   file { "/var/lib/bdii/db":
@@ -44,8 +42,7 @@ class creamce::gip inherits creamce::params {
     owner   => "ldap",
     group   => "ldap",
     mode    => '0755',
-    require => Package["bdii"],
-    notify  => Service["bdii"],
+    tag     => ['bdiisetup'],
   }
 
   file {"/etc/sysconfig/bdii":
@@ -53,26 +50,25 @@ class creamce::gip inherits creamce::params {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => Package["bdii"],
-    notify  => Service["bdii"],
+    tag     => ['bdiisetup'],
   }
 
-  file_line{ 'slapd_threads':
+  file_line { 'slapd_threads':
     path    => "${slapdconf}",
     match   => "^\s*threads",
     line    => "threads          ${slapdthreads}",
-    require => Package["bdii"],
-    notify  => Service["bdii"],
+    tag     => ['bdiisetup'],
   }
 
-  file_line{ 'slapd_loglevel':
+  file_line { 'slapd_loglevel':
     path    => "${slapdconf}",
     match   => "^\s*loglevel",
     line    => "loglevel       ${slapdloglevel}",
-    require => Package["bdii"],
-    notify  => Service["bdii"],
+    tag     => ['bdiisetup'],
   }
 
+  Package["bdii"] -> File <| tag == 'bdiisetup' |> ~> Service["bdii"]
+  Package["bdii"] -> File_line <| tag == 'bdiisetup' |> ~> Service["bdii"]
 
   # ##################################################################################################
   # Experimental features and misc.
@@ -101,22 +97,6 @@ class creamce::gip inherits creamce::params {
     }
   }
   
-  file { "/var/tmp/puppet-creamce":
-    ensure => directory,
-    owner  => "root",
-    group  => "root",
-    mode   => '0644',
-  }
-  
-  file { "/var/tmp/puppet-creamce/replace_infos.sh":
-    ensure  => file,
-    owner   => "root",
-    group   => "root",
-    mode    => '0744',
-    content => template("creamce/replace_infos.sh.erb"),
-    require => File["/var/tmp/puppet-creamce"],
-  }
-
   # ##################################################################################################
   # vo tag dir setup
   # ##################################################################################################
@@ -165,20 +145,15 @@ class creamce::gip inherits creamce::params {
   # common plugin 
   # ##################################################################################################
 
-  file {"/etc/glite-ce-glue2/glite-ce-glue2.conf":
+  file { "/etc/glite-ce-glue2/glite-ce-glue2.conf":
     ensure  => file,
     owner   => "root",
     group   => "root",
     mode    => '0755',
     content => template("creamce/gip/glite-ce-glue2.conf.erb"),
     require => Package["glite-ce-cream-utils"],
-    notify  => Exec["replace_ce_glue2_facts"],
   }
 
-  exec { "replace_ce_glue2_facts":
-    command => "/var/tmp/puppet-creamce/replace_infos.sh /etc/glite-ce-glue2/glite-ce-glue2.conf",
-  }
-  
   file { "$gippath/plugin/glite-info-cream-glue2":
     ensure  => file,
     owner   => "${info_user}",
@@ -186,6 +161,16 @@ class creamce::gip inherits creamce::params {
     mode    => '0755',
     content => template("creamce/gip/glite-info-cream-glue2.erb"),
     require => File["/etc/glite-ce-glue2/glite-ce-glue2.conf"],
+    notify  => Service["bdii"],
+  }
+  
+  file { "$gippath/plugin/glite-info-service-data":
+    ensure  => file,
+    owner   => "${info_user}",
+    group   => "${info_group}",
+    mode    => '0755',
+    content => template("creamce/gip/glite-info-service-data.erb"),
+    require => Package["bdii"],
     notify  => Service["bdii"],
   }
 
@@ -222,13 +207,7 @@ class creamce::gip inherits creamce::params {
     group   => "${info_group}",
     mode    => '0644',
     content => template("creamce/gip/static-file-CE.ldif.erb"),
-    require => Package["bdii"],
-    notify  => Exec["replace_static_CE_facts"],
-  }
-  
-  exec { "replace_static_CE_facts":
-    command => "/var/tmp/puppet-creamce/replace_infos.sh $gippath/ldif/static-file-CE.ldif",
-    notify  => Service["bdii"],
+    tag     => ['bdiildifdefs'],
   }
   
   file { "$gippath/ldif/ComputingEndpoint.ldif":
@@ -237,13 +216,7 @@ class creamce::gip inherits creamce::params {
     owner   => "${info_user}",
     group   => "${info_group}",
     content => template("creamce/gip/computingendpoint.ldif.erb"),
-    require => Package["bdii"],
-    notify  => Exec["replace_endpoint_facts"],
-  }
-  
-  exec { "replace_endpoint_facts":
-    command => "/var/tmp/puppet-creamce/replace_infos.sh $gippath/ldif/ComputingEndpoint.ldif",
-    notify  => Service["bdii"],
+    tag     => ['bdiildifdefs'],
   }
   
   file { "$gippath/ldif/ComputingService.ldif":
@@ -252,8 +225,7 @@ class creamce::gip inherits creamce::params {
     owner   => "${info_user}",
     group   => "${info_group}",
     content => template("creamce/gip/computing_service.ldif.erb"),
-    require => Package["bdii"],
-    notify  => Service["bdii"],
+    tag     => ['bdiildifdefs'],
   }
 
   file {'/var/tmp/info-dynamic-scheduler-generic':
@@ -269,16 +241,22 @@ class creamce::gip inherits creamce::params {
     # ################################################################################################
     # ldif files
     # ################################################################################################
-    exec {'ComputingShare.ldif.dummy':
-      command => "/bin/touch  $gippath/ldif/ComputingShare.ldif",
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+    file { "$gippath/ldif/ComputingShare.ldif":
+      ensure  => file,
+      mode    => '0644',
+      owner   => "${info_user}",
+      group   => "${info_group}",
+      content => "\n",
+      tag     => ['bdiildifdefs'],
     }  
 
-    exec {'ComputingManager.ldif.dummy':
-      command => "/bin/touch  $gippath/ldif/ComputingManager.ldif",
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+    file { "$gippath/ldif/ComputingManager.ldif":
+      ensure  => file,
+      mode    => '0644',
+      owner   => "${info_user}",
+      group   => "${info_group}",
+      content => "\n",
+      tag     => ['bdiildifdefs'],
     }
     
   } else {
@@ -307,7 +285,10 @@ class creamce::gip inherits creamce::params {
       group   => "${info_group}",
       mode    => '0755',
       content => template("creamce/gip/glite-info-glue2-applicationenvironment-wrapper.erb"),
-      require => [ Package["glite-ce-cream-utils"], File["$gippath/ldif/static-file-Cluster.ldif", "/etc/glite-ce-glue2/glite-ce-glue2.conf"] ],
+      require => [
+        Package["glite-ce-cream-utils"],
+        File["$gippath/ldif/static-file-Cluster.ldif", "/etc/glite-ce-glue2/glite-ce-glue2.conf"]
+      ],
       notify  => Service["bdii"],
     }
    
@@ -335,7 +316,10 @@ class creamce::gip inherits creamce::params {
       group   => "${info_group}",
       mode    => '0755',
       content => template("creamce/gip/glite-info-provider-service-rtepublisher-wrapper.erb"),
-      require => File["/etc/glite/info/service/glite-info-glue2-rtepublisher.conf", "/etc/glite/info/service/glite-info-service-rtepublisher.conf"],
+      require => File[
+        "/etc/glite/info/service/glite-info-glue2-rtepublisher.conf",
+        "/etc/glite/info/service/glite-info-service-rtepublisher.conf"
+      ],
       notify  => Service["bdii"],
     }
 
@@ -348,8 +332,7 @@ class creamce::gip inherits creamce::params {
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/computing_manager.ldif.erb"),
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+      tag     => ['bdiildifdefs'],
     }
 
     file { "$gippath/ldif/ComputingShare.ldif":
@@ -358,8 +341,7 @@ class creamce::gip inherits creamce::params {
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/computing_share.ldif.erb"),
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+      tag     => ['bdiildifdefs'],
     }
 
     file { "$gippath/ldif/ExecutionEnvironment.ldif":
@@ -368,8 +350,7 @@ class creamce::gip inherits creamce::params {
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/executionenvironment.ldif.erb"),
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+      tag     => ['bdiildifdefs'],
     }
 
     file { "$gippath/ldif/Benchmark.ldif":
@@ -378,8 +359,7 @@ class creamce::gip inherits creamce::params {
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/benchmark.ldif.erb"),
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+      tag     => ['bdiildifdefs'],
     }
 
     file { "$gippath/ldif/ToStorageService.ldif":
@@ -388,8 +368,7 @@ class creamce::gip inherits creamce::params {
       owner   => "${info_user}",
       group   => "${info_group}",
       content => template("creamce/gip/tostorageservice.ldif.erb"),
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+      tag     => ['bdiildifdefs'],
     }
 
     file {"$gippath/ldif/static-file-CESEBind.ldif":
@@ -398,8 +377,7 @@ class creamce::gip inherits creamce::params {
       group   => "${info_group}",
       mode    => '0644',
       content => template("creamce/gip/static-file-CESEBind.ldif.erb"),
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+      tag     => ['bdiildifdefs'],
     }
 
     file {"$gippath/ldif/static-file-Cluster.ldif":
@@ -408,11 +386,12 @@ class creamce::gip inherits creamce::params {
       group   => "${info_group}",
       mode    => '0644',
       content => template("creamce/gip/static-file-Cluster.ldif.erb"),
-      require => Package["bdii"],
-      notify  => Service["bdii"],
+      tag     => ['bdiildifdefs'],
     }  
     
   }
+  
+  Package["bdii"] -> File <| tag == 'bdiildifdefs' |> ~> Service["bdii"]
   
   service { "bdii":
     ensure     => running,
