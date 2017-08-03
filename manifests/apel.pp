@@ -1,5 +1,10 @@
 class creamce::apel inherits creamce::params {
 
+  # ##################################################################################################
+  # TODO deploy apel-client
+  # https://wiki.italiangrid.it/twiki/bin/view/SiteAdminCorner/ApelDeployment
+  # ##################################################################################################
+  
   if $use_apel {
   
     package { "apel-parsers":
@@ -19,8 +24,8 @@ class creamce::apel inherits creamce::params {
       ensure  => present,
       owner   => "root",
       group   => "root",
-      mode    => '0640',
-      content => "${apel_cron_sched} root /usr/bin/apelparser",
+      mode    => '0644',
+      content => "${apel_cron_sched} root /usr/bin/apelparser\n",
       require => File["/etc/apel/parser.cfg"],
     }
   } 

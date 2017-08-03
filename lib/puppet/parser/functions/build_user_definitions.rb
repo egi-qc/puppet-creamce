@@ -33,8 +33,8 @@ module Puppet::Parser::Functions
         if uid_list.size > 0
           (0...uid_list.size).each do | idx |
             nameStr = sprintf(name_pattern % { :prefix => user_prefix, :index => (idx + name_offset) })
-            result[u_name] = {
-              'uid'        => uidlist.at(idx),
+            result[nameStr] = {
+              'uid'        => uid_list.at(idx),
               'groups'     => udata['groups'],
               'gridmapdir' => "#{gridmapdir}",
               'homedir'    => "#{home_dir}",
