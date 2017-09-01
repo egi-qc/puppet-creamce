@@ -33,6 +33,10 @@ blah_id_mapping_command_sudo="/usr/bin/sudo -H"
 
 blah_set_default_workdir_to_home=yes
 
+<% if @blah_shared_dirs.length > 0 -%>
+blah_shared_directories=<%=@blah_shared_dirs.join(":")%>
+<% end -%>
+
 # #############################################################################
 # TORQUE common variables
 # #############################################################################

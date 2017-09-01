@@ -101,6 +101,7 @@ class creamce::params {
   $blah_config_file          = hiera("blah::config_file", "/etc/blah.config")
   $blah_child_poll_timeout   = hiera("blah::child_poll_timeout", 200)
   $blah_alldone_interval     = hiera("blah::alldone_interval", 86400)
+  $blah_shared_dirs          = hiera("blah::shared_directories", [])
   $use_blparser              = hiera("blah::use_blparser", false)
   $blah_blp_server           = hiera("blah::blp::host", "")
   $blah_blp_port             = hiera("blah::blp::port", 33333)
