@@ -2,17 +2,22 @@ class creamce::poolaccount inherits creamce::params {
 
   require creamce::yumrepos
   
-  define pooluser ($uid, $groups, $gridmapdir, $homedir="/home", $shell="/bin/bash") {
+  define pooluser ($uid, $groups, $gridmapdir, $comment, $homedir="/home", $shell="/bin/bash") {
   
     user { "${title}":
       ensure     => "present",
       uid        => $uid,
-      comment    => "mapped user for ${groups[0]}",
       gid        => "${groups[0]}",
       groups     => $groups,
       home       => "${homedir}/${title}",
       managehome => true,
       shell      => "${shell}"
+    }
+    
+    unless $comment == "" {
+      User["${title}"]{
+        comment    => "${comment}",
+      }
     }
     
     file { "${gridmapdir}/${title}":

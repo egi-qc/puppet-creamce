@@ -13,15 +13,19 @@ module Puppet::Parser::Functions
         home_dir = udata.fetch('homedir', '/home')
         use_shell = udata.fetch('shell', '/bin/bash')
         name_pattern = udata.fetch('name_pattern', '%<prefix>s%03<index>d')
+        comment_pattern = udata.fetch('comment_pattern', "")
         name_offset = udata.fetch('name_offset', def_name_offset)
         
         utable = udata.fetch('users_table', Hash.new)
         if utable.size > 0
           utable.each do | u_name, u_id |
+            nDict = { :username => u_name, :userid => u_id }
+            commentStr = sprintf(comment_pattern % nDict )
             result[u_name] = {
               'uid'        => u_id,
               'groups'     => udata['groups'],
               'gridmapdir' => "#{gridmapdir}",
+              'comment'    => "#{commentStr}",
               'homedir'    => "#{home_dir}",
               'shell'      => "#{use_shell}"
             }
@@ -32,11 +36,14 @@ module Puppet::Parser::Functions
         uid_list = udata.fetch('uid_list', Array.new)
         if uid_list.size > 0
           (0...uid_list.size).each do | idx |
-            nameStr = sprintf(name_pattern % { :prefix => user_prefix, :index => (idx + name_offset) })
+            nDict = { :prefix => user_prefix, :index => (idx + name_offset) }
+            nameStr = sprintf(name_pattern % nDict )
+            commentStr = sprintf(comment_pattern % nDict )
             result[nameStr] = {
               'uid'        => uid_list.at(idx),
               'groups'     => udata['groups'],
               'gridmapdir' => "#{gridmapdir}",
+              'comment'    => "#{commentStr}",
               'homedir'    => "#{home_dir}",
               'shell'      => "#{use_shell}"
             }
@@ -48,11 +55,14 @@ module Puppet::Parser::Functions
         if pool_size > 0
         
           (0...pool_size).each do | idx |
-            nameStr = sprintf(name_pattern % { :prefix => user_prefix, :index => (idx + name_offset) })
+            nDict = { :prefix => user_prefix, :index => (idx + name_offset) }
+            nameStr = sprintf(name_pattern % nDict )
+            commentStr = sprintf(comment_pattern % nDict )
             result[nameStr] = { 
               'uid'        => udata['first_uid'] + idx,
               'groups'     => udata['groups'],
               'gridmapdir' => "#{gridmapdir}",
+              'comment'    => "#{commentStr}",
               'homedir'    => "#{home_dir}",
               'shell'      => "#{use_shell}"
             }
@@ -60,10 +70,13 @@ module Puppet::Parser::Functions
           end
         else
           # static account
+          nDict = { :username => user_prefix, :userid => udata['first_uid'] }
+          commentStr = sprintf(comment_pattern % nDict )
           result["#{user_prefix}"] = { 
             'uid'        => udata['first_uid'],
             'groups'     => udata['groups'],
             'gridmapdir' => "#{gridmapdir}",
+            'comment'    => "#{commentStr}",
             'homedir'    => "#{home_dir}",
             'shell'      => "#{use_shell}"
           }
