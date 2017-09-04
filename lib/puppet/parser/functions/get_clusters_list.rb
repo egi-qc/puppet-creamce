@@ -95,13 +95,13 @@ module Puppet::Parser::Functions
         cdata["benchmarks"]["specint2000"] = nil
       end
 
-      cdata["instances"] = cdata["wn_list"].length
+      cdata["instances"] = cdata.fetch("node_number", cdata["wn_list"].length)
       cdata["physcpu"] = cdata["physcpu_perhost"] * cdata["instances"]
       cdata["logcpu"] = cdata["logcpu_perhost"] * cdata["instances"]
-      if cdata["physcpu"] == 0
+      if cdata["physcpu_perhost"] == 0
         cdata["cores"] = 0
       else
-        cdata["cores"] = cdata["logcpu"]/cdata["physcpu"]
+        cdata["cores"] = cdata["logcpu_perhost"] / cdata["physcpu_perhost"]
       end
       if cdata["instances"] == 0
         cdata["smpsize"] = 0
