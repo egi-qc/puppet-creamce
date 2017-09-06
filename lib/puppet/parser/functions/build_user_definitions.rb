@@ -1,3 +1,5 @@
+require 'gridutils'
+
 module Puppet::Parser::Functions
   newfunction(:build_user_definitions, :type => :rvalue, :doc => "This function converts user table structure") do | args |
     voenv = args[0]
@@ -9,46 +11,33 @@ module Puppet::Parser::Functions
 
     voenv.each do | voname, vodata |
 
-      f_table = Hash.new
-      vodata['groups'].each do | group, gdata |
-        gdata['fqan'].each do | fqan |
+      f_table = Gridutils.get_fqan_table(vodata)
 
-          norm_fqan = fqan.lstrip
-          norm_fqan.slice!(/\/capability=null/i)
-          norm_fqan.slice!(/\/role=null/i)
-          norm_fqan.gsub!(/role=/i, "Role=")
-
-          if f_table.has_key?(norm_fqan)
-            raise "Duplicate definition of #{norm_fqan} for group #{group}"
-          else
-            f_table[norm_fqan] = group
-          end
-
-        end
-      end
-
-      vodata['users'].each do | user_prefix, udata |
+      vodata[Gridutils::USERS_T].each do | user_prefix, udata |
 
         grp_list = Array.new
-        udata['fqan'].each do | fqan |
-          norm_fqan = fqan.lstrip
-          norm_fqan.slice!(/\/capability=null/i)
-          norm_fqan.slice!(/\/role=null/i)
-          norm_fqan.gsub!(/role=/i, "Role=")
+        udata[Gridutils::USERS_FQAN_T].each do | fqan |
+
+          norm_fqan = Gridutils.norm_fqan(fqan)
           unless f_table.has_key?(norm_fqan)
             raise "FQAN mismatch with #{norm_fqan} for #{user_prefix}"
           end
           grp_list.push(f_table[norm_fqan])
+
         end
 
-        home_dir = udata.fetch('homedir', '/home')
-        use_shell = udata.fetch('shell', '/bin/bash')
-        name_pattern = udata.fetch('name_pattern', '%<prefix>s%03<index>d')
-        comment_pattern = udata.fetch('comment_pattern', "")
-        name_offset = udata.fetch('name_offset', def_name_offset)
+        home_dir = udata.fetch(Gridutils::USERS_HOMEDIR_T, '/home')
+        use_shell = udata.fetch(Gridutils::USERS_SHELL_T, '/bin/bash')
+        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, '%<prefix>s%03<index>d')
+        comment_pattern = udata.fetch(Gridutils::USERS_CPATTERN_T, "")
+        name_offset = udata.fetch(Gridutils::USERS_NOFFSET_T, def_name_offset)
 
-        utable = udata.fetch('users_table', Hash.new)
-        if utable.size > 0
+        utable = udata.fetch(Gridutils::USERS_UTABLE_T, nil)
+        uid_list = udata.fetch(Gridutils::USERS_IDLIST_T, nil)
+        pool_size = udata.fetch(Gridutils::USERS_PSIZE_T, def_pool_size)
+        
+        if utable != nil and utable.size > 0
+
           utable.each do | u_name, u_id |
             nDict = { :username => u_name, :userid => u_id }
             commentStr = sprintf(comment_pattern % nDict )
@@ -61,11 +50,9 @@ module Puppet::Parser::Functions
               'shell'      => "#{use_shell}"
             }
           end
-          next
-        end
 
-        uid_list = udata.fetch('uid_list', Array.new)
-        if uid_list.size > 0
+        elsif uid_list != nil and uid_list.size > 0
+
           (0...uid_list.size).each do | idx |
             nDict = { :prefix => user_prefix, :index => (idx + name_offset) }
             nameStr = sprintf(name_pattern % nDict )
@@ -79,18 +66,15 @@ module Puppet::Parser::Functions
               'shell'      => "#{use_shell}"
             }
           end
-          next
-        end
 
-        pool_size = udata.fetch('pool_size', def_pool_size)
-        if pool_size > 0
+        elsif pool_size > 0
 
           (0...pool_size).each do | idx |
             nDict = { :prefix => user_prefix, :index => (idx + name_offset) }
             nameStr = sprintf(name_pattern % nDict )
             commentStr = sprintf(comment_pattern % nDict )
             result[nameStr] = { 
-              'uid'        => udata['first_uid'] + idx,
+              'uid'        => udata[Gridutils::USERS_FIRSTID_T] + idx,
               'groups'     => grp_list,
               'gridmapdir' => "#{gridmapdir}",
               'comment'    => "#{commentStr}",
@@ -99,12 +83,13 @@ module Puppet::Parser::Functions
             }
 
           end
+
         else
           # static account
-          nDict = { :username => user_prefix, :userid => udata['first_uid'] }
+          nDict = { :username => user_prefix, :userid => udata[Gridutils::USERS_FIRSTID_T] }
           commentStr = sprintf(comment_pattern % nDict )
           result["#{user_prefix}"] = { 
-            'uid'        => udata['first_uid'],
+            'uid'        => udata[Gridutils::USERS_FIRSTID_T],
             'groups'     => grp_list,
             'gridmapdir' => "#{gridmapdir}",
             'comment'    => "#{commentStr}",

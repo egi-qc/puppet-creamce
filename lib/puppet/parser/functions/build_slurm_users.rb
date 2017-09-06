@@ -1,3 +1,5 @@
+require 'gridutils'
+
 module Puppet::Parser::Functions
 
   newfunction(:build_slurm_users, :type => :rvalue, :doc => "It returns the table of slurm users") do | args |
@@ -5,13 +7,13 @@ module Puppet::Parser::Functions
     queues = args[1]
     def_pool_size = args[2].to_i()
     use_std_accts = args[3]
-    name_offset = args[4].to_i()
+    def_name_offset = args[4].to_i()
 
     result = Hash.new
 
     partTable = Hash.new
     queues.each do | qname, qdata |
-      qdata["groups"].each do | grpname |
+      qdata[Gridutils::QUEUES_GROUPS_T].each do | grpname |
         unless partTable.has_key?(grpname)
           partTable[grpname] = Set.new
         end
@@ -21,51 +23,33 @@ module Puppet::Parser::Functions
 
     voenv.each do | voname, vodata |
 
-      f_table = Hash.new
-      vodata['groups'].each do | group, gdata |
-        gdata['fqan'].each do | fqan |
+      f_table = Gridutils.get_fqan_table(vodata)
 
-          norm_fqan = fqan.lstrip
-          norm_fqan.slice!(/\/capability=null/i)
-          norm_fqan.slice!(/\/role=null/i)
-          norm_fqan.gsub!(/role=/i, "Role=")
-
-          if f_table.has_key?(norm_fqan)
-            raise "Duplicate definition of #{norm_fqan} for group #{group}"
-          else
-            f_table[norm_fqan] = group
-          end
-
-        end
-      end
-
-      vodata['users'].each do | user_prefix, udata |
+      vodata[Gridutils::USERS_T].each do | user_prefix, udata |
 
         partSet = Set.new
         accounts = Array.new
 
-        udata['fqan'].each do | fqan |
-          norm_fqan = fqan.lstrip
-          norm_fqan.slice!(/\/capability=null/i)
-          norm_fqan.slice!(/\/role=null/i)
-          norm_fqan.gsub!(/role=/i, "Role=")
+        udata[Gridutils::USERS_FQAN_T].each do | fqan |
+          norm_fqan = Gridutils.norm_fqan(fqan)
           grpname = f_table[norm_fqan]
           partSet.merge(partTable[grpname])
           accounts.push(grpname)
         end
 
         unless use_std_accts
-          accounts = udata.fetch('accounts', nil)
+          accounts = udata.fetch(Gridutils::USERS_ACCTS_T, nil)
         end
 
         if accounts == nil or accounts.size == 0
           raise "Missing accounts definition for #{user_prefix}"
         end
 
-        utable = udata.fetch('users_table', nil)
-        uid_list = udata.fetch('uid_list', nil)        
-        pool_size = udata.fetch('pool_size', def_pool_size)
-        name_pattern = udata.fetch('name_pattern', '%<prefix>s%03<index>d')
+        utable = udata.fetch(Gridutils::USERS_UTABLE_T, nil)
+        uid_list = udata.fetch(Gridutils::USERS_IDLIST_T, nil)
+        pool_size = udata.fetch(Gridutils::USERS_PSIZE_T, def_pool_size)
+        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, '%<prefix>s%03<index>d')
+        name_offset = udata.fetch(Gridutils::USERS_NOFFSET_T, def_name_offset)
 
         if utable != nil and utable.size > 0
 

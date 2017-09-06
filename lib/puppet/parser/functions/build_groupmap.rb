@@ -1,3 +1,5 @@
+require 'gridutils'
+
 module Puppet::Parser::Functions
 
   newfunction(:build_groupmap, :type => :rvalue, :doc => "This function returns the groupmap list") do | args |
@@ -7,13 +9,10 @@ module Puppet::Parser::Functions
     result = Array.new
 
     voenv.each do | voname, vodata |
-      vodata['groups'].each do | group, gdata |
-        gdata['fqan'].each do | fqan |
+      vodata[Gridutils::GROUPS_T].each do | group, gdata |
+        gdata[Gridutils::GROUPS_FQAN_T].each do | fqan |
         
-          norm_fqan = fqan.lstrip
-          norm_fqan.slice!(/\/capability=null/i)
-          norm_fqan.slice!(/\/role=null/i)
-          norm_fqan.gsub!(/role=/i, "Role=")
+          norm_fqan = Gridutils.norm_fqan(fqan)
           
           if fqantable.has_key?(norm_fqan)
             raise "Duplicate definition of #{norm_fqan} for group #{group}"

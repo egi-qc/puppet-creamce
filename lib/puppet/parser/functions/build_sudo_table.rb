@@ -1,8 +1,10 @@
+require 'gridutils'
+
 module Puppet::Parser::Functions
   newfunction(:build_sudo_table, :type => :rvalue, :doc => "This function converts user table structure") do | args |
     voenv = args[0]
     def_pool_size = args[1].to_i()
-    name_offset = args[2].to_i()
+    def_name_offset = args[2].to_i()
 
     result = Hash.new
 
@@ -17,10 +19,7 @@ module Puppet::Parser::Functions
         
         gdata['fqan'].each do | fqan |
         
-          norm_fqan = fqan.lstrip
-          norm_fqan.slice!(/\/capability=null/i)
-          norm_fqan.slice!(/\/role=null/i)
-          norm_fqan.gsub!(/role=/i, "Role=")
+          norm_fqan = Gridutils.norm_fqan(fqan)
 
           if f_table.has_key?(norm_fqan)
             raise "Duplicate definition of #{norm_fqan} for group #{group}"
@@ -36,17 +35,15 @@ module Puppet::Parser::Functions
 
       vodata['users'].each do | user_prefix, udata |
 
-        p_fqan = udata['fqan'][0].lstrip
-        p_fqan.slice!(/\/capability=null/i)
-        p_fqan.slice!(/\/role=null/i)
-        p_fqan.gsub!(/role=/i, "Role=")
+        p_fqan = Gridutils.norm_fqan(udata['fqan'][0])
 
         norm_group = f_table[p_fqan]
         
-        pool_size = udata.fetch('pool_size', def_pool_size)
-        name_pattern = udata.fetch('name_pattern', '%<prefix>s%03<index>d')
-        utable = udata.fetch('users_table', nil)
-        uid_list = udata.fetch('uid_list', nil)
+        pool_size = udata.fetch(Gridutils::USERS_PSIZE_T, def_pool_size)
+        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, '%<prefix>s%03<index>d')
+        name_offset = udata.fetch(Gridutils::USERS_NOFFSET_T, def_name_offset)
+        utable = udata.fetch(Gridutils::USERS_UTABLE_T, nil)
+        uid_list = udata.fetch(Gridutils::USERS_IDLIST_T, nil)
         
         if utable != nil and utable.size > 0
 
