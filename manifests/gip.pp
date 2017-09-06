@@ -108,39 +108,30 @@ class creamce::gip inherits creamce::params {
     mode   => '0755',
   }
   
-  $cluster_paths = prefix(keys($subclusters), "${gridft_pub_dir}/")
-  file { $cluster_paths:
-    ensure => directory,
-    owner  => "root",
-    group  => "root",
-    mode   => '0755',
-  }
+  define tagspace ($pub_dir, $a_owner, $a_group) {
   
-  define tagspace ($pub_dir, $sub_cluster, $a_owner, $a_group, $req_list) {
-  
-    file { "${pub_dir}/${sub_cluster}/${title}":
+    file { "${pub_dir}/${title}":
       ensure  => directory,
       owner   => "${a_owner}",
       group   => "${a_group}",
       mode    => '0755',
-      require => $req_list,
     }
 
-    file { "${pub_dir}/${sub_cluster}/${title}/${title}.list":
+    file { "${pub_dir}/${title}/${title}.list":
       ensure  => file,
       owner   => "${a_owner}",
       group   => "${a_group}",
       mode    => '0644',
-      require => File["${pub_dir}/${sub_cluster}/${title}"],
+      require => File["${pub_dir}/${title}"],
     }
 
   }
   
-  $tagdir_defs = build_tagdir_definitions($voenv, $subclusters, $gridft_pub_dir, 
-                                          $username_offset, File[$cluster_paths])
+  $tagdir_defs = build_tagdir_definitions($voenv, $gridft_pub_dir, $username_offset)
   create_resources(tagspace, $tagdir_defs)
-
-
+  
+  File["${gridft_pub_dir}"] -> Tagspace <| |>
+  
   # ##################################################################################################
   # common plugin 
   # ##################################################################################################

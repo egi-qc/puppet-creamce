@@ -100,11 +100,11 @@ creamce::vo_table :
             dteamprod : { fqan : [ "/dteam/prod/ROLE=developer" ], gid : 9002 }
         },
         users : {
-            dteamusr : { first_uid : 6000, groups : [ dteam ], name_pattern : "%<prefix>s%03<index>d" },
+            dteamusr : { first_uid : 6000, fqan : [ "/dteam" ], name_pattern : "%<prefix>s%03<index>d" },
             
-            dteamsgmusr : { first_uid : 6100, groups : [ dteamsgm, dteam ], pool_size : 5, name_pattern : "%<prefix>s%02<index>d" },
+            dteamsgmusr : { first_uid : 6100, fqan : [ "/dteam/sgm/ROLE=developer", "/dteam" ], pool_size : 5, name_pattern : "%<prefix>s%02<index>d" },
             
-            dteamprodusr : { first_uid : 6200, groups : [ dteamprod, dteam ], pool_size : 5, name_pattern : "%<prefix>s%02<index>d" }
+            dteamprodusr : { first_uid : 6200, fqan : [ "/dteam/prod/ROLE=developer", "/dteam" ], pool_size : 5, name_pattern : "%<prefix>s%02<index>d" }
         }
     }
 
