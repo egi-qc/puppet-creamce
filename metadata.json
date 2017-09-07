@@ -1,6 +1,6 @@
 {
   "name": "infnpd-creamce",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "author": "blah-cream@lists.infn.it",
   "summary": "This modules provides classes and definitions required to manage and properly configure an EMI creamce service.",
   "license": "Apache 2.0",
@@ -9,9 +9,9 @@
   "issues_url": "https://github.com/italiangrid/puppet-creamce/issues",
   "dependencies": [
     {"name": "puppetlabs-stdlib", "version_requirement": ">= 1.0.0"},
-    {"name": "puppet-fetchcrl", "version": ">= 1.1.1"},
-    {"name": "lcgdm-gridftp", "version": ">= 0.2.2"},
-    {"name": "puppetlabs-mysql", "version": ">= 3.9.0"}
+    {"name": "puppet-fetchcrl", "version_requirement": ">= 1.1.1"},
+    {"name": "lcgdm-gridftp", "version_requirement": ">= 0.2.2"},
+    {"name": "puppetlabs-mysql", "version_requirement": ">= 3.11.0 < 4.0.0"}
   ],
   "requirements": [
     { "name": "puppet", "version_requirement": ">= 3.0.0" }
