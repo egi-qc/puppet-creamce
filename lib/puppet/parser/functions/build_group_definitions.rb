@@ -1,20 +1,28 @@
+require 'gridutils'
+
 module Puppet::Parser::Functions
-  newfunction(:build_group_definitions, :type => :rvalue, :doc => "This function converts group table structure") do |args|
+  newfunction(:build_group_definitions, :type => :rvalue, :doc => "This function converts group table structure") do | args |
     voenv = args[0]
     
     result = Hash.new
     gid_table = Hash.new
 
     voenv.each do | voname, vodata |
-      vodata['groups'].each do | group, gdata |
-        if gid_table.has_key?(gdata['gid'])
-          raise "Duplicate gid #{gdata['gid']}"
+      vodata[Gridutils::GROUPS_T].each do | group, gdata |
+
+        grpid = gdata[Gridutils::GROUPS_GID_T]
+        if gid_table.has_key?(grpid)
+          raise "Duplicate gid #{grpid}"
         else
-          gid_table[gdata['gid']] = gdata['fqan']
+          gid_table[grpid] = gdata[Gridutils::GROUPS_FQAN_T]
         end
-        result[group] = { 'ensure'   => "present",
-                          'tag'      => [ 'creamce::poolgroup' ],
-                          'gid'      => gdata['gid']}
+
+        result[group] = {
+          'ensure'   => "present",
+          'tag'      => [ 'creamce::poolgroup' ],
+          'gid'      => grpid
+        }
+
       end
     end
     return result

@@ -20,6 +20,39 @@ module Gridutils
   
   QUEUES_GROUPS_T =    'groups'
   
+  VO_SERVERS_T =       'servers'
+  VO_SRVNAME_T =       'server'
+  VO_SRVPORT_T =       'port'
+  VO_SRVDN_T =         'dn'
+  VO_SRVCADN_T =       'ca_dn'
+  VO_GTVER_T =         'gt_version'
+  
+  CE_PHYCPU_T =        'ce_physcpu'
+  CE_LOGCPU_T =        'ce_logcpu'
+  CE_NODES_T =         'nodes'
+  CE_RTENV_T =         'ce_runtimeenv'
+  CE_CPUMODEL_T =      'ce_cpu_model'
+  CE_CPUSPEED_T =      'ce_cpu_speed'
+  CE_CPUVEND_T =       'ce_cpu_vendor'
+  CE_CPUVER_T =        'ce_cpu_version'
+  CE_INCONN_T =        'ce_inboundip'
+  CE_OUTCONN_T =       'ce_outboundip'
+  CE_PHYMEM_T =        'ce_minphysmem'
+  CE_VIRTMEM_T =       'ce_minvirtmem'
+  CE_OSFAMILY_T =      'ce_os_family'
+  CE_OSNAME_T =        'ce_os_name'
+  CE_OSARCH_T =        'ce_os_arch'
+  CE_OSREL_T =         'ce_os_release'
+  CE_OTHERD_T =        'ce_otherdescr'
+  CE_TMPDIR_T =        'subcluster_tmpdir'
+  CE_WNTMDIR_T =       'subcluster_wntmdir'
+  CE_BENCHM_T =        'ce_benchmarks'
+  CE_ACCELER_T =       'accelerators'
+  
+  BENCH_SPECFP_D =     'specfp2000'
+  BENCH_SPECINT_D =    'specint2000'
+  BENCH_HEP_D =        'hep-spec06'
+
   def Gridutils.norm_fqan(fqan)
     norm_fqan = fqan.lstrip
     norm_fqan.slice!(/\/capability=null/i)
