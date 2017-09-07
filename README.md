@@ -60,12 +60,6 @@ creamce::use_argus :                 false
 creamce::default_pool_size :         10
 creamce::info::capability :          [ "CloudSupport=false", "Multinode=true" ]
 
-creamce::repo_urls :                 [ 
-                                       "http://repository.example.org/dist/CREAM/repos/centos7/cream.repo",
-                                       "http://repository.example.org/dist/CREAM/repos/centos7/security_extras.repo"
-                                     ]
-creamce::rpm_key_urls :              [ "http://repository.example.org/dist/RPM-GPG-KEY-cream-dist" ]
-
 gridftp::params::certificate :       "/etc/grid-security/hostcert.pem"
 gridftp::params::key :               "/etc/grid-security/hostkey.pem"
 gridftp::params::port :              2811
