@@ -170,6 +170,14 @@ class creamce::params {
   $condor_queue_attr         = hiera("condor::queue_attribute", undef)
   $condor_conf_dir           = hiera("condor::config::dir", "/etc/condor/config.d")
 
+  $sge_master                = hiera("gridengine::master", undef)
+  $sge_master_port           = hiera("gridengine::master_port", 536)
+  $sge_execd_port            = hiera("gridengine::execd_port", 537)
+  $sge_root_path             = hiera("gridengine::root_path", "/usr/local/sge/pro")
+  $sge_cell                  = hiera("gridengine::cell", "default")
+  $sge_spool                 = hiera("gridengine::spool_meth", "classic")
+  $sge_cluster               = hiera("gridengine::cluster_name", undef)
+
   $cream_config_ssh          = hiera("creamce::config_ssh", false)
   $shosts_equiv_extras       = hiera("creamce::shosts_equiv_extras", [])
   $ssh_cron_sched            = hiera("creamce::ssh_cron_sched", "05 1,7,13,19 * * *")

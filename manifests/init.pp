@@ -34,8 +34,11 @@ class creamce inherits creamce::params {
       slurm: {
         include creamce::slurm
       }
+      sge: {
+        include creamce::gridengine
+      }
       default: {
-        warning "No package installed for lrms infoprovider"
+        warning "Unsupported batch system ${batch_system}"
       }
     }
     
