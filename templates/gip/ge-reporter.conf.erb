@@ -1,0 +1,21 @@
+#
+# Sample configuration file for SGE information reporter
+# Build by puppet, do not edit
+# ======================================================
+SGE_ROOT = <%=@sge_root_path%>
+SGE_ARCH = `<%=@sge_root_path-%>/util/arch`
+SGE_CELL = <%=@sge_cell%>
+vqueue_file = /etc/lrms/vqueues.conf
+state_file = /etc/lrms/cluster.state
+qstat_command = <%=@sge_root_path-%>/bin/`<%=@sge_root_path-%>/util/arch`/qstat
+qconf_command = <%=@sge_root_path-%>/bin/`<%=@sge_root_path-%>/util/arch`/qconf
+glue1-static-file-CE                = <%=@gippath-%>/ldif/static-file-CE.ldif
+glue2-static-file-computing-manager = <%=@gippath-%>/ldif/ComputingManager.ldif
+glue2-static-file-computing-share   = <%=@gippath-%>/ldif/ComputingShare.ldif
+<% if $clustermode -%>
+outputformat                        = glue1
+<% else -%>
+outputformat                        = both
+<% end -%>
+
+

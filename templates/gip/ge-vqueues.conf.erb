@@ -1,0 +1,11 @@
+#
+# SGE JobManager queue mapping file
+# Build by puppet, do not edit
+#
+# Virtual
+# Queue         Property                New Value
+# --------------------------------------------------
+<% @grid_queues.each do | queue, qdata | -%>
+<%=queue%>          queue                   <%=queue%>
+<% end -%>
+

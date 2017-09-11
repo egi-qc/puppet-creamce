@@ -37,9 +37,27 @@ blah_set_default_workdir_to_home=yes
 blah_shared_directories=<%=@blah_shared_dirs.join(":")%>
 <% end -%>
 
+<% if @use_blparser -%>
+# #############################################################################
+# BLParser section
+# #############################################################################
+
+sge_BLParser=yes
+
+sge_BLPserver=<%=@blah_blp_server%>
+
+sge_BLPport=<%=@blah_blp_port%>
+
+sge_num_BLParser=<%=@blah_blp_num%>
+
+
+<% else -%>
+
 # #############################################################################
 # BUpdater/BNotifier common variables
 # #############################################################################
+
+sge_BLParser=no
 
 bupdater_pidfile=/var/blah/blah_bupdater.pid
 
@@ -47,7 +65,7 @@ job_registry=/var/blah/user_blah_job_registry.bjr
 
 job_registry_use_mmap=yes
 
-async_notification_host=
+async_notification_host=localhost
 
 async_notification_port=<%=@bupdater_notify_port%>
 
@@ -84,6 +102,27 @@ bnotifier_debug_logfile=/var/log/cream/glite-ce-bnotifier.log
 # #############################################################################
 
 bupdater_path=/usr/libexec/BUpdaterSGE
+
+<% end -%>
+# #############################################################################
+# GE variables
+# #############################################################################
+
+sge_fallback=no
+sge_cellname=<%=@sge_cell%>
+sge_nochecksubmission=yes
+sge_confpath=
+sge_nologaccess=
+sge_rootpath=<%=@sge_root_path%>
+
+export SGE_CELL=<%=@sge_cell%>
+export SGE_EXECD_PORT=<%=@sge_execd_port%>
+export SGE_QMASTER_PORT=<%=@sge_master_port%>
+export SGE_ROOT=<%=@sge_root_path%>
+
+sge_binpath=<%=@sge_bin_dir%>
+sge_spoolpath=<%=@sge_spool_dir%>
+
 
 
 

@@ -173,9 +173,11 @@ class creamce::params {
   $sge_master                = hiera("gridengine::master", undef)
   $sge_master_port           = hiera("gridengine::master_port", 536)
   $sge_execd_port            = hiera("gridengine::execd_port", 537)
-  $sge_root_path             = hiera("gridengine::root_path", "/usr/local/sge/pro")
+  $sge_root_path             = hiera("gridengine::root_path", "/opt/sge")
   $sge_cell                  = hiera("gridengine::cell", "default")
-  $sge_spool                 = hiera("gridengine::spool_meth", "classic")
+  $sge_spool_meth            = hiera("gridengine::spool_meth", "classic")
+  $sge_spool_dir             = hiera("gridengine::spool_dir", "${sge_root_path}/default/common")
+  $sge_bin_dir               = hiera("gridengine::bin_dir", "${sge_root_path}/bin")
   $sge_cluster               = hiera("gridengine::cluster_name", undef)
 
   $cream_config_ssh          = hiera("creamce::config_ssh", false)

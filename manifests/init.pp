@@ -107,16 +107,16 @@ PartOf=glite-services.target
         Class[Creamce::Condor] -> File["${blah_systemddir}/10-glite-services.conf"]
       }
       lsf: {
-        include creamce::lsf
         Class[Creamce::Lsf] -> File["${blah_systemddir}/10-glite-services.conf"]
       }
       pbs: {
-        include creamce::torque
         Class[Creamce::Torque] -> File["${blah_systemddir}/10-glite-services.conf"]
       }
       slurm: {
-        include creamce::slurm
         Class[Creamce::Slurm] -> File["${blah_systemddir}/10-glite-services.conf"]
+      }
+      sge: {
+        Class[Creamce::Gridengine] -> File["${blah_systemddir}/10-glite-services.conf"]
       }
     }
     

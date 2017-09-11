@@ -1,0 +1,11 @@
+#!/bin/sh
+/usr/libexec/glite-ce-check-submission-state /etc/glite-ce-dbtool/creamdb_min_access.conf
+retcode=$?
+if [ $retcode = 1 ] || [ $retcode = 2 ] ; then
+  # Submissions disabled. Publish Draining
+  /usr/libexec/glite-info-dynamic-ge --info -c /etc/lrms/scheduler.conf | sed -e 's/GlueCEStateStatus: Production/GlueCEStateStatus: Draining/'
+else 
+  # Submissions enabled. The default cluster.state will be used
+  /usr/libexec/glite-info-dynamic-ge --info -c /etc/lrms/scheduler.conf
+fi
+

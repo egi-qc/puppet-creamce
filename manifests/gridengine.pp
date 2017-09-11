@@ -4,7 +4,7 @@ class creamce::gridengine inherits creamce::params {
   include creamce::gip
   
   # ##################################################################################################
-  # configure blah for Condor
+  # BLAHP setup (GE)
   # ##################################################################################################
   
   file{ "${blah_config_file}":
@@ -14,6 +14,77 @@ class creamce::gridengine inherits creamce::params {
     mode    => '0644',
     content => template("creamce/blah.config.gridengine.erb"),
   }
+
+
+  # ##################################################################################################
+  # GE infoproviders
+  # ##################################################################################################
+
+  package { "glite-info-dynamic-ge":
+    ensure  => present,
+  }
+  
+  file { "/etc/lrms/scheduler.conf":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => '0644',
+    content => template("creamce/gip/ge-provider.conf.erb"),
+    require => Package["glite-info-dynamic-ge"],
+    notify  => Service["bdii"],
+  }
+
+  file { "/etc/lrms/vqueues.conf":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => '0644',
+    content => template("creamce/gip/ge-vqueues.conf.erb"),
+    require => Package["glite-info-dynamic-ge"],
+    notify  => Service["bdii"],
+  }
+  
+  file { "/etc/lrms/cluster.state":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => '0644',
+    content => "Production",
+    require => Package["glite-info-dynamic-ge"],
+    notify  => Service["bdii"],
+  }
+  
+  file { "/etc/lrms/sge.conf":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => '0644',
+    content => template("creamce/gip/ge-reporter.conf.erb"),
+    require => Package["glite-info-dynamic-ge"],
+    notify  => Service["bdii"],
+  }
+  
+  file { "$gippath/plugin/glite-info-dynamic-ce":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
+    content => template("creamce/gip/glite-info-dynamic-ce-ge.erb"),
+    require => Package["glite-info-dynamic-ge"],
+    notify  => Service["bdii"],
+  }
+  
+  file { "/etc/lrms/scheduler.conf":
+    ensure  => present,
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
+    content => template("creamce/gip/scheduler.conf.ge.erb"),
+    require => Package["glite-info-dynamic-ge"],   
+    notify  => Service["bdii"],
+  }
+
+  
 
 
 }

@@ -1,0 +1,12 @@
+# Built by puppet, DO NOT EDIT
+
+[Main]
+module_search_path : ../lrms:../ett
+
+[LRMS]
+lrms_backend_cmd: /usr/libexec/glite-info-dynamic-ge --lrmsinfo -c /etc/lrms/scheduler.conf
+
+[Scheduler]
+cycle_time : 0
+vo_max_jobs_cmd: /usr/libexec/glite-info-dynamic-ge --vomaxjobs -c /etc/lrms/scheduler.conf
+
