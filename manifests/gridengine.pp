@@ -24,16 +24,6 @@ class creamce::gridengine inherits creamce::params {
     ensure  => present,
   }
   
-  file { "/etc/lrms/scheduler.conf":
-    ensure  => present,
-    owner   => "root",
-    group   => "root",
-    mode    => '0644',
-    content => template("creamce/gip/ge-provider.conf.erb"),
-    require => Package["glite-info-dynamic-ge"],
-    notify  => Service["bdii"],
-  }
-
   file { "/etc/lrms/vqueues.conf":
     ensure  => present,
     owner   => "root",
@@ -70,7 +60,7 @@ class creamce::gridengine inherits creamce::params {
     group   => "root",
     mode    => '0755',
     content => template("creamce/gip/glite-info-dynamic-ce-ge.erb"),
-    require => Package["glite-info-dynamic-ge"],
+    require => Package["glite-info-dynamic-ge", "bdii"],
     notify  => Service["bdii"],
   }
   
