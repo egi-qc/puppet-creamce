@@ -9,15 +9,7 @@ password = <%=@apel_dbpass%>
 
 [site_info]
 site_name = <%=@sitename%>
-<% if @batch_system == "lsf" -%>
-lrms_server = <%=@lsf_primary_master%>
-<% elsif @batch_system == "pbs" -%>
-lrms_server = <%=@torque_server%>
-<% elsif @batch_system == "slurm" -%>
-lrms_server = <%=@slurm_master%>
-<% else -%>
-lrms_server = <%=@ce_host%>
-<% end -%>
+lrms_server = <%=apel_lrms_srv%>
 
 [blah]
 enabled = true

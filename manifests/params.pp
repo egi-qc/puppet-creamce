@@ -170,7 +170,7 @@ class creamce::params {
   $condor_queue_attr         = hiera("condor::queue_attribute", undef)
   $condor_conf_dir           = hiera("condor::config::dir", "/etc/condor/config.d")
 
-  $sge_master                = hiera("gridengine::master", undef)
+  $sge_master                = hiera("gridengine::master", "${::fqdn}")
   $sge_master_port           = hiera("gridengine::master_port", 536)
   $sge_execd_port            = hiera("gridengine::execd_port", 537)
   $sge_root_path             = hiera("gridengine::root_path", "/opt/sge")
@@ -293,6 +293,26 @@ class creamce::params {
   $apel_lrms_dir              = hiera('apel::batch::dir', "")
   $apel_file_prefix           = hiera('apel::prefix::filter', "")
   $apel_cron_sched            = hiera('apel::cron::sched', "5 0 * * *")
+  case $batch_system {
+    condor: {
+      $apel_lrms_srv          = "${ce_host}"
+    }
+    lsf: {
+      $apel_lrms_srv          = "${lsf_primary_master}"
+    }
+    pbs: {
+      $apel_lrms_srv          = "${torque_server}"
+    }
+    slurm: {
+      $apel_lrms_srv          = "${slurm_master}"
+    }
+    sge: {
+      $apel_lrms_srv          = "${sge_master}"
+    }
+    default: {
+      $apel_lrms_srv          = "${ce_host}"
+    }
+  }
 
   #
   # yum repositories
