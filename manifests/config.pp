@@ -4,14 +4,283 @@ class creamce::config inherits creamce::params {
   
   require creamce::install
   
-  require creamce::env
+  require creamce::poolaccount
   
-  require creamce::sudo
+  # ##################################################################################################
+  # Environment setup
+  # ##################################################################################################
+
+  file { "/etc/profile.d/grid-env.sh":
+    ensure  => present,
+    content => template("creamce/gridenvsh.erb"),
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
+    tag     => [ "gridenvfiles" ],
+  }  
+
+  file { "/etc/profile.d/grid-env.csh":
+    ensure  => present,
+    content => template("creamce/gridenvcsh.erb"),
+    owner   => "root",
+    group   => "root",
+    mode    => '0644',
+    tag     => [ "gridenvfiles" ],
+  }
+
+  # ##################################################################################################
+  # Sudo setup
+  # ##################################################################################################
+
+  $sudo_table = build_sudo_table($voenv, $default_pool_size, $username_offset)
+
+  package { "sudo":
+    ensure => present
+  }
+
+  file { "/etc/sudoers.d/50_cream_users":
+    ensure  => file,
+    owner   => "root",
+    group   => "root",
+    mode    => '0440',
+    content => template("creamce/sudoers_forcream.erb"),
+    require => Package["sudo"],
+    tag     => [ "tomcatcefiles" ],
+  }
+
+  unless $sudo_logfile == "" {
+
+    file { "${sudo_logfile}":
+      ensure  => file,
+      owner   => "root",
+      group   => "root",
+      mode    => '0640',      
+      tag     => [ "tomcatcefiles" ],
+    }
+
+  }
+
+  # ##################################################################################################
+  # VOMS setup
+  # ##################################################################################################
+
+  file { "/etc/vomses":
+    ensure  => directory,
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
+  }
   
-  require creamce::voms
+  file { "${voms_dir}":
+    ensure  => directory,
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
+  }
   
-  require creamce::creamdb
+  define vofiles ($server, $port, $dn, $ca_dn, $gtversion, $voname, $vodir) {
   
+    $lscfile_content = "${dn}\n${ca_dn}\n"
+    file { "${vodir}/${voname}/${server}.lsc":
+      ensure  => file,
+      owner   => "root",
+      group   => "root",
+      mode    => '0644',
+      content => "${lscfile_content}",
+      require => File["${vodir}/${voname}"],
+      tag     => [ "vomscefiles" ],
+    }
+    
+    # maybe we can use the voname for nickname
+    $nickname = $title
+    
+    $vomsfile_content = "\"${nickname}\" \"${server}\" \"${port}\" \"${dn}\" \"${voname}\" \"${gtversion}\"\n"
+    file { "/etc/vomses/${voname}-${server}":
+      ensure  => file,
+      owner   => "root",
+      group   => "root",
+      mode    => '0644',
+      content => "${vomsfile_content}",
+      require => File["/etc/vomses"],
+      tag     => [ "vomscefiles" ],
+    }    
+    
+  }
+  
+  $vopaths = prefix(keys($voenv), "${voms_dir}/")
+  file { $vopaths:
+    ensure  => directory,
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
+    require => File["${voms_dir}"],
+  }
+  
+  $vo_table = build_vo_definitions($voenv, "${voms_dir}")
+  create_resources(vofiles, $vo_table)
+
+  # ##################################################################################################
+  # Database setup
+  # See https://forge.puppetlabs.com/puppetlabs/mysql
+  # ##################################################################################################
+
+  if $access_by_domain {
+    $access_pattern = "%.${cream_db_domain}"
+  } else {
+    $access_pattern = "${cream_db_host}"
+  }
+  
+  class { 'mysql::server':
+    root_password      => $mysql_password,
+    override_options   => $mysql_override_options
+  }
+  
+  # --------------------------------------------------------------------------------------------------
+  # configuration files
+  # --------------------------------------------------------------------------------------------------
+  
+  #
+  # TODO verify privileges and move into gip.pp in case
+  #
+  file { "/etc/glite-ce-dbtool/creamdb_min_access.conf":
+    ensure   => present,
+    content  => template("creamce/creamdb_min_access.conf.erb"),
+    owner    => "root",
+    group    => "root",
+    mode     => '0644',
+  }
+
+  #
+  # TODO use scripts from package
+  #
+  file { "/etc/glite-ce-cream/populate_creamdb_mysql.puppet.sql":
+    ensure   => present,
+    content  => template("creamce/populate_creamdb_mysql.sql.erb"),
+    owner    => "root",
+    group    => "root",
+    mode     => '0600',
+    require  => Class['mysql::server'],
+  }
+  
+  file { "/etc/glite-ce-cream/populate_delegationcreamdb.puppet.sql":
+    ensure   => present,
+    content  => template("creamce/populate_delegationcreamdb.sql.erb"),
+    owner    => "root",
+    group    => "root",
+    mode     => '0600',
+    require  => Class['mysql::server'],
+  }
+
+
+  # --------------------------------------------------------------------------------------------------
+  # create database
+  # --------------------------------------------------------------------------------------------------
+  
+  mysql_database { "${cream_db_name}":
+    ensure   => 'present',
+    charset  => 'latin1',
+    collate  => 'latin1_general_ci',
+    require  => Class['mysql::server'],
+  }
+  
+  mysql_database { "${delegation_db_name}":
+    ensure   => 'present',
+    charset  => 'latin1',
+    collate  => 'latin1_general_ci',
+    require  => Class['mysql::server'],
+  }
+  
+  # --------------------------------------------------------------------------------------------------
+  # tables
+  # --------------------------------------------------------------------------------------------------
+  
+  exec { "populate-creamdb":
+    command     => "mysql -h localhost -u root --password=\"${mysql_password}\" ${cream_db_name} < /etc/glite-ce-cream/populate_creamdb_mysql.puppet.sql",
+    refreshonly => true,
+    logoutput   => true,
+    path        => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+    timeout     => 300,
+    require     => File["/etc/glite-ce-cream/populate_creamdb_mysql.puppet.sql"],
+    subscribe   => Mysql_database["${cream_db_name}"],
+  }
+
+  exec { "populate-delegationdb":
+    command     => "mysql -h localhost -u root --password=\"${mysql_password}\" ${delegation_db_name} < /etc/glite-ce-cream/populate_delegationcreamdb.puppet.sql",
+    refreshonly => true,
+    logoutput   => true,
+    path        => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+    timeout     => 300,
+    require     => File["/etc/glite-ce-cream/populate_delegationcreamdb.puppet.sql"],
+    subscribe   => Mysql_database["${delegation_db_name}"],
+  }
+  
+  # --------------------------------------------------------------------------------------------------
+  # users
+  # --------------------------------------------------------------------------------------------------
+
+  $enc_std_password = mysql_password("${cream_db_password}")
+  $enc_min_password = mysql_password("${cream_db_minpriv_password}")
+  
+  mysql_user { [ "${cream_db_user}@${access_pattern}", "${cream_db_user}@localhost" ]:
+    ensure        => $ensure,
+    password_hash => $enc_std_password,
+    require       => Class['mysql::server'],
+  }
+  
+  mysql_user { [ "${cream_db_minpriv_user}@${access_pattern}", "${cream_db_minpriv_user}@localhost" ]:
+    ensure        => $ensure,
+    password_hash => $enc_min_password,
+    require       => Class['mysql::server'],
+  }
+
+  # --------------------------------------------------------------------------------------------------
+  # grants
+  # --------------------------------------------------------------------------------------------------
+  
+  mysql_grant { "${cream_db_user}@${access_pattern}/${cream_db_name}.*":
+    privileges => 'ALL',
+    user       => "${cream_db_user}@${access_pattern}",
+    table      => "${cream_db_name}.*",
+    require    => [ Mysql_database["${cream_db_name}"], Mysql_user["${cream_db_user}@${access_pattern}"] ],
+  }
+
+  mysql_grant { "${cream_db_user}@localhost/${cream_db_name}.*":
+    privileges => 'ALL',
+    user       => "${cream_db_user}@localhost",
+    table      => "${cream_db_name}.*",
+    require    => [ Mysql_database["${cream_db_name}"], Mysql_user["${cream_db_user}@localhost"] ],
+  }
+
+  mysql_grant { "${cream_db_user}@${access_pattern}/${delegation_db_name}.*":
+    privileges => 'ALL',
+    user       => "${cream_db_user}@${access_pattern}",
+    table      => "${delegation_db_name}.*",
+    require    => [ Mysql_database["${delegation_db_name}"], Mysql_user["${cream_db_user}@${access_pattern}"] ],
+  }
+
+  mysql_grant { "${cream_db_user}@localhost/${delegation_db_name}.*":
+    privileges => 'ALL',
+    user       => "${cream_db_user}@localhost",
+    table      => "${delegation_db_name}.*",
+    require    => [ Mysql_database["${delegation_db_name}"], Mysql_user["${cream_db_user}@localhost"] ],
+  }
+  
+  mysql_grant { "${cream_db_minpriv_user}@${access_pattern}/${cream_db_name}.db_info":
+    privileges => ['SELECT (submissionEnabled,startUpTime)'],
+    options    => ['GRANT'],
+    user       => "${cream_db_minpriv_user}@${access_pattern}",
+    table      => "${cream_db_name}.db_info",
+    require    => [ Exec["populate-creamdb"], Mysql_user["${cream_db_minpriv_user}@${access_pattern}"] ],
+  }
+    
+  mysql_grant { "${cream_db_minpriv_user}@localhost/${cream_db_name}.db_info":
+    privileges => ['SELECT (submissionEnabled,startUpTime)'],
+    options    => ['GRANT'],
+    user       => "${cream_db_minpriv_user}@localhost",
+    table      => "${cream_db_name}.db_info",
+    require    => [ Exec["populate-creamdb"], Mysql_user["${cream_db_minpriv_user}@localhost"] ],
+  }
+
   # ##################################################################################################
   # Tomcat setup
   # ##################################################################################################
@@ -22,7 +291,7 @@ class creamce::config inherits creamce::params {
     group    => "root",
     mode     => '0644',
     source   => [$host_certificate],
-    notify   => Service[$tomcat]
+    tag     => [ "tomcatcefiles" ],
   }
   
   file { "${tomcat_key}":
@@ -31,7 +300,7 @@ class creamce::config inherits creamce::params {
     group    => "root",
     mode     => '0400',
     source   => [$host_private_key],
-    notify   => Service[$tomcat]
+    tag     => [ "tomcatcefiles" ],
   }
 
   file {"/etc/${tomcat}/server.xml":
@@ -40,7 +309,7 @@ class creamce::config inherits creamce::params {
     owner   => "tomcat",
     group   => "tomcat",
     mode    => '0660',
-    notify  => Service["$tomcat"],
+    tag     => [ "tomcatcefiles" ],
   }
   
   file {"/etc/${tomcat}/${tomcat}.conf":
@@ -49,15 +318,7 @@ class creamce::config inherits creamce::params {
     owner   => "root",
     group   => "root",
     mode    => '0660',
-    notify  => Service["$tomcat"],
-  }
-
-  service { "$tomcat":
-    ensure     => running,
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
-    alias      => "tomcat",
+    tag     => [ "tomcatcefiles" ],
   }
 
   # ##################################################################################################
@@ -91,7 +352,7 @@ class creamce::config inherits creamce::params {
     group   => "root",
     mode    => '0400',
     content => template("creamce/cream.erb"),
-    notify  => Service["$tomcat"],
+    tag     => [ "tomcatcefiles" ],
   }
  
   file {"/etc/glite-ce-cream/cream-config.xml":
@@ -100,7 +361,7 @@ class creamce::config inherits creamce::params {
     owner   => "tomcat",
     group   => "tomcat",
     mode    => '0640',
-    notify  => Service["$tomcat"],
+    tag     => [ "tomcatcefiles" ],
   }
 
   file {"/etc/glite-ce-cream-utils/glite_cream_load_monitor.conf":
@@ -109,7 +370,7 @@ class creamce::config inherits creamce::params {
     owner   => "tomcat",
     group   => "root",
     mode    => '0640',
-    notify  => Service["$tomcat"],
+    tag     => [ "tomcatcefiles" ],
   }
 
   file { "${cream_admin_list_file}":
@@ -118,8 +379,25 @@ class creamce::config inherits creamce::params {
     group   => "root",
     mode    => '0644',
     content => template("creamce/adminlist.erb"),
-    notify  => Service["$tomcat"],
+    tag     => [ "tomcatcefiles" ],
   }  
+
+  # ##################################################################################################
+  # Tomcat service
+  # ##################################################################################################
+
+  service { "$tomcat":
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
+    alias      => "tomcat",
+  }
+  
+  File <| tag == 'gridenvfiles' |> ~> Service["$tomcat"]
+  File <| tag == 'tomcatcefiles' |> ~> Service["$tomcat"]
+  File <| tag == 'vomscefiles' |> ~> Service["$tomcat"]
+  Mysql_grant <| |> ~> Service["$tomcat"]
 
 }
 
