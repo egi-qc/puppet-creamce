@@ -4,10 +4,6 @@ class creamce inherits creamce::params {
   
     include creamce::config
 
-    unless $use_argus {
-        include creamce::glexec
-    }
-
     include creamce::gridftp
     
     include creamce::gip
