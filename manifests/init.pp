@@ -12,7 +12,9 @@ class creamce inherits creamce::params {
     
     include creamce::gip
     
-    include creamce::apel
+    if $use_apel {
+      include creamce::apel
+    } 
 
     if $use_loclog {
       include creamce::locallogger
