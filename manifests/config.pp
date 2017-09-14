@@ -2,12 +2,31 @@ class creamce::config inherits creamce::params {
   
   require creamce::certificate
   
-  require creamce::install
-  
   require creamce::poolaccount
   
   require creamce::lcmaps
   
+  # ##################################################################################################
+  # Packages and installation
+  # ##################################################################################################
+
+  package { "$tomcat":
+    ensure  => present,
+    tag     => [ "creamcepackages" ],
+  }
+  
+  package { ["glite-ce-cream", "canl-java-tomcat", "mysql-connector-java"]: 
+    ensure   => present,
+    require  => Package["${tomcat}"],
+    tag      => [ "creamcepackages" ],
+  }
+  
+  file { "${tomcat_server_lib}/commons-logging.jar":
+    ensure    => link,
+    target    => "/usr/share/java/commons-logging.jar",
+    subscribe => Package["${tomcat}"],
+  }
+
   # ##################################################################################################
   # Environment setup
   # ##################################################################################################
@@ -61,6 +80,8 @@ class creamce::config inherits creamce::params {
     }
 
   }
+  
+  #Creamce::Poolaccount::Pooluser <| |> -> File["/etc/sudoers.d/50_cream_users"]
 
   # ##################################################################################################
   # Glexec setup
@@ -446,6 +467,7 @@ class creamce::config inherits creamce::params {
     alias      => "tomcat",
   }
   
+  Package <| tag == 'creamcepackages' |> -> Service["$tomcat"]
   File <| tag == 'gridenvfiles' |> ~> Service["$tomcat"]
   File <| tag == 'tomcatcefiles' |> ~> Service["$tomcat"]
   File <| tag == 'vomscefiles' |> ~> Service["$tomcat"]
