@@ -6,7 +6,7 @@ module Puppet::Parser::Functions
     gridmapdir = args[1]
     def_pool_size = args[2].to_i()
     def_name_offset = args[3].to_i()
-    create_user = args[4]
+    def_create_user = args[4]
 
     result = Hash.new
 
@@ -36,6 +36,7 @@ module Puppet::Parser::Functions
         utable = udata.fetch(Gridutils::USERS_UTABLE_T, nil)
         uid_list = udata.fetch(Gridutils::USERS_IDLIST_T, nil)
         pool_size = udata.fetch(Gridutils::USERS_PSIZE_T, def_pool_size)
+        create_user = udata.fetch(Gridutils::USERS_CRUSR_T, def_create_user)
         
         if utable != nil and utable.size > 0
 
