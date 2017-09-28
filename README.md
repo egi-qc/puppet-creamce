@@ -20,11 +20,9 @@ Check if the hostname and FQDN is correctly detected by puppet:
 facter | grep hostname
 facter | grep fqdn
 ```
-In the following examples the FQHN will be myhost.mydomain
+In the following examples the FQDN will be myhost.mydomain
 
 Install the CREAM CE module for puppet: `puppet module install infnpd-creamce`
-
-Apply the patch described in the tips&tricks section
 
 Create the required directories: `mkdir -p /etc/puppet/manifests /var/lib/hiera/node`
 
@@ -48,7 +46,7 @@ Edit the file `/etc/hiera.yaml` as:
 
 Link the hiera configuration to puppet: `ln -s /etc/hiera.yaml /etc/puppet/hiera.yaml`
 
-Edit the CREAM CE description file, an example of minimal configuration is:
+Edit the CREAM CE description file `/var/lib/hiera/node/myhost.mydomain.yaml`, an example of minimal configuration is:
 ```
 ---
 creamce::mysql::root_password :      mysqlp@$$w0rd
@@ -58,7 +56,6 @@ apel::db::pass :                     apelp@$$w0rd
 creamce::batch_system :              pbs
 creamce::use_argus :                 false
 creamce::default_pool_size :         10
-creamce::info::capability :          [ "CloudSupport=false", "Multinode=true" ]
 
 gridftp::params::certificate :       "/etc/grid-security/hostcert.pem"
 gridftp::params::key :               "/etc/grid-security/hostkey.pem"
