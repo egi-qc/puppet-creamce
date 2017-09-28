@@ -2,7 +2,8 @@ class creamce::poolaccount inherits creamce::params {
 
   require creamce::yumrepos
   
-  define pooluser ($uid, $groups, $gridmapdir, $comment, $homedir="/home", $shell="/bin/bash") {
+  define pooluser ($uid, $groups, $gridmapdir, $comment,
+                   $homedir="/home", $shell="/bin/bash", $create_usr=true) {
   
     user { "${title}":
       ensure     => "present",
@@ -50,7 +51,8 @@ class creamce::poolaccount inherits creamce::params {
   $group_table = build_group_definitions($voenv)
   create_resources(group, $group_table)
   
-  $user_table = build_user_definitions($voenv, $gridmap_dir, $default_pool_size, $username_offset)
+  $user_table = build_user_definitions($voenv, $gridmap_dir, $default_pool_size,
+                                       $username_offset, $create_user)
   create_resources(pooluser, $user_table)
 
   notify { "pool_checkpoint":

@@ -6,6 +6,7 @@ module Puppet::Parser::Functions
     gridmapdir = args[1]
     def_pool_size = args[2].to_i()
     def_name_offset = args[3].to_i()
+    create_user = args[4]
 
     result = Hash.new
 
@@ -47,7 +48,8 @@ module Puppet::Parser::Functions
               'gridmapdir' => "#{gridmapdir}",
               'comment'    => "#{commentStr}",
               'homedir'    => "#{home_dir}",
-              'shell'      => "#{use_shell}"
+              'shell'      => "#{use_shell}",
+              'create_usr' => create_user
             }
           end
 
@@ -63,7 +65,8 @@ module Puppet::Parser::Functions
               'gridmapdir' => "#{gridmapdir}",
               'comment'    => "#{commentStr}",
               'homedir'    => "#{home_dir}",
-              'shell'      => "#{use_shell}"
+              'shell'      => "#{use_shell}",
+              'create_usr' => create_user
             }
           end
 
@@ -79,7 +82,8 @@ module Puppet::Parser::Functions
               'gridmapdir' => "#{gridmapdir}",
               'comment'    => "#{commentStr}",
               'homedir'    => "#{home_dir}",
-              'shell'      => "#{use_shell}"
+              'shell'      => "#{use_shell}",
+              'create_usr' => create_user
             }
 
           end
@@ -94,7 +98,8 @@ module Puppet::Parser::Functions
             'gridmapdir' => "#{gridmapdir}",
             'comment'    => "#{commentStr}",
             'homedir'    => "#{home_dir}",
-            'shell'      => "#{use_shell}"
+            'shell'      => "#{use_shell}",
+            'create_usr' => create_user
           }
         end
       end

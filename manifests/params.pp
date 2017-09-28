@@ -75,6 +75,7 @@ class creamce::params {
   $sudo_logfile              = hiera("creamce::sudo_logfile", "")
   $default_pool_size         = hiera("creamce::default_pool_size", 100)
   $username_offset           = hiera("creamce::username_offset", 1)
+  $create_user               = hiera("creamce::create_user", true)
 
   #
   # Tomcat
