@@ -8,6 +8,7 @@ module Gridutils
   USERS_T =            'users'
   USERS_FQAN_T =       'fqan'
   USERS_PSIZE_T =      'pool_size'
+  USERS_CRUSR_T =      'create_user'
   USERS_IDLIST_T =     'uid_list'
   USERS_UTABLE_T =     'users_table'
   USERS_NPATTERN_T =   'name_pattern'

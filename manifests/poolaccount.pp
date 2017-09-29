@@ -2,22 +2,33 @@ class creamce::poolaccount inherits creamce::params {
 
   require creamce::yumrepos
   
-  define pooluser ($uid, $groups, $gridmapdir, $comment, $homedir="/home", $shell="/bin/bash") {
+  define pooluser ($uid, $groups, $gridmapdir, $comment,
+                   $homedir="/home", $shell="/bin/bash", $create_usr=true) {
   
-    user { "${title}":
-      ensure     => "present",
-      uid        => $uid,
-      gid        => "${groups[0]}",
-      groups     => $groups,
-      home       => "${homedir}/${title}",
-      managehome => true,
-      shell      => "${shell}"
-    }
+    if $create_usr {
     
-    unless $comment == "" {
-      User["${title}"]{
-        comment    => "${comment}",
+      user { "${title}":
+        ensure     => "present",
+        uid        => $uid,
+        gid        => "${groups[0]}",
+        groups     => $groups,
+        home       => "${homedir}/${title}",
+        managehome => true,
+        shell      => "${shell}"
       }
+      
+      unless $comment == "" {
+        User["${title}"]{
+          comment    => "${comment}",
+        }
+      }
+    
+    } else {
+
+      notify { "${title}_fake":
+        message => "User ${title} not created",
+      }
+
     }
     
     file { "${gridmapdir}/${title}":
@@ -26,7 +37,7 @@ class creamce::poolaccount inherits creamce::params {
       group      => "root",
       mode       => '0644',
       content    => "",
-      require    => [ File["${gridmapdir}"], User["${title}"] ]
+      require    => File["${gridmapdir}"]
     }
 
   }
@@ -50,7 +61,8 @@ class creamce::poolaccount inherits creamce::params {
   $group_table = build_group_definitions($voenv)
   create_resources(group, $group_table)
   
-  $user_table = build_user_definitions($voenv, $gridmap_dir, $default_pool_size, $username_offset)
+  $user_table = build_user_definitions($voenv, $gridmap_dir, $default_pool_size,
+                                       $username_offset, $create_user)
   create_resources(pooluser, $user_table)
 
   notify { "pool_checkpoint":
