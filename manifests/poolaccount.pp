@@ -5,20 +5,30 @@ class creamce::poolaccount inherits creamce::params {
   define pooluser ($uid, $groups, $gridmapdir, $comment,
                    $homedir="/home", $shell="/bin/bash", $create_usr=true) {
   
-    user { "${title}":
-      ensure     => "present",
-      uid        => $uid,
-      gid        => "${groups[0]}",
-      groups     => $groups,
-      home       => "${homedir}/${title}",
-      managehome => true,
-      shell      => "${shell}"
-    }
+    if $create_usr {
     
-    unless $comment == "" {
-      User["${title}"]{
-        comment    => "${comment}",
+      user { "${title}":
+        ensure     => "present",
+        uid        => $uid,
+        gid        => "${groups[0]}",
+        groups     => $groups,
+        home       => "${homedir}/${title}",
+        managehome => true,
+        shell      => "${shell}"
       }
+      
+      unless $comment == "" {
+        User["${title}"]{
+          comment    => "${comment}",
+        }
+      }
+    
+    } else {
+
+      notify { "${title}_fake":
+        message => "User ${title} not created",
+      }
+
     }
     
     file { "${gridmapdir}/${title}":
@@ -27,7 +37,7 @@ class creamce::poolaccount inherits creamce::params {
       group      => "root",
       mode       => '0644',
       content    => "",
-      require    => [ File["${gridmapdir}"], User["${title}"] ]
+      require    => File["${gridmapdir}"]
     }
 
   }
