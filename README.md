@@ -86,16 +86,20 @@ creamce::vo_table :
         groups : {
             dteam : { fqan : [ "/dteam" ], gid : 9000 },
             
-            dteamsgm : { fqan : [ "/dteam/sgm/ROLE=developer" ], gid : 9001, pub_admin : true },
+            dteamsgm : { fqan : [ "/dteam/sgm/ROLE=developer" ], gid : 9001 },
             
             dteamprod : { fqan : [ "/dteam/prod/ROLE=developer" ], gid : 9002 }
         },
         users : {
-            dteamusr : { first_uid : 6000, fqan : [ "/dteam" ], name_pattern : "%<prefix>s%03<index>d" },
+            dteamusr : { first_uid : 6000, name_pattern : "%<prefix>s%03<index>d",
+                         primary_fqan : [ "/dteam" ] },
             
-            dteamsgmusr : { first_uid : 6100, fqan : [ "/dteam/sgm/ROLE=developer", "/dteam" ], pool_size : 5, name_pattern : "%<prefix>s%02<index>d" },
+            dteamsgmusr : { first_uid : 6100, pool_size : 5,name_pattern : "%<prefix>s%02<index>d",
+                            primary_fqan : [ "/dteam/sgm/ROLE=developer" ], secondary_fqan : [ "/dteam" ],
+                            pub_admin : true },
             
-            dteamprodusr : { first_uid : 6200, fqan : [ "/dteam/prod/ROLE=developer", "/dteam" ], pool_size : 5, name_pattern : "%<prefix>s%02<index>d" }
+            dteamprodusr : { first_uid : 6200, pool_size : 5, name_pattern : "%<prefix>s%02<index>d",
+                             primary_fqan : [ "/dteam/prod/ROLE=developer" ], secondary_fqan : [ "/dteam" ] }
         }
     }
 

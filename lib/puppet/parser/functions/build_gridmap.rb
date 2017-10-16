@@ -11,21 +11,26 @@ module Puppet::Parser::Functions
     voenv.each do | voname, vodata |
       vodata[Gridutils::USERS_T].each do | user, udata |
 
-        if udata.has_key?('groups') and not udata.has_key?('fqan')
-        	raise "Definition \"group\" is deprecated, use \"fqan\" for #{user}"
+        if udata.has_key?(Gridutils::USERS_FQAN_T)
+        	raise "Definition \"fqan\" is deprecated, use \"primary_fqan\" for #{user}"
         end
 
-      	norm_fqan = Gridutils.norm_fqan(udata['fqan'][0])
+        if udata.has_key?('groups')
+        	raise "Definition \"groups\" is deprecated, use \"primary_fqan\" for #{user}"
+        end
 
-        utable = udata.fetch(Gridutils::USERS_UTABLE_T, nil)
-        uid_list = udata.fetch(Gridutils::USERS_IDLIST_T, nil)
-        pool_size = udata.fetch(Gridutils::USERS_PSIZE_T, def_pool_size)
+      	if udata.fetch(Gridutils::USERS_PFQAN_T, []).length == 0
+          raise "Attribute #{Gridutils::USERS_PFQAN_T} is mandatory for #{user}"
+        end
 
-        if (utable != nil and utable.size > 0) or (uid_list != nil and uid_list.size > 0) or pool_size > 0
-          fqantable[norm_fqan] = ".#{user}"
+        if Gridutils.is_a_pool(udata, def_pool_size)
+          udata[Gridutils::USERS_PFQAN_T].each do | pfqan |
+            fqantable[Gridutils.norm_fqan(pfqan)] = ".#{user}"
+          end
         else
-          # static account
-          fqantable[norm_fqan] = user
+          udata[Gridutils::USERS_PFQAN_T].each do | pfqan |
+            fqantable[Gridutils.norm_fqan(pfqan)] = user
+          end
         end
 
       end
