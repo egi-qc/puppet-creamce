@@ -28,16 +28,23 @@ module Puppet::Parser::Functions
       vodata[Gridutils::USERS_T].each do | user_prefix, udata |
 
         partSet = Set.new
-        accounts = Array.new
+        acctSet = Set.new
 
-        udata[Gridutils::USERS_FQAN_T].each do | fqan |
+        norm_fqan = Gridutils.norm_fqan(udata[Gridutils::USERS_PFQAN_T][0])
+        grpname = f_table[norm_fqan]
+        partSet.merge(partTable[grpname])
+        acctSet.add(grpname)
+
+        udata.fetch(Gridutils::USERS_SFQAN_T, []).each do | fqan |
           norm_fqan = Gridutils.norm_fqan(fqan)
           grpname = f_table[norm_fqan]
           partSet.merge(partTable[grpname])
-          accounts.push(grpname)
+          acctSet.add(grpname)
         end
 
-        unless use_std_accts
+        if use_std_accts
+          accounts = acctSet.to_a()
+        else
           accounts = udata.fetch(Gridutils::USERS_ACCTS_T, nil)
         end
 
@@ -48,7 +55,7 @@ module Puppet::Parser::Functions
         utable = udata.fetch(Gridutils::USERS_UTABLE_T, nil)
         uid_list = udata.fetch(Gridutils::USERS_IDLIST_T, nil)
         pool_size = udata.fetch(Gridutils::USERS_PSIZE_T, def_pool_size)
-        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, '%<prefix>s%03<index>d')
+        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, Gridutils::USR_STRFMT_D)
         name_offset = udata.fetch(Gridutils::USERS_NOFFSET_T, def_name_offset)
 
         if utable != nil and utable.size > 0

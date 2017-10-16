@@ -17,7 +17,18 @@ module Puppet::Parser::Functions
       vodata[Gridutils::USERS_T].each do | user_prefix, udata |
 
         grp_list = Array.new
-        udata[Gridutils::USERS_FQAN_T].each do | fqan |
+
+        if udata.fetch(Gridutils::USERS_PFQAN_T, []).length == 0
+          raise "Attribute #{Gridutils::USERS_PFQAN_T} is mandatory for #{user_prefix}"
+        end
+
+        norm_fqan = Gridutils.norm_fqan(udata[Gridutils::USERS_PFQAN_T][0])
+        unless f_table.has_key?(norm_fqan)
+          raise "FQAN mismatch with #{norm_fqan} for #{user_prefix}"
+        end
+        grp_list.push(f_table[norm_fqan])
+
+        udata.fetch(Gridutils::USERS_SFQAN_T, []).each do | fqan |
 
           norm_fqan = Gridutils.norm_fqan(fqan)
           unless f_table.has_key?(norm_fqan)
@@ -29,7 +40,7 @@ module Puppet::Parser::Functions
 
         home_dir = udata.fetch(Gridutils::USERS_HOMEDIR_T, '/home')
         use_shell = udata.fetch(Gridutils::USERS_SHELL_T, '/bin/bash')
-        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, '%<prefix>s%03<index>d')
+        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, Gridutils::USR_STRFMT_D)
         comment_pattern = udata.fetch(Gridutils::USERS_CPATTERN_T, "")
         name_offset = udata.fetch(Gridutils::USERS_NOFFSET_T, def_name_offset)
 

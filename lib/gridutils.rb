@@ -3,10 +3,11 @@ module Gridutils
   GROUPS_T =           'groups'
   GROUPS_GID_T =       'gid'
   GROUPS_FQAN_T =      'fqan'
-  GROUPS_PADMIN_T =    'pub_admin'
 
   USERS_T =            'users'
   USERS_FQAN_T =       'fqan'
+  USERS_PFQAN_T =      'primary_fqan'
+  USERS_SFQAN_T =      'secondary_fqan'
   USERS_PSIZE_T =      'pool_size'
   USERS_CRUSR_T =      'create_user'
   USERS_IDLIST_T =     'uid_list'
@@ -17,6 +18,7 @@ module Gridutils
   USERS_HOMEDIR_T =    'homedir'
   USERS_SHELL_T =      'shell'
   USERS_CPATTERN_T =   'comment_pattern'
+  USERS_PADMIN_T =     'pub_admin'
   USERS_ACCTS_T =      'accounts'
   
   QUEUES_GROUPS_T =    'groups'
@@ -53,6 +55,8 @@ module Gridutils
   BENCH_SPECFP_D =     'specfp2000'
   BENCH_SPECINT_D =    'specint2000'
   BENCH_HEP_D =        'hep-spec06'
+  
+  USR_STRFMT_D =       '%<prefix>s%03<index>d'
 
   def Gridutils.norm_fqan(fqan)
     norm_fqan = fqan.lstrip
@@ -81,6 +85,16 @@ module Gridutils
     end
 
     f_table
+
+  end
+  
+  def Gridutils.is_a_pool(udata, def_pool_size)
+
+    utable = udata.fetch(Gridutils::USERS_UTABLE_T, nil)
+    uid_list = udata.fetch(Gridutils::USERS_IDLIST_T, nil)
+    pool_size = udata.fetch(Gridutils::USERS_PSIZE_T, def_pool_size)
+
+    (utable != nil and utable.size > 0) or (uid_list != nil and uid_list.size > 0) or pool_size > 0
 
   end
 

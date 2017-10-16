@@ -13,11 +13,11 @@ module Puppet::Parser::Functions
       gItem = Hash.new
       f_table = Hash.new
       
-      vodata['groups'].each do | group, gdata |
+      vodata[Gridutils::GROUPS_T].each do | group, gdata |
       
         norm_group = group.upcase.tr("^A-Z0-9_", "_")
         
-        gdata['fqan'].each do | fqan |
+        gdata[Gridutils::GROUPS_FQAN_T].each do | fqan |
         
           norm_fqan = Gridutils.norm_fqan(fqan)
 
@@ -33,14 +33,14 @@ module Puppet::Parser::Functions
         
       end
 
-      vodata['users'].each do | user_prefix, udata |
+      vodata[Gridutils::USERS_T].each do | user_prefix, udata |
 
-        p_fqan = Gridutils.norm_fqan(udata['fqan'][0])
+        p_fqan = Gridutils.norm_fqan(udata[Gridutils::USERS_PFQAN_T][0])
 
         norm_group = f_table[p_fqan]
         
         pool_size = udata.fetch(Gridutils::USERS_PSIZE_T, def_pool_size)
-        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, '%<prefix>s%03<index>d')
+        name_pattern = udata.fetch(Gridutils::USERS_NPATTERN_T, Gridutils::USR_STRFMT_D)
         name_offset = udata.fetch(Gridutils::USERS_NOFFSET_T, def_name_offset)
         utable = udata.fetch(Gridutils::USERS_UTABLE_T, nil)
         uid_list = udata.fetch(Gridutils::USERS_IDLIST_T, nil)

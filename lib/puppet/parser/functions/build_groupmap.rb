@@ -9,18 +9,9 @@ module Puppet::Parser::Functions
     result = Array.new
 
     voenv.each do | voname, vodata |
-      vodata[Gridutils::GROUPS_T].each do | group, gdata |
-        gdata[Gridutils::GROUPS_FQAN_T].each do | fqan |
-        
-          norm_fqan = Gridutils.norm_fqan(fqan)
-          
-          if fqantable.has_key?(norm_fqan)
-            raise "Duplicate definition of #{norm_fqan} for group #{group}"
-          else
-            fqantable[norm_fqan] = group
-          end
-        end
-      end
+    
+      fqantable.merge!(Gridutils.get_fqan_table(vodata))
+
     end
 
     fqanlist = fqantable.keys
