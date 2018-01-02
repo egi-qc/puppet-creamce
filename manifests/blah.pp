@@ -37,7 +37,7 @@ class creamce::blah inherits creamce::params {
     group   => "root",
     mode    => '0644',
     content => template("creamce/blahp-logrotate.erb"),
-    tag    => [ "blahconffiles" ],
+    tag     => [ "blahconffiles" ],
   }
   
   unless $use_blparser {
@@ -48,7 +48,7 @@ class creamce::blah inherits creamce::params {
       owner   => "root",
       group   => "root",
       mode    => '0644',
-      tag    => [ "blahconffiles" ],
+      tag     => [ "blahconffiles" ],
     }
 
     file { "/etc/logrotate.d/bupdater-logrotate":
@@ -57,11 +57,38 @@ class creamce::blah inherits creamce::params {
       owner   => "root",
       group   => "root",
       mode    => '0644',
-      tag    => [ "blahconffiles" ],
+      tag     => [ "blahconffiles" ],
     }
   
   }
   
   Package <| tag == 'creamcepackages' |> -> File <| tag == 'blahconffiles' |>
+
+  # ##################################################################################################
+  # Service management
+  # ##################################################################################################
+
+  if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease in [ "7" ] {
+
+    file { "/etc/systemd/system/glite-ce-blah-parser.service.d":
+      ensure => directory,
+      owner  => "root",
+      group  => "root",
+      mode   => '0644',
+    }
+    
+    file { "/etc/systemd/system/glite-ce-blah-parser.service.d/10-glite-services.conf":
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => '0644',
+      content => "[Unit]
+PartOf=glite-services.target
+",
+      require => File["/etc/systemd/system/glite-ce-blah-parser.service.d"],
+      tag     => [ "glitesystemdfiles" ],
+    }
+
+  }
 
 }

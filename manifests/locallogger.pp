@@ -52,6 +52,10 @@ class creamce::locallogger inherits creamce::params {
     require   => [ File["${loclog_dir}/.certs/hostcert.pem"], Package["glite-lb-logger"] ],
   }
 
+  # ##################################################################################################
+  # Service management
+  # ##################################################################################################
+
   service { "glite-lb-logd":
     ensure     => running,
     hasstatus  => true,
@@ -64,6 +68,42 @@ class creamce::locallogger inherits creamce::params {
     hasstatus  => true,
     hasrestart => true,
     require    => Service["glite-lb-logd"],
+  }
+
+  if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease in [ "7" ] {
+
+    file { ["/etc/systemd/system/glite-lb-logd.service.d",
+            "/etc/systemd/system/glite-lb-interlogd.service.d"]:
+      ensure => directory,
+      owner  => "root",
+      group  => "root",
+      mode   => '0644',
+    }
+
+    file { "/etc/systemd/system/glite-lb-logd.service.d/10-glite-services.conf":
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => '0644',
+      content => "[Unit]
+PartOf=glite-services.target
+",
+      require => File["/etc/systemd/system/glite-lb-logd.service.d"],
+      tag     => [ "glitesystemdfiles" ],
+    }
+  
+    file { "/etc/systemd/system/glite-lb-interlogd.service.d/10-glite-services.conf":
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => '0644',
+      content => "[Unit]
+PartOf=glite-services.target
+",
+      require => File["/etc/systemd/system/glite-lb-interlogd.service.d"],
+      tag     => [ "glitesystemdfiles" ],
+    }
+
   }
 
 }

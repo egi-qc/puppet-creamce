@@ -479,5 +479,49 @@ class creamce::config inherits creamce::params {
   File <| tag == 'vomscefiles' |> ~> Service["$tomcat"]
   Mysql_grant <| |> ~> Service["$tomcat"]
 
+  if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease in [ "7" ] {
+
+    file { "/etc/systemd/system/tomcat.service.d":
+      ensure => directory,
+      owner  => "root",
+      group  => "root",
+      mode   => '0644',
+    }
+    
+    file { "/etc/systemd/system/tomcat.service.d/10-glite-services.conf":
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => '0644',
+      content => "[Unit]
+PartOf=glite-services.target
+",
+      require => File["/etc/systemd/system/tomcat.service.d"],
+      tag     => [ "glitesystemdfiles" ],
+    }
+
+    if $use_loclog {
+      $glite_service_defs = "[Unit]
+Description=Master service for CREAM CE
+Requires=tomcat.service glite-ce-blah-parser.service glite-lb-logd.service glite-lb-interlogd.service
+"
+    } else {
+      $glite_service_defs = "[Unit]
+Description=Master service for CREAM CE
+Requires=tomcat.service glite-ce-blah-parser.service
+"
+    }
+
+    file { "/lib/systemd/system/glite-services.target":
+      ensure  => present,
+      owner   => "root",
+      group   => "root",
+      mode    => '0644',
+      content => "${glite_service_defs}",
+    }
+    
+    File <| tag == 'glitesystemdfiles' |> -> File["/lib/systemd/system/glite-services.target"]
+  }
+
 }
 
