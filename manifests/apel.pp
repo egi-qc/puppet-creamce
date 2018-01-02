@@ -6,7 +6,8 @@ class creamce::apel inherits creamce::params {
   # ##################################################################################################
   
   package { "apel-parsers":
-    ensure   => present,
+    ensure => present,
+    tag    => [ "apelpackages", "umdpackages" ],
   }
 
   file { "/etc/apel/parser.cfg":

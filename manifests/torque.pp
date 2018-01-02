@@ -65,6 +65,7 @@ class creamce::torque inherits creamce::params {
 
   package { "lcg-info-dynamic-scheduler-pbs":
     ensure  => present,
+    tag     => [ "bdiipackages", "umdpackages" ],
   }
   
   file { "/etc/lrms/scheduler.conf":

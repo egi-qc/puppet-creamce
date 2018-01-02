@@ -1,6 +1,5 @@
 class creamce::gip inherits creamce::params {
 
-  require creamce::yumrepos
   require creamce::poolaccount
 
   $queue_vo_map = build_queue_vo_map($grid_queues, $voenv)
@@ -15,6 +14,7 @@ class creamce::gip inherits creamce::params {
               "glue-schema"
             ]:
     ensure   => present,
+    tag      => [ "umdpackages" ],
   }
   
   # ##################################################################################################

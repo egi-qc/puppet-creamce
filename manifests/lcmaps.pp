@@ -1,7 +1,5 @@
 class creamce::lcmaps inherits creamce::params {
 
-  require creamce::yumrepos
-
   package { [
               "lcmaps-plugins-basic",
               "lcmaps-plugins-voms",
@@ -10,7 +8,8 @@ class creamce::lcmaps inherits creamce::params {
               "lcas-plugins-voms",
               "lcas-plugins-check-executable"
             ]:
-    ensure => present
+    ensure => present,
+    tag    => [ "lcmapspackages", "umdpackages" ],
   }
   
   file { "/etc/lcas/lcas-glexec.db":

@@ -34,6 +34,7 @@ class creamce::condor inherits creamce::params {
   package { "lcg-info-dynamic-scheduler-condor":
     ensure  => present,
     require => Package["bdii"],
+    tag     => [ "bdiipackages", "umdpackages" ],
   }
   
   file { "${condor_conf_dir}/bdii_setup.config":

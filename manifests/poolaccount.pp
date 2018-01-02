@@ -1,7 +1,5 @@
 class creamce::poolaccount inherits creamce::params {
 
-  require creamce::yumrepos
-  
   define pooluser ($uid, $groups, $gridmapdir, $comment,
                    $homedir="/home", $shell="/bin/bash", $create_usr=true) {
   
@@ -43,7 +41,8 @@ class creamce::poolaccount inherits creamce::params {
   }
   
   package { [ "cleanup-grid-accounts", "lcg-expiregridmapdir" ]:
-    ensure => present
+    ensure => present,
+    tag    => [ "poolaccountpackages", "umdpackages" ],
   }
   
   group { "edguser":

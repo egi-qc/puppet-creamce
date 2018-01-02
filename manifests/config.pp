@@ -15,7 +15,13 @@ class creamce::config inherits creamce::params {
     tag     => [ "creamcepackages" ],
   }
   
-  package { ["glite-ce-cream", "canl-java-tomcat", "mysql-connector-java"]: 
+  package { ["glite-ce-cream", "canl-java-tomcat" ]: 
+    ensure   => present,
+    require  => Package["${tomcat}"],
+    tag      => [ "creamcepackages", "umdpackages" ],
+  }
+  
+  package { "mysql-connector-java":
     ensure   => present,
     require  => Package["${tomcat}"],
     tag      => [ "creamcepackages" ],

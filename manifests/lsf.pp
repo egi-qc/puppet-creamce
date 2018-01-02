@@ -24,6 +24,7 @@ class creamce::lsf inherits creamce::params {
   package { [ "info-dynamic-scheduler-lsf", "info-dynamic-scheduler-lsf-btools" ]:
     ensure  => present,
     require => Package["bdii", "dynsched-generic"],
+    tag     => [ "bdiipackages", "umdpackages" ],
   }
 
   file{ "/etc/lrms/lsf.conf":

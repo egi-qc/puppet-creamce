@@ -22,6 +22,7 @@ class creamce::gridengine inherits creamce::params {
 
   package { "glite-info-dynamic-ge":
     ensure  => present,
+    tag     => [ "bdiipackages", "umdpackages" ],
   }
   
   file { "/etc/lrms/vqueues.conf":

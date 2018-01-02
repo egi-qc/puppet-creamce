@@ -6,7 +6,7 @@ class creamce::blah inherits creamce::params {
 
   package { "BLAH":
     ensure  => present,
-    tag     => [ "creamcepackages" ],
+    tag     => [ "creamcepackages", "umdpackages" ],
   }
 
   # ##################################################################################################

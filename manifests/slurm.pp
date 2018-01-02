@@ -25,6 +25,7 @@ class creamce::slurm inherits creamce::params {
   package{"info-dynamic-scheduler-slurm":
     ensure  => present,
     require => Package["dynsched-generic"],
+    tag     => [ "bdiipackages", "umdpackages" ],
   }
 
   file { "/etc/lrms/scheduler.conf":

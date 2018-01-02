@@ -1,6 +1,5 @@
 class creamce::gridftp inherits creamce::params {
 
-  require creamce::yumrepos
   require creamce::certificate
   
   if $use_argus {
@@ -64,6 +63,7 @@ class creamce::gridftp inherits creamce::params {
   package { ["globus-proxy-utils", "kill-stale-ftp", "${gridftp_auth_plugin}"]:
     ensure  => present,
     require => Class[Gridftp::Install],
+    tag     => [ "gridftppackages", "umdpackages" ],
   }
   
 }
