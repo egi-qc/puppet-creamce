@@ -20,6 +20,7 @@ class creamce::yumrepos inherits creamce::params {
   if size($cream_rpmkey_urls) > 0 {
 
     getrpmkeys { $cream_rpmkey_urls:
+      tag => [ "yumrepokey" ],
     }
 
   }
@@ -28,6 +29,7 @@ class creamce::yumrepos inherits creamce::params {
 
     getyumrepo { $cream_repo_urls:
       yum_repo_dir  => "/etc/yum.repos.d",
+      tag           => [ "yumrepomdfile" ],
     }
 
   }
@@ -35,6 +37,9 @@ class creamce::yumrepos inherits creamce::params {
   package { "redhat-lsb-core":
     ensure   => present,
   }
+
+  Getrpmkeys <| tag == 'yumrepokey' |> -> Getyumrepo <| tag == 'yumrepomdfile' |>
+  Getyumrepo <| tag == 'yumrepomdfile' |> -> Package <| tag == 'umdpackages' |>
 
 }
 
