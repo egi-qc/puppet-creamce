@@ -461,6 +461,8 @@ class creamce::config inherits creamce::params {
     tag     => [ "tomcatcefiles" ],
   }  
 
+  Package <| tag == 'creamcepackages' |> -> File <| tag == 'tomcatcefiles' |>
+
   # ##################################################################################################
   # Tomcat service
   # ##################################################################################################
@@ -473,7 +475,6 @@ class creamce::config inherits creamce::params {
     alias      => "tomcat",
   }
   
-  Package <| tag == 'creamcepackages' |> -> Service["$tomcat"]
   File <| tag == 'gridenvfiles' |> ~> Service["$tomcat"]
   File <| tag == 'tomcatcefiles' |> ~> Service["$tomcat"]
   File <| tag == 'vomscefiles' |> ~> Service["$tomcat"]
