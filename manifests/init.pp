@@ -6,8 +6,6 @@ class creamce inherits creamce::params {
 
     include creamce::gridftp
     
-    include creamce::gip
-    
     if $use_apel {
       include creamce::apel
     } 
