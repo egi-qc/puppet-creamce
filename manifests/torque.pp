@@ -1,7 +1,7 @@
 class creamce::torque inherits creamce::params {
 
-  include creamce::blah
-  include creamce::gip
+  require creamce::blah
+  require creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -37,21 +37,15 @@ class creamce::torque inherits creamce::params {
       content => template("creamce/blahp-logrotate.erb"),
     }
     
-    service { "glite-ce-blah-parser":
-      ensure    => running,
-      require   => Package["BLAH"],
-      subscribe => File["/etc/blparser.conf"],
-    }
+    # realization of virtual resource Service["glite-ce-blah-parser"]
+    File["/etc/blparser.conf"] ~> Service <| tag == 'blahparserservice' |>
 
   }
   
   if $istorqueinstalled == "true" {
 
-    service { "glite-ce-blah-parser":
-      ensure    => running,
-      require   => Package["BLAH"],
-      subscribe => File["${blah_config_file}"],
-    }
+    # realization of virtual resource Service["glite-ce-blah-parser"]
+    File["${blah_config_file}"] ~> Service <| tag == 'blahparserservice' |>
 
   }
   

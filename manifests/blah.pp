@@ -68,6 +68,15 @@ class creamce::blah inherits creamce::params {
   # Service management
   # ##################################################################################################
 
+  @service { "glite-ce-blah-parser":
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
+    require    => Package["BLAH"],
+    tag        => [ "blahparserservice" ],
+  }
+
   if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease in [ "7" ] {
 
     file { "/etc/systemd/system/glite-ce-blah-parser.service.d":

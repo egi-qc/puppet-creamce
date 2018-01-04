@@ -1,8 +1,7 @@
 class creamce::slurm inherits creamce::params {
 
-  include creamce::blah
-  include creamce::gip
-  include creamce::poolaccount
+  require creamce::blah
+  require creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -17,6 +16,9 @@ class creamce::slurm inherits creamce::params {
     mode    => '0644',
     content => template("creamce/blah.config.slurm.erb"),
   }
+
+  # realization of virtual resource Service["glite-ce-blah-parser"]
+  File["${blah_config_file}"] ~> Service <| tag == 'blahparserservice' |>
 
   # ##################################################################################################
   # SLURM infoproviders
@@ -82,6 +84,8 @@ class creamce::slurm inherits creamce::params {
   }
   
   if $slurm_config_acct {
+
+    include creamce::poolaccount
 
     $slurm_acct_users = build_slurm_users($voenv, $grid_queues,
                                           $default_pool_size, $slurm_use_std_acct, $username_offset)

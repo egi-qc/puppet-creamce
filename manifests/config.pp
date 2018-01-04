@@ -4,8 +4,6 @@ class creamce::config inherits creamce::params {
   
   require creamce::poolaccount
   
-  require creamce::lcmaps
-  
   # ##################################################################################################
   # Packages and installation
   # ##################################################################################################
@@ -95,6 +93,8 @@ class creamce::config inherits creamce::params {
 
   unless $use_argus {
 
+    require creamce::lcmaps
+  
     package { "glexec":
       ensure  => present,
     }

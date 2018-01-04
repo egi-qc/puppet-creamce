@@ -1,7 +1,7 @@
 class creamce::lsf inherits creamce::params {
 
-  include creamce::blah
-  include creamce::gip
+  require creamce::blah
+  require creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -16,6 +16,9 @@ class creamce::lsf inherits creamce::params {
     mode     => '0644',
     content  => template("creamce/blah.config.lsf.erb"),
   }
+
+  # realization of virtual resource Service["glite-ce-blah-parser"]
+  File["${blah_config_file}"] ~> Service <| tag == 'blahparserservice' |>
 
   # ##################################################################################################
   # LSF infoproviders
