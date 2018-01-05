@@ -15,10 +15,11 @@ class creamce::slurm inherits creamce::params {
     group   => "root",
     mode    => '0644',
     content => template("creamce/blah.config.slurm.erb"),
+    tag     => [ "blahconffiles" ],
   }
 
   # realization of virtual resource Service["glite-ce-blah-parser"]
-  File["${blah_config_file}"] ~> Service <| tag == 'blahparserservice' |>
+  File <| tag == 'blahconffiles' |> ~> Service <| tag == 'blahparserservice' |>
 
   # ##################################################################################################
   # SLURM infoproviders

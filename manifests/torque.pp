@@ -1,7 +1,7 @@
 class creamce::torque inherits creamce::params {
 
-  require creamce::blah
-  require creamce::gip
+  include creamce::blah
+  include creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
@@ -15,6 +15,7 @@ class creamce::torque inherits creamce::params {
     group   => "root",
     mode    => '0644',
     content => template("creamce/blah.config.torque.erb"),
+    tag     => [ "blahconffiles" ],
   }
   
   if $use_blparser {
@@ -25,6 +26,7 @@ class creamce::torque inherits creamce::params {
       group   => "root",
       mode    => '0644',
       content => template("creamce/blparser.conf.torque.erb"),
+      tag     => [ "blahconffiles" ],
     }
 
     $file_to_rotate = "/var/log/cream/glite-pbsparser.log"
@@ -35,17 +37,15 @@ class creamce::torque inherits creamce::params {
       group   => "root",
       mode    => '0644',
       content => template("creamce/blahp-logrotate.erb"),
+      tag     => [ "blahconffiles" ],
     }
     
-    # realization of virtual resource Service["glite-ce-blah-parser"]
-    File["/etc/blparser.conf"] ~> Service <| tag == 'blahparserservice' |>
-
   }
   
-  if $istorqueinstalled == "true" {
+  if $use_blparser or $istorqueinstalled == "true" {
 
     # realization of virtual resource Service["glite-ce-blah-parser"]
-    File["${blah_config_file}"] ~> Service <| tag == 'blahparserservice' |>
+    File <| tag == 'blahconffiles' |> ~> Service <| tag == 'blahparserservice' |>
 
   }
   
