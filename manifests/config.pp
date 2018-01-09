@@ -227,6 +227,7 @@ class creamce::config inherits creamce::params {
     owner    => "root",
     group    => "root",
     mode     => '0644',
+    tag      => [ "dbconffiles" ],
   }
 
   #
@@ -239,6 +240,7 @@ class creamce::config inherits creamce::params {
     group    => "root",
     mode     => '0600',
     require  => Class['mysql::server'],
+    tag      => [ "dbconffiles" ],
   }
   
   file { "/etc/glite-ce-cream/populate_delegationcreamdb.puppet.sql":
@@ -248,8 +250,10 @@ class creamce::config inherits creamce::params {
     group    => "root",
     mode     => '0600',
     require  => Class['mysql::server'],
+    tag      => [ "dbconffiles" ],
   }
 
+  Package <| tag == 'creamcepackages' |> -> File <| tag == 'dbconffiles' |>
 
   # --------------------------------------------------------------------------------------------------
   # create database
