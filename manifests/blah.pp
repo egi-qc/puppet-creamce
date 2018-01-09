@@ -4,7 +4,7 @@ class creamce::blah inherits creamce::params {
   # BLAHP Package
   # ##################################################################################################
 
-  package { "BLAH":
+  package { "${blah_package}":
     ensure  => present,
     tag     => [ "creamcepackages", "umdpackages" ],
   }
@@ -73,7 +73,7 @@ class creamce::blah inherits creamce::params {
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package["BLAH"],
+    require    => Package["${blah_package}"],
     tag        => [ "blahparserservice" ],
   }
 

@@ -99,6 +99,14 @@ class creamce::params {
   # BLAH/LRMS
   #
   $batch_system              = hiera("creamce::batch_system")
+  case $::lsbmajdistrelease {
+    6: {
+      $blah_package          = "glite-ce-blahp"
+    }
+    default: {
+      $blah_package          = "BLAH"
+    }
+  }
   $blah_config_file          = hiera("blah::config_file", "/etc/blah.config")
   $blah_child_poll_timeout   = hiera("blah::child_poll_timeout", 200)
   $blah_alldone_interval     = hiera("blah::alldone_interval", 86400)
