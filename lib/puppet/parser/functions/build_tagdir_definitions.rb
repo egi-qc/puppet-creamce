@@ -29,7 +29,7 @@ module Puppet::Parser::Functions
             tmp_list.sort!
             admin_user = tmp_list[0]
           elsif (uid_list != nil and uid_list.size > 0) or pool_size > 0
-            admin_user = sprintf(name_pattern % { :prefix => user_prefix, :index => name_offset })
+            admin_user = Gridutils.format_username(name_pattern, user_prefix, name_offset)
           else
             admin_user = user_prefix
           end

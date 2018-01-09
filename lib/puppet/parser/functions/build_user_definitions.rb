@@ -54,6 +54,7 @@ module Puppet::Parser::Functions
           utable.each do | u_name, u_id |
             nDict = { :username => u_name, :userid => u_id }
             commentStr = sprintf(comment_pattern % nDict )
+            commentStr = Gridutils.format_comment(comment_pattern, u_name, u_id)
             result[u_name] = {
               'uid'        => u_id,
               'groups'     => grp_list,
@@ -68,9 +69,8 @@ module Puppet::Parser::Functions
         elsif uid_list != nil and uid_list.size > 0
 
           (0...uid_list.size).each do | idx |
-            nDict = { :prefix => user_prefix, :index => (idx + name_offset) }
-            nameStr = sprintf(name_pattern % nDict )
-            commentStr = sprintf(comment_pattern % nDict )
+            nameStr = Gridutils.format_username(name_pattern, user_prefix, idx + name_offset)
+            commentStr = Gridutils.format_comment(comment_pattern, nameStr, uid_list.at(idx))
             result[nameStr] = {
               'uid'        => uid_list.at(idx),
               'groups'     => grp_list,
@@ -85,9 +85,9 @@ module Puppet::Parser::Functions
         elsif pool_size > 0
 
           (0...pool_size).each do | idx |
-            nDict = { :prefix => user_prefix, :index => (idx + name_offset) }
-            nameStr = sprintf(name_pattern % nDict )
-            commentStr = sprintf(comment_pattern % nDict )
+            nameStr = Gridutils.format_username(name_pattern, user_prefix, idx + name_offset)
+            commentStr = Gridutils.format_comment(comment_pattern, nameStr, 
+                                                  udata[Gridutils::USERS_FIRSTID_T] + idx)
             result[nameStr] = { 
               'uid'        => udata[Gridutils::USERS_FIRSTID_T] + idx,
               'groups'     => grp_list,
@@ -102,8 +102,8 @@ module Puppet::Parser::Functions
 
         else
           # static account
-          nDict = { :username => user_prefix, :userid => udata[Gridutils::USERS_FIRSTID_T] }
-          commentStr = sprintf(comment_pattern % nDict )
+          commentStr = Gridutils.format_comment(comment_pattern, user_prefix,
+                                                udata[Gridutils::USERS_FIRSTID_T])
           result["#{user_prefix}"] = { 
             'uid'        => udata[Gridutils::USERS_FIRSTID_T],
             'groups'     => grp_list,

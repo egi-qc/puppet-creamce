@@ -97,5 +97,17 @@ module Gridutils
     (utable != nil and utable.size > 0) or (uid_list != nil and uid_list.size > 0) or pool_size > 0
 
   end
+  
+  def Gridutils.format_username(fmt, prefix, idx)
+
+    sprintf(fmt, { :prefix => prefix, :index => idx })
+
+  end
+
+  def Gridutils.format_comment(fmt, username, uid)
+
+    sprintf(fmt, { :username => username, :userid => uid } )
+
+  end
 
 end

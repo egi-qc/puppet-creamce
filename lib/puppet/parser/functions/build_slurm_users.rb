@@ -71,7 +71,7 @@ module Puppet::Parser::Functions
         elsif uid_list != nil and uid_list.size > 0
 
           (0...uid_list.size).each do | idx |
-            nameStr = sprintf(name_pattern % { :prefix => user_prefix, :index => (idx + name_offset) })
+            nameStr = Gridutils.format_username(name_pattern, user_prefix, idx + name_offset)
             result["acctusr_#{nameStr}"] = {
               "pool_user"     => nameStr,
               "accounts"      => accounts,
@@ -82,7 +82,7 @@ module Puppet::Parser::Functions
         elsif pool_size > 0
 
           (0...pool_size).each do | idx |
-            nameStr = sprintf(name_pattern % { :prefix => user_prefix, :index => (idx + name_offset) })
+            nameStr = Gridutils.format_username(name_pattern, user_prefix, idx + name_offset)
             result["acctusr_#{nameStr}"] = {
               "pool_user"     => nameStr,
               "accounts"      => accounts,
