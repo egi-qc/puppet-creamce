@@ -1,7 +1,7 @@
 class creamce::gridengine inherits creamce::params {
 
-  require creamce::blah
-  require creamce::gip
+  include creamce::blah
+  include creamce::gip
   
   # ##################################################################################################
   # BLAHP setup (GE)

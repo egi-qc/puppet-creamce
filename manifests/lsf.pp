@@ -1,7 +1,7 @@
 class creamce::lsf inherits creamce::params {
 
-  require creamce::blah
-  require creamce::gip
+  include creamce::blah
+  include creamce::gip
   
   $vo_group_table = build_vo_group_table($voenv)
   
