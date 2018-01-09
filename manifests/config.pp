@@ -415,6 +415,7 @@ class creamce::config inherits creamce::params {
   
   $sb_definitions = build_sb_definitions($voenv, $cream_db_sandbox_path)
   create_resources(file, $sb_definitions)
+  Package <| tag == 'creamcepackages' |> -> File["$cream_db_sandbox_path"]
   File["$cream_db_sandbox_path"] -> File <| tag == 'creamce::sandboxdirs' |>
   
   file{"/etc/sysconfig/edg":
