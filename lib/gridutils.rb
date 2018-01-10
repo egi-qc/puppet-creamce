@@ -100,13 +100,27 @@ module Gridutils
   
   def Gridutils.format_username(fmt, prefix, idx)
 
-    sprintf(fmt, { :prefix => prefix, :index => idx })
+    #sprintf(fmt, { :prefix => prefix, :index => idx })
+    vList = Array.new
+    fmt2 = fmt.gsub(/%<prefix>s|%\d*\d*<index>d/){ | tmps |
+      vList.push(tmps.include?("index") ? idx : prefix)
+      tmps.gsub(/<prefix>|<index>/, "")
+    }
+
+    fmt2 % vList
 
   end
 
   def Gridutils.format_comment(fmt, username, uid)
 
-    sprintf(fmt, { :username => username, :userid => uid } )
+    #sprintf(fmt, { :username => username, :userid => uid } )
+    vList = Array.new
+    fmt2 = fmt.gsub(/%<username>s|%\d*\d*<userid>d/){ | tmps |
+      vList.push(tmps.include?("username") ? username : uid)
+      tmps.gsub(/<username>|<userid>/, "")
+    }
+
+    fmt2 % vList
 
   end
 
