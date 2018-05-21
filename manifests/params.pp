@@ -81,7 +81,7 @@ class creamce::params {
   # Tomcat
   #
   case $::lsbmajdistrelease {
-    6: {
+    "6": {
       $tomcat                = "tomcat6"
     }
     default: {
@@ -100,7 +100,7 @@ class creamce::params {
   #
   $batch_system              = hiera("creamce::batch_system")
   case $::lsbmajdistrelease {
-    6: {
+    "6": {
       $blah_package          = "glite-ce-blahp"
     }
     default: {

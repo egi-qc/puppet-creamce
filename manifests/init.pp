@@ -1,49 +1,41 @@
 class creamce inherits creamce::params {
-  
-  if $::operatingsystem == "CentOS" and $::operatingsystemmajrelease in [ "7" ] {
-  
-    include creamce::config
 
-    include creamce::gridftp
-    
-    if $use_apel {
-      include creamce::apel
-    } 
+  include creamce::config
 
-    if $use_loclog {
-      include creamce::locallogger
-    }
+  include creamce::gridftp
 
-    #
-    # Batch system support
-    #
-    case $batch_system {
-      condor: {
-        include creamce::condor
-      }
-      lsf: {
-        include creamce::lsf
-      }
-      pbs: {
-        include creamce::torque
-      }
-      slurm: {
-        include creamce::slurm
-      }
-      sge: {
-        include creamce::gridengine
-      }
-      default: {
-        warning "Unsupported batch system ${batch_system}"
-      }
-    }
+  if $use_apel {
+    include creamce::apel
+  } 
 
-  } else {
-  
-    # TODO
-  
+  if $use_loclog {
+    include creamce::locallogger
   }
-  
+
+  #
+  # Batch system support
+  #
+  case $batch_system {
+    condor: {
+      include creamce::condor
+    }
+    lsf: {
+      include creamce::lsf
+    }
+    pbs: {
+      include creamce::torque
+    }
+    slurm: {
+      include creamce::slurm
+    }
+    sge: {
+      include creamce::gridengine
+    }
+    default: {
+      warning "Unsupported batch system ${batch_system}"
+    }
+  }
+
 }
 
   
