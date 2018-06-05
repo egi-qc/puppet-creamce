@@ -1,6 +1,6 @@
 {
   "name": "infnpd-creamce",
-  "version": "0.0.16",
+  "version": "0.1.1",
   "author": "blah-cream@lists.infn.it",
   "summary": "This modules provides classes and definitions required to manage and properly configure an EMI creamce service.",
   "license": "Apache 2.0",
@@ -17,7 +17,8 @@
     { "name": "puppet", "version_requirement": ">= 3.0.0" }
   ],
   "operatingsystem_support": [
-     {"operatingsystem": "CentOS", "operatingsystemrelease": [ "7.0.1406" ]}
+     {"operatingsystem": "CentOS", "operatingsystemrelease": [ "7.0.1406" ]},
+     {"operatingsystem": "Scientific", "operatingsystemrelease": [ "6.9" ]}
   ],
   "tags": [ "cream", "creamce", "emi", "umd", "grid" ],
   "description": "CREAM CE module"
